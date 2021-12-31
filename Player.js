@@ -17,16 +17,6 @@ export default class Player {
     }
 
     async move(cells, size) {
-        const p = this;
-        
-        const promise = new Promise(function(resolve, reject) {
-            const nextCell = p.nextEmptyCell(cells, size);
-            window.setTimeout(
-                function() {
-                  resolve(nextCell)
-                }, Math.random() * 3000);
-        });
-
-        return promise;
+        throw new Error('move() não definido')
     }
 }

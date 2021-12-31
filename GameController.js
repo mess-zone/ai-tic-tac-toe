@@ -1,12 +1,12 @@
 import Board from './Board.js';
-import Player from './Player.js';
+import ComputerPlayer from './ComputerPlayer.js';
 
 export default class GameController {
     constructor() {
         this.boardSize = 3; // 3x3
         this.board = new Board(this.boardSize);
         
-        this.players = [ new Player('P1', 'x'), new Player('P2', 'o') ];
+        this.players = [ new ComputerPlayer('P1', 'x'), new ComputerPlayer('P2', 'o') ];
         this.currentPlayer = 0;
         this.winner = null;
         this.status = null;
