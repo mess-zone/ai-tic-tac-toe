@@ -3,10 +3,10 @@ import Player from "./Player.js";
 export default class Board {
     constructor() {
         this.size = 3; // 3x3
+        this.cells = [];
         this.players = [ new Player('P1', 'x'), new Player('P2', 'o') ];
         this.currentPlayer = 0;
         this.winner = null;
-        this.cells = [];
     }
 
     start() {
@@ -22,18 +22,6 @@ export default class Board {
         this.currentPlayer = 0;
         this.winner = null;
         console.log(this.cells);
-    }
-
-    nextEmptyCell() {
-        for(let i = 0; i < this.size; i++) {
-            for(let j = 0; j < this.size; j++) {
-                if(this.cells[i][j] == '') {
-                    return {i,j};
-                }
-            }
-        }
-
-        return null;
     }
 
     switchPlayer() {
@@ -78,15 +66,17 @@ export default class Board {
         return (a == b && b == c);
     }
 
-    move() {
+    async move() {
         if(this.winner) {
             return;
         }
-        const c = this.nextEmptyCell();
+
+        const c = await this.players[this.currentPlayer].move(this.cells, this.size);
         console.log(c)
         if(c){
             this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
         }
+
         this.checkWinner();
         console.log(this.winner)
         this.switchPlayer();
