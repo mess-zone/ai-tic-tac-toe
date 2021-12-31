@@ -38,4 +38,7 @@ body {
     border: 5px solid black;
     width: calc(var(--board-size) / 3);
     height: calc(var(--board-size) / 3);
+
+    font-size: 5em;
+    text-align: center;
 }
