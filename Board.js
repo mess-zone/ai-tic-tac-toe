@@ -1,7 +1,9 @@
+import Player from "./Player.js";
+
 export default class Board {
     constructor() {
         this.size = 3; // 3x3
-        this.players = [ 'x', 'o' ];
+        this.players = [ new Player('P1', 'x'), new Player('P2', 'o') ];
         this.currentPlayer = 0;
         this.winner = null;
         this.cells = [];
@@ -83,7 +85,7 @@ export default class Board {
         const c = this.nextEmptyCell();
         console.log(c)
         if(c){
-            this.cells[c.i][c.j] = this.players[this.currentPlayer];
+            this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
         }
         this.checkWinner();
         console.log(this.winner)

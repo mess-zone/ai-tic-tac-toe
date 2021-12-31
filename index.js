@@ -11,6 +11,8 @@ board.move();
 board.move();
 board.move();
 board.move();
+board.move();
+
 
 
 
