@@ -1,0 +1,41 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+:root {
+  --board-size: 600px; 
+}
+
+body {
+    margin: 0;
+}
+
+.screen {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+}
+
+.screen.screen--show {
+    display: flex;
+}
+
+.screen--board {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.board {
+    width: var(--board-size);
+    height: var(--board-size);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.board__cell {
+    border: 5px solid black;
+    width: calc(var(--board-size) / 3);
+    height: calc(var(--board-size) / 3);
+}
