@@ -91,4 +91,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: not-allowed;
+}
+
+.board.board--human-turn .board__cell.board__cell--empty {
+    cursor: pointer;
+}
+
+.board.board--human-turn .board__cell.board__cell--empty:hover {
+    background-color: red;
 }
