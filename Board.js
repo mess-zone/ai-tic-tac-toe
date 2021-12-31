@@ -4,6 +4,9 @@ export default class Board {
     constructor(size) {
         this.size = size; // 3x3
         this.cells = [];
+
+        // TODO eliminar dependencia do DOM
+        this.cellsEl = document.querySelectorAll('.board__cell');
     }
 
     reset() {
@@ -72,17 +75,15 @@ export default class Board {
 
 
     draw() {
-        // TODO eliminar dependencia do DOM
-        const cells = document.querySelectorAll('.board__cell');
         for(let i = 0; i < this.size; i++) {
             for(let j = 0; j < this.size; j++) {
                 if(this.cells[i][j] == '') {
-                    cells[i*3 + j].classList.add('board__cell--empty');
+                    this.cellsEl[i*3 + j].classList.add('board__cell--empty');
                 } else {
-                    cells[i*3 + j].classList.remove('board__cell--empty');
+                    this.cellsEl[i*3 + j].classList.remove('board__cell--empty');
                 }
                 
-                cells[i*3 + j].innerText = `${this.cells[i][j]}`;
+                this.cellsEl[i*3 + j].innerText = `${this.cells[i][j]}`;
                     
             }
         }
