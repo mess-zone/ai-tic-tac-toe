@@ -1,15 +1,17 @@
-import Player from "./Player.js";
-
+const DRAW = 'EMPATE';
+const WIN = 'VITORIA';
 export default class Board {
-    constructor() {
-        this.size = 3; // 3x3
+    constructor(size, players) {
+        this.size = size; // 3x3
         this.cells = [];
-        this.players = [ new Player('P1', 'x'), new Player('P2', 'o') ];
+        this.players = players;
         this.currentPlayer = 0;
         this.winner = null;
+        this.status = null;
     }
 
-    start() {
+    init() {
+
         this.cells = [];
 
         for(let i = 0; i < this.size; i++) {
@@ -21,6 +23,7 @@ export default class Board {
 
         this.currentPlayer = 0;
         this.winner = null;
+        this.status = null;
         console.log(this.cells);
     }
 
@@ -36,6 +39,7 @@ export default class Board {
             (this.isEqual(this.cells[2][0], this.cells[2][1], this.cells[2][2]) && this.cells[2][0] != '' )
         ) {
             this.winner = this.players[this.currentPlayer];
+            this.status = WIN;
             // TODO show end screen
             return;
         }
@@ -47,6 +51,7 @@ export default class Board {
             (this.isEqual(this.cells[0][2], this.cells[1][2], this.cells[2][2]) && this.cells[0][2] != '')
         ) {
             this.winner = this.players[this.currentPlayer];
+            this.status = WIN;
             // TODO show end screen
             return;
         }
@@ -57,8 +62,15 @@ export default class Board {
             (this.isEqual(this.cells[2][0], this.cells[1][1], this.cells[0][2])  && this.cells[2][0] != '')
         ) {
             this.winner = this.players[this.currentPlayer];
+            this.status = WIN;
             // TODO show end screen
             return;
+        }
+
+        // checa empate
+        if(!this.hasEmptyCells()) {
+            this.winner = null;
+            this.status = DRAW;
         }
     }
 
@@ -66,8 +78,28 @@ export default class Board {
         return (a == b && b == c);
     }
 
+    hasEmptyCells() {
+        for(let i = 0; i < this.size; i++) {
+            for(let j = 0; j < this.size; j++) {
+                if(this.cells[i][j] == '') {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    hasWinner() {
+        return this.winner != null;
+    }
+
+    isEnded() {
+        return this.status != null;
+    }
+
     async move() {
-        if(this.winner) {
+        if(this.status != null) {
             return;
         }
 

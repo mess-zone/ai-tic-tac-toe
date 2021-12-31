@@ -1,14 +1,10 @@
-import Board from './Board.js';
 
-const board = new Board();
-board.start();
-await board.move();
-await board.move();
-await board.move();
-await board.move();
-await board.move();
-await board.move();
-await board.move();
+import GameController from './GameController.js';
+
+const gameController = new GameController();
+
+gameController.startGame();
+
 
 
 
