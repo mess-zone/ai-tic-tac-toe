@@ -3,12 +3,25 @@ import Player from './Player.js';
 
 export default class GameController {
     constructor() {
-        this.players = [ new Player('P1', 'x'), new Player('P2', 'o') ];
         this.boardSize = 3; // 3x3
-        this.board = new Board(this.boardSize, this.players);
+        this.board = new Board(this.boardSize);
+        
+        this.players = [ new Player('P1', 'x'), new Player('P2', 'o') ];
+        this.currentPlayer = 0;
+        this.winner = null;
+        this.status = null;
+    }
+
+    switchPlayer() {
+        this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
     }
 
     async startGame() {
+        this.currentPlayer = 0;
+        this.winner = null;
+        this.status = null;
+        this.board.reset();
+
         const boardScreenEl = document.getElementById('board-screen');
         const scoreEl = boardScreenEl.querySelector('#score');
         const hintEl = boardScreenEl.querySelector('#hint');
@@ -20,26 +33,28 @@ export default class GameController {
             scoreEl.appendChild(h1);
         });
 
-        this.board.init();
 
 
-        
-        while(this.board.isEnded() == false) {
-            hintEl.innerHTML = `${this.board.players[this.board.currentPlayer].name}: your turn!`;
-            const c = await this.board.players[this.board.currentPlayer].move(this.board.cells, this.board.size);
+        //move
+        while(this.status == null) {
+            hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+            
+            const c = await this.players[this.currentPlayer].move(this.board.cells, this.board.size);
             console.log(c)
             if(c){
-                this.board.cells[c.i][c.j] = this.board.players[this.board.currentPlayer].symbol;
+                //TODO create method for Board
+                this.board.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
             }
     
-            this.board.checkWinner();
-            // console.log(this.board.winner)
-            this.board.switchPlayer();
+            this.status = this.board.checkWinner();
+            this.winner = this.players[this.currentPlayer];
+            // console.log(this.status, this.players[this.currentPlayer].name)
+            this.switchPlayer();
             // console.log(this.board.cells);
             this.board.draw();
         }
 
         // TODO mostrar tela de fim de jogo
-        console.log(this.board.status, this.board.winner)
+        console.log(this.status, this.winner);
     }
 }
