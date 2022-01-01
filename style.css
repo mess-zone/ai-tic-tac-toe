@@ -92,10 +92,12 @@ body {
     justify-content: center;
     align-items: center;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 .board.board--human-turn .board__cell.board__cell--empty {
     cursor: pointer;
+    pointer-events: auto;
 }
 
 .board.board--human-turn .board__cell.board__cell--empty:hover {

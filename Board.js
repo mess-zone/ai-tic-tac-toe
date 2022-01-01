@@ -6,7 +6,9 @@ export default class Board {
         this.cells = [];
 
         // TODO eliminar dependencia do DOM
-        this.cellsEl = document.querySelectorAll('.board__cell');
+        this.boardEl = document.querySelector('#board');
+        this.cellsEl = this.boardEl.querySelectorAll('.board__cell');
+
     }
 
     reset() {
@@ -18,6 +20,24 @@ export default class Board {
                 this.cells[i][j] = '';
             }
         }
+
+        this.boardEl.innerHTML = '';
+        for(let i = 0; i < this.size; i++) {
+            for(let j = 0; j < this.size; j++) {
+                this.cells[i][j] = '';
+                const newCell = document.createElement('div');
+                newCell.classList.add('board__cell');
+                newCell.dataset.i = i;
+                newCell.dataset.j = j;
+                // newCell.addEventListener('click', function() {
+                //     console.log('clicou')
+                // });
+                this.boardEl.appendChild(newCell);
+            }
+        }
+
+        this.cellsEl = this.boardEl.querySelectorAll('.board__cell');
+
     }
 
 
