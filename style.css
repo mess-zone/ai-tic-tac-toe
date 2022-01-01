@@ -100,6 +100,14 @@ body {
     pointer-events: auto;
 }
 
-.board.board--human-turn .board__cell.board__cell--empty:hover {
-    background-color: red;
+.board.board--human-turn .board__cell.board__cell--empty:hover:before {
+    color: rgba(255, 255, 255, .3);
+}
+
+.board.board--human-turn.x .board__cell.board__cell--empty:hover:before {
+    content: 'x';
+}
+
+.board.board--human-turn.o .board__cell.board__cell--empty:hover:before {
+    content: 'o';
 }

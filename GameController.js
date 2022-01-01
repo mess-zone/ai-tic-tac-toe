@@ -151,7 +151,9 @@ export default class GameController {
 
 
     switchPlayer() {
+        this.boardEl.classList.remove(this.players[this.currentPlayer].symbol);
         this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+        this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
     }
 
     async startGame() {
@@ -201,6 +203,7 @@ export default class GameController {
         } else {
             // se todos humanos
             this.boardEl.classList.add('board--human-turn');
+            this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
             this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
         }
     }
