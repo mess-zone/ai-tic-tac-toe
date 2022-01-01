@@ -1,5 +1,9 @@
 const DRAW = 'EMPATE';
 const WIN = 'VITORIA';
+
+/**
+ * @deprecated
+ */
 export default class Board {
     constructor(size) {
         this.size = size; // 3x3
