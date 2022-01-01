@@ -157,7 +157,8 @@ export default class GameController {
                     this.cellsEl[i*3 + j].classList.remove('board__cell--empty');
                 }
                 
-                this.cellsEl[i*3 + j].innerText = `${this.cells[i][j]}`;
+                // this.cellsEl[i*3 + j].innerText = `${this.cells[i][j]}`;
+                this.cellsEl[i*3 + j].classList.add(`board__cell--${this.cells[i][j]}`);
                     
             }
         }
