@@ -11,7 +11,7 @@ export default class GameController {
         // this.board = new Board(this.boardSize);
         this.cells = [];
         
-        this.players = [ new ComputerPlayer('P1', 'x'), new ComputerPlayer('P2', 'o') ];
+        this.players = [ new HumanPlayer('P1', 'x'), new HumanPlayer('P2', 'o') ];
         this.currentPlayer = 0;
         this.winner = null;
         this.status = null;
@@ -41,9 +41,7 @@ export default class GameController {
                 newCell.classList.add('board__cell');
                 newCell.dataset.i = i;
                 newCell.dataset.j = j;
-                // newCell.addEventListener('click', function() {
-                //     console.log('clicou')
-                // });
+                newCell.addEventListener('click', this.handleClick.bind(this));
                 this.boardEl.appendChild(newCell);
             }
         }
@@ -52,6 +50,37 @@ export default class GameController {
 
     }
 
+    handleClick(e) {
+        console.log(this.players[this.currentPlayer].name, 'clicou', e.target.dataset);
+
+        if(this.status != null) {
+            return;
+        }
+
+        this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+        
+        const c = e.target.dataset;
+        console.log(c)
+        if(c){
+            //TODO create method for Board
+            this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
+        }
+        
+
+        this.status = this.checkWinner();
+        this.winner = this.players[this.currentPlayer];
+        // console.log(this.status, this.players[this.currentPlayer].name)
+        this.switchPlayer();
+        this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+        // console.log(this.board.cells);
+        this.drawBoard();
+        
+
+        if(this.status != null) {
+            // TODO mostrar tela de fim de jogo
+            console.log(this.status, this.winner);
+        }
+    }
 
     
     checkWinner() {
@@ -172,6 +201,7 @@ export default class GameController {
         } else {
             // se todos humanos
             this.boardEl.classList.add('board--human-turn');
+            this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
         }
     }
 }
