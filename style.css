@@ -3,7 +3,7 @@
 }
 
 :root {
-  --board-size: 600px; 
+  --board-size: 60vw; 
 }
 
 body {
@@ -20,77 +20,41 @@ body {
 }
 
 .screen.screen--show {
-    display: flex;
+    display: grid;
 }
 
 .screen--board {
+    display: grid;
+    grid-template-rows: 10vh 70vh 20vh;
+    grid-template-columns: 100vw;
+}
+
+#board-container {
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: column;
-}
-
-.board__external-border {
-    position: relative;
-}
-
-.board__external-border::before {
-    content: '';
-    width: 5px;
-    height: 100%;
-    background-color: black;
-    top: 0;
-    left: 0;
-    position: absolute;
-    z-index: 1;
-}
-
-.board__external-border::after {
-    content: '';
-    width: 5px;
-    height: 100%;
-    background-color: black;
-    top: 0;
-    right: 0;
-    position: absolute;
+    align-items: center;
 }
 
 .board {
-    width: var(--board-size);
-    height: var(--board-size);
-    display: flex;
-    flex-wrap: wrap;
-    position: relative;
-}
-
-.board::before {
-    content: '';
-    width: 100%;
-    height: 5px;
-    background-color: black;
-    top: 0;
-    position: absolute;
-}
-
-.board::after {
-    content: '';
-    width: 100%;
-    height: 5px;
-    background-color: black;
-    bottom: 0;
-    position: absolute;
+    background-color: white;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 10px;
+    justify-content: center;
+    align-content: center;
 }
 
 .board__cell {
-    border: 5px solid white;
-    width: calc(var(--board-size) / 3);
-    height: calc(var(--board-size) / 3);
+    background-color: black;
 
     font-size: 5em;
     text-align: center;
+
     display: flex;
     justify-content: center;
     align-items: center;
+   
     cursor: not-allowed;
     pointer-events: none;
 }

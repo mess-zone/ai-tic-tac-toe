@@ -19,8 +19,22 @@ export default class GameController {
         this.boardScreenEl = document.getElementById('board-screen');
         this.scoreEl = this.boardScreenEl.querySelector('#score');
         this.hintEl = this.boardScreenEl.querySelector('#hint');
+        this.boardContainerEl = this.boardScreenEl.querySelector('#board-container');
         this.boardEl = this.boardScreenEl.querySelector('#board');
         this.cellsEl = this.boardEl.querySelectorAll('.board__cell');
+
+        window.addEventListener('resize', this.handleResize.bind(this));
+
+        this.handleResize();
+    }
+
+    handleResize(e) {
+        console.log(e)
+        console.log(this.boardContainerEl.offsetWidth, this.boardContainerEl.offsetHeight)
+        const side = this.boardContainerEl.offsetWidth <= this.boardContainerEl.offsetHeight ? this.boardContainerEl.offsetWidth : this.boardContainerEl.offsetHeight;
+
+        this.boardEl.style.width = side + 'px';
+        this.boardEl.style.height = side + 'px';
     }
 
     resetBoard() {
