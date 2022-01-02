@@ -35,7 +35,7 @@ export default class GameController {
 
         window.addEventListener('resize', this.handleResize.bind(this));
 
-        this.handleResize();
+        this.roundScreenEl.addEventListener("animationend", this.showBoardScreen.bind(this));
     }
 
     run() {
@@ -52,20 +52,32 @@ export default class GameController {
                 type: this.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'computer',
             };
 
-            this.roundScreenEl.addEventListener("animationend", function() {
-                this.startScreenEl.classList.remove('screen--show');
-                this.boardScreenEl.classList.add('screen--show');
-                this.handleResize();
-                this.startGame();
-                this.roundScreenEl.classList.remove('screen--show');
-                this.roundScreenEl.classList.remove('animating');
-            }.bind(this));
-            this.roundScreenEl.classList.add('screen--show');
-            this.roundScreenEl.classList.add('animating');
+            
+            this.startNewRound();
             
 
         }.bind(this));
 
+    }
+
+    startNewRound() {
+        this.currentRound++;
+        this.showRoundScreen();
+    }
+
+    showRoundScreen() {
+        this.roundScreenEl.querySelector('h1').innerText = `Round ${this.currentRound}/${this.options.rounds}`;
+        this.roundScreenEl.classList.add('screen--show');
+        this.roundScreenEl.classList.add('animating');
+    }
+
+    showBoardScreen() {
+        this.startScreenEl.classList.remove('screen--show');
+        this.boardScreenEl.classList.add('screen--show');
+        this.handleResize();
+        this.startRound();
+        this.roundScreenEl.classList.remove('screen--show');
+        this.roundScreenEl.classList.remove('animating');
     }
 
     handleResize(e) {
@@ -211,8 +223,7 @@ export default class GameController {
         this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
     }
 
-    async startGame() {
-        this.currentRound++;
+    async startRound() {
 
         this.currentPlayer = 0;
 
