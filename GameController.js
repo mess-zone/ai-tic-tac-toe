@@ -74,6 +74,7 @@ export default class GameController {
     }
 
     showBoardScreen() {
+        console.log('show board scree')
         this.startScreenEl.classList.remove('screen--show');
         this.boardScreenEl.classList.add('screen--show');
         this.handleResize();
@@ -119,35 +120,35 @@ export default class GameController {
     }
 
     handleClick(e) {
-        console.log(this.players[this.currentPlayer].name, 'clicou', e.target.dataset);
+        // console.log(this.players[this.currentPlayer].name, 'clicou', e.target.dataset);
 
+        //se o jogo já acabou...
         if(this.status != null) {
             return;
         }
 
-        this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+        // this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
         
         const c = e.target.dataset;
-        console.log(c)
+        // console.log(c)
         if(c){
             //TODO create method for Board
             this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
         }
-        
 
-        this.status = this.checkWinner();
-        this.winner = this.players[this.currentPlayer];
-        // console.log(this.status, this.players[this.currentPlayer].name)
-        this.switchPlayer();
-        this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
-        // console.log(this.board.cells);
         this.drawBoard();
         
+        this.status = this.checkWinner();
+        this.winner = this.players[this.currentPlayer];
 
+        //fim de jogo
         if(this.status != null) {
             // TODO mostrar tela de fim de jogo
             console.log(this.status, this.winner);
+        } else {
+            this.switchPlayer();
         }
+
     }
 
     
@@ -219,15 +220,41 @@ export default class GameController {
     }
 
 
-    switchPlayer() {
-        this.boardEl.classList.remove(this.players[this.currentPlayer].symbol);
+    async switchPlayer() {
+
+        this.boardEl.classList.remove(this.players[this.currentPlayer]?.symbol);
         this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
         this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
+
+        if(this.players[this.currentPlayer] instanceof HumanPlayer) {
+            this.boardEl.classList.add('board--human-turn');
+        } else {
+            this.boardEl.classList.remove('board--human-turn');
+            const c = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
+            console.log(c)
+            if(c){
+                this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
+            }
+        }
+
+        this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+
+
+        this.status = this.checkWinner();
+        this.winner = this.players[this.currentPlayer];
+
+        //fim de jogo
+        if(this.status != null) {
+            // TODO mostrar tela de fim de jogo
+            console.log('switch', this.status, this.winner);
+        } else {
+            // this.switchPlayer();
+        }
     }
 
     async startRound() {
 
-        this.currentPlayer = 0;
+        this.currentPlayer = -1;
 
         this.winner = null;
         this.status = null;
@@ -242,39 +269,44 @@ export default class GameController {
 
         this.drawBoard();
 
-        const allRobots = this.players.find(player => player instanceof HumanPlayer) ? false : true;
+        await this.switchPlayer();
 
 
-        if(allRobots) {
-            //se todos robos
-            this.boardEl.classList.remove('board--human-turn');
+        /////
 
-            while(this.status == null) {
-                this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+        // const allRobots = this.players.find(player => player instanceof HumanPlayer) ? false : true;
+
+
+        // if(allRobots) {
+        //     //se todos robos
+        //     this.boardEl.classList.remove('board--human-turn');
+
+        //     while(this.status == null) {
+        //         this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
                 
-                    const c = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
-                    console.log(c)
-                    if(c){
-                        //TODO create method for Board
-                        this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
-                    }
+        //             const c = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
+        //             console.log(c)
+        //             if(c){
+        //                 //TODO create method for Board
+        //                 this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
+        //             }
                 
         
-                this.status = this.checkWinner();
-                this.winner = this.players[this.currentPlayer];
-                // console.log(this.status, this.players[this.currentPlayer].name)
-                this.switchPlayer();
-                // console.log(this.board.cells);
-                this.drawBoard();
-            }
+        //         this.status = this.checkWinner();
+        //         this.winner = this.players[this.currentPlayer];
+        //         // console.log(this.status, this.players[this.currentPlayer].name)
+        //         this.switchPlayer();
+        //         // console.log(this.board.cells);
+        //         this.drawBoard();
+        //     }
     
-            // TODO mostrar tela de fim de jogo
-            console.log(this.status, this.winner);
-        } else {
-            // se todos humanos
-            this.boardEl.classList.add('board--human-turn');
-            this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
-            this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
-        }
+        //     // TODO mostrar tela de fim de jogo
+        //     console.log(this.status, this.winner);
+        // } else {
+        //     // se todos humanos
+        //     this.boardEl.classList.add('board--human-turn');
+        //     this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
+        //     this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+        // }
     }
 }
