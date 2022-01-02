@@ -11,19 +11,72 @@ body {
     background-color: black;
     color: white;
     font-family: 'Audiowide', cursive;
+    font-size: 1.3rem;
 }
 
 .screen {
+    position: fixed;
     display: none;
     height: 100vh;
     width: 100vw;
 }
 
 .screen.screen--show {
-    display: grid;
+    display: block;
 }
 
-.screen--board {
+.screen--start {
+    overflow: scroll;
+}
+
+.screen--start .container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.screen--start h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.screen--start input[type="text"] {
+    padding: 10px 15px;
+    color: white;
+    background-color: black;
+    border: none;
+    border-bottom: 3px solid white;
+    font-family: 'Audiowide', cursive;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.screen--start input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.521);
+}
+
+.screen--start button {
+    color: black;
+    background-color: white;
+    font-family: 'Audiowide', cursive;
+    font-size: 1rem;
+    padding: 1.2rem 5rem;
+    border: 2px solid black;
+    border-radius: 6px;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+
+.screen--start button:hover {
+    border-color: white;
+    background-color: black;
+    color: white;
+}
+
+.screen--board .container {
     display: grid;
     grid-template-rows: 10vh 70vh 20vh;
     grid-template-columns: 100vw;

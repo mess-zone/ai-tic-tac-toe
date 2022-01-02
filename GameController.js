@@ -6,9 +6,15 @@ const WIN = 'VITORIA';
 
 export default class GameController {
     constructor() {
+
+        this.options = {
+            boardSize: 3, // 3x3
+            rounds: 3,
+        };
         
-        this.boardSize = 3; // 3x3
-        // this.board = new Board(this.boardSize);
+        this.currentRound = 0;
+
+        // this.board = new Board(this.options.boardSize);
         this.cells = [];
         
         this.players = [ new HumanPlayer('P1', 'x'), new HumanPlayer('P2', 'o') ];
@@ -40,16 +46,16 @@ export default class GameController {
     resetBoard() {
         this.cells = [];
 
-        for(let i = 0; i < this.boardSize; i++) {
+        for(let i = 0; i < this.options.boardSize; i++) {
             this.cells[i] = [];
-            for(let j = 0; j < this.boardSize; j++) {
+            for(let j = 0; j < this.options.boardSize; j++) {
                 this.cells[i][j] = '';
             }
         }
 
         this.boardEl.innerHTML = '';
-        for(let i = 0; i < this.boardSize; i++) {
-            for(let j = 0; j < this.boardSize; j++) {
+        for(let i = 0; i < this.options.boardSize; i++) {
+            for(let j = 0; j < this.options.boardSize; j++) {
                 this.cells[i][j] = '';
                 const newCell = document.createElement('div');
                 newCell.classList.add('board__cell');
@@ -137,8 +143,8 @@ export default class GameController {
     }
 
     hasEmptyCells() {
-        for(let i = 0; i < this.boardSize; i++) {
-            for(let j = 0; j < this.boardSize; j++) {
+        for(let i = 0; i < this.options.boardSize; i++) {
+            for(let j = 0; j < this.options.boardSize; j++) {
                 if(this.cells[i][j] == '') {
                     return true;
                 }
@@ -149,8 +155,8 @@ export default class GameController {
     }
 
     drawBoard() {
-        for(let i = 0; i < this.boardSize; i++) {
-            for(let j = 0; j < this.boardSize; j++) {
+        for(let i = 0; i < this.options.boardSize; i++) {
+            for(let j = 0; j < this.options.boardSize; j++) {
                 if(this.cells[i][j] == '') {
                     this.cellsEl[i*3 + j].classList.add('board__cell--empty');
                 } else {
@@ -172,6 +178,8 @@ export default class GameController {
     }
 
     async startGame() {
+        this.currentRound++;
+
         this.currentPlayer = 0;
 
         this.winner = null;
@@ -197,7 +205,7 @@ export default class GameController {
             while(this.status == null) {
                 this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
                 
-                    const c = await this.players[this.currentPlayer].move(this.cells, this.boardSize);
+                    const c = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
                     console.log(c)
                     if(c){
                         //TODO create method for Board
