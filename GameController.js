@@ -221,35 +221,40 @@ export default class GameController {
 
 
     async switchPlayer() {
-
+        console.log('switch player')
         this.boardEl.classList.remove(this.players[this.currentPlayer]?.symbol);
         this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
         this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
+        this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
+
 
         if(this.players[this.currentPlayer] instanceof HumanPlayer) {
             this.boardEl.classList.add('board--human-turn');
         } else {
+            console.log('robo joga')
             this.boardEl.classList.remove('board--human-turn');
             const c = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
             console.log(c)
             if(c){
                 this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
             }
+
+            this.drawBoard();
+            this.status = this.checkWinner();
+            this.winner = this.players[this.currentPlayer];
+    
+            //fim de jogo
+            if(this.status != null) {
+                // TODO mostrar tela de fim de jogo
+                console.log('switch', this.status, this.winner);
+            } else {
+                this.switchPlayer();
+            }
         }
 
-        this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
 
 
-        this.status = this.checkWinner();
-        this.winner = this.players[this.currentPlayer];
 
-        //fim de jogo
-        if(this.status != null) {
-            // TODO mostrar tela de fim de jogo
-            console.log('switch', this.status, this.winner);
-        } else {
-            // this.switchPlayer();
-        }
     }
 
     async startRound() {
