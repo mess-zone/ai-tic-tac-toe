@@ -12,12 +12,12 @@ export default class GameController {
             rounds: 3,
         };
         
-        this.currentRound = 0;
+        this.currentRound = -1;
 
         // this.board = new Board(this.options.boardSize);
         this.cells = [];
         
-        this.players = [ new HumanPlayer('P1', 'x'), new HumanPlayer('P2', 'o') ];
+        this.players = [];
         this.currentPlayer = 0;
         this.winner = null;
         this.status = null;
@@ -40,24 +40,26 @@ export default class GameController {
 
     run() {
         this.startScreenEl.classList.add('screen--show');
-        this.startScreenEl.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const player1 = {
-                name: this.startScreenEl.querySelector('#player1-name').value || 'player 1',
-                type: this.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'computer',
-            };
+        this.startScreenEl.querySelector('form').addEventListener('submit', this.configurePlayers.bind(this));
+    }
 
-            const player2 = {
-                name: this.startScreenEl.querySelector('#player2-name').value || 'player 1',
-                type: this.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'computer',
-            };
+    configurePlayers(e) {
+        e.preventDefault();
+        const player1 = {
+            name: this.startScreenEl.querySelector('#player1-name').value || 'player 1',
+            type: this.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'computer',
+        };
 
-            
-            this.startNewRound();
-            
+        const player2 = {
+            name: this.startScreenEl.querySelector('#player2-name').value || 'player 2',
+            type: this.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'computer',
+        };
 
-        }.bind(this));
-
+        this.players = [];            
+        this.players.push((player1.type == 'human') ? new HumanPlayer(player1.name, 'x') : new ComputerPlayer(player1.name, 'x'));
+        this.players.push((player2.type == 'human') ? new HumanPlayer(player2.name, 'o') : new ComputerPlayer(player2.name, 'o'));
+        
+        this.startNewRound();
     }
 
     startNewRound() {
@@ -66,7 +68,7 @@ export default class GameController {
     }
 
     showRoundScreen() {
-        this.roundScreenEl.querySelector('h1').innerText = `Round ${this.currentRound}/${this.options.rounds}`;
+        this.roundScreenEl.querySelector('h1').innerText = `Round ${this.currentRound + 1}/${this.options.rounds}`;
         this.roundScreenEl.classList.add('screen--show');
         this.roundScreenEl.classList.add('animating');
     }
