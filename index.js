@@ -3,7 +3,9 @@ import GameController from './GameController.js';
 
 const gameController = new GameController();
 
-gameController.startGame();
+gameController.run();
+
+// gameController.startGame();
 
 
 

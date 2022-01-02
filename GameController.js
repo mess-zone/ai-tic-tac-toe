@@ -22,6 +22,9 @@ export default class GameController {
         this.winner = null;
         this.status = null;
         
+        this.startScreenEl = document.getElementById('start-screen');
+        
+        
         this.boardScreenEl = document.getElementById('board-screen');
         this.scoreEl = this.boardScreenEl.querySelector('#score');
         this.hintEl = this.boardScreenEl.querySelector('#hint');
@@ -32,6 +35,25 @@ export default class GameController {
         window.addEventListener('resize', this.handleResize.bind(this));
 
         this.handleResize();
+    }
+
+    run() {
+        this.startScreenEl.classList.add('screen--show');
+        this.startScreenEl.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const player1 = {
+                name: this.startScreenEl.querySelector('#player1-name').value || 'player 1',
+                type: this.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'computer',
+            };
+
+            const player2 = {
+                name: this.startScreenEl.querySelector('#player2-name').value || 'player 1',
+                type: this.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'computer',
+            };
+
+            console.log(player1, player2);
+        }.bind(this));
+
     }
 
     handleResize(e) {
