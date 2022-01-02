@@ -23,6 +23,7 @@ export default class GameController {
         this.status = null;
         
         this.startScreenEl = document.getElementById('start-screen');
+        this.roundScreenEl = document.getElementById('round-screen');
         
         
         this.boardScreenEl = document.getElementById('board-screen');
@@ -51,7 +52,18 @@ export default class GameController {
                 type: this.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'computer',
             };
 
-            console.log(player1, player2);
+            this.roundScreenEl.addEventListener("animationend", function() {
+                this.startScreenEl.classList.remove('screen--show');
+                this.boardScreenEl.classList.add('screen--show');
+                this.handleResize();
+                this.startGame();
+                this.roundScreenEl.classList.remove('screen--show');
+                this.roundScreenEl.classList.remove('animating');
+            }.bind(this));
+            this.roundScreenEl.classList.add('screen--show');
+            this.roundScreenEl.classList.add('animating');
+            
+
         }.bind(this));
 
     }
