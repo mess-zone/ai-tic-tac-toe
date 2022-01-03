@@ -28,7 +28,6 @@ export default class GameController {
         
         this.currentRound = -1;
 
-        // this.board = new Board(this.options.boardSize);
         this.cells = [];
         
         this.players = [];
@@ -109,24 +108,19 @@ export default class GameController {
     resetBoard() {
         this.cells = [];
 
-        for(let i = 0; i < this.options.boardSize; i++) {
-            this.cells[i] = [];
-            for(let j = 0; j < this.options.boardSize; j++) {
-                this.cells[i][j] = '';
-            }
+        for(let i = 0; i < Math.pow(this.options.boardSize, 2); i++) {
+            this.cells[i] = '';
         }
 
         this.boardEl.innerHTML = '';
-        for(let i = 0; i < this.options.boardSize; i++) {
-            for(let j = 0; j < this.options.boardSize; j++) {
-                this.cells[i][j] = '';
+        for(let i = 0; i <  this.cells.length; i++) {
+                this.cells[i] = '';
                 const newCell = document.createElement('div');
                 newCell.classList.add('board__cell');
                 newCell.dataset.i = i;
-                newCell.dataset.j = j;
+                // newCell.dataset.j = j;
                 newCell.addEventListener('click', this.handleClick.bind(this));
                 this.boardEl.appendChild(newCell);
-            }
         }
 
         this.cellsEl = this.boardEl.querySelectorAll('.board__cell');
@@ -140,14 +134,11 @@ export default class GameController {
         if(this.status != null) {
             return;
         }
-
-        // this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
         
         const c = e.target.dataset;
         // console.log(c)
-        if(c){
-            //TODO create method for Board
-            this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
+        if(c != null){
+            this.cells[c.i] = this.players[this.currentPlayer].symbol;
         }
 
         this.drawBoard();
@@ -171,7 +162,7 @@ export default class GameController {
         let hasWinner = false;
         for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner == false; i++) {
 
-           hasWinner = WINNING_COMBINATIONS[i].every(index => this.cells[Math.floor(index/3)][index % 3] == symbol);
+           hasWinner = WINNING_COMBINATIONS[i].every(index => this.cells[index] == symbol);
     
            if(hasWinner == true) {
                WINNING_COMBINATIONS[i].forEach(index => {
@@ -186,20 +177,15 @@ export default class GameController {
             return DRAW;
         }
 
-        //jogo não acabou
+        // TODO NÃO GOSTO DE RETORNAR NULL, CRIAR UM STATUS PARA JOGO EM ANDAMENTO
+        // jogo não acabou
         return null;
     }
 
-    // isEqual(a, b, c) {
-    //     return (a == b && b == c && a != '');
-    // }
-
     hasEmptyCells() {
-        for(let i = 0; i < this.options.boardSize; i++) {
-            for(let j = 0; j < this.options.boardSize; j++) {
-                if(this.cells[i][j] == '') {
-                    return true;
-                }
+        for(let i = 0; i < this.cells.length; i++) {
+            if(this.cells[i] == '') {
+                return true;
             }
         }
 
@@ -207,15 +193,13 @@ export default class GameController {
     }
 
     drawBoard() {
-        for(let i = 0; i < this.options.boardSize; i++) {
-            for(let j = 0; j < this.options.boardSize; j++) {
-                if(this.cells[i][j] == '') {
-                    this.cellsEl[i*3 + j].classList.add('board__cell--empty');
-                } else {
-                    this.cellsEl[i*3 + j].classList.remove('board__cell--empty');
-                    this.cellsEl[i*3 + j].classList.add(`board__cell--${this.cells[i][j]}`);
-                }                   
-            }
+        for(let i = 0; i < this.cells.length; i++) {
+            if(this.cells[i] == '') {
+                this.cellsEl[i].classList.add('board__cell--empty');
+            } else {
+                this.cellsEl[i].classList.remove('board__cell--empty');
+                this.cellsEl[i].classList.add(`board__cell--${this.cells[i]}`);
+            }                   
         }
     }
 
@@ -231,12 +215,13 @@ export default class GameController {
         if(this.players[this.currentPlayer] instanceof HumanPlayer) {
             this.boardEl.classList.add('board--human-turn');
         } else {
-            console.log('robo joga')
             this.boardEl.classList.remove('board--human-turn');
-            const c = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
-            console.log(c)
-            if(c){
-                this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
+
+            // TODO refatorar
+            const index = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
+            console.log('robot cell',index)
+            if(index !== null){
+                this.cells[index] = this.players[this.currentPlayer].symbol;
             }
 
             this.drawBoard();
@@ -266,6 +251,7 @@ export default class GameController {
         this.resetBoard();
 
         this.scoreEl.innerHTML = '';
+        // TODO mostrar também a contagem de empates
         this.players.forEach(player => {
             const h1 = document.createElement('h1');
             h1.innerHTML = `${player.name} (${player.symbol}): 0 points`;

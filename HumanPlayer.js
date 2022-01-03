@@ -5,6 +5,7 @@ export default class HumanPlayer extends Player {
         super(name, symbol);
     }
 
+    // TODO este método não está sendo utilizado
     async move(cells, size) {
         const p = this;
         

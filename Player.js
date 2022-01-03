@@ -4,13 +4,12 @@ export default class Player {
         this.symbol = symbol;
     }
 
+    // TODO refactor
     nextEmptyCell(cells, size) {
-        for(let i = 0; i < size; i++) {
-            for(let j = 0; j < size; j++) {
-                if(cells[i][j] == '') {
-                    return {i,j};
-                }
-            }
+        for(let i = 0; i < cells.length; i++) {
+            if(cells[i] == '') {
+                return i;
+            }   
         }
 
         return null;
