@@ -168,13 +168,15 @@ export default class GameController {
     
     checkWinner() {
         const symbol =  this.players[this.currentPlayer].symbol;
-        let win = false;
-        for(let i = 0; i < WINNING_COMBINATIONS.length && win == false; i++) {
+        let hasWinner = false;
+        for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner == false; i++) {
 
-           win = WINNING_COMBINATIONS[i].every(index => this.cells[Math.floor(index/3)][index % 3] == symbol);
+           hasWinner = WINNING_COMBINATIONS[i].every(index => this.cells[Math.floor(index/3)][index % 3] == symbol);
     
-           if(win == true) {
-               console.log(win, WINNING_COMBINATIONS[i])
+           if(hasWinner == true) {
+               WINNING_COMBINATIONS[i].forEach(index => {
+                   this.cellsEl[index].classList.add('board__cell--highlight');
+               });
                return WIN;
            }
         }
@@ -184,6 +186,7 @@ export default class GameController {
             return DRAW;
         }
 
+        //jogo não acabou
         return null;
     }
 
