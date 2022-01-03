@@ -4,6 +4,20 @@ import HumanPlayer from './HumanPlayer.js';
 const DRAW = 'EMPATE';
 const WIN = 'VITORIA';
 
+const WINNING_COMBINATIONS = [
+    //horizontal
+    [ 0, 1, 2 ],
+    [ 3, 4, 5 ],
+    [ 6, 7, 8 ],
+    //vertical
+    [ 0, 3, 6 ],
+    [ 1, 4, 7 ],
+    [ 2, 5, 8 ],
+    //diagonal
+    [ 0, 4, 8 ],
+    [ 2, 4, 6 ],
+];
+
 export default class GameController {
     constructor() {
 
@@ -153,30 +167,16 @@ export default class GameController {
 
     
     checkWinner() {
-        //horizontal
-        if(
-            (this.isEqual(this.cells[0][0], this.cells[0][1], this.cells[0][2]) && this.cells[0][0] != '') ||
-            (this.isEqual(this.cells[1][0], this.cells[1][1], this.cells[1][2]) && this.cells[1][0] != '' ) ||
-            (this.isEqual(this.cells[2][0], this.cells[2][1], this.cells[2][2]) && this.cells[2][0] != '' )
-        ) {
-            return WIN;
-        }
+        const symbol =  this.players[this.currentPlayer].symbol;
+        let win = false;
+        for(let i = 0; i < WINNING_COMBINATIONS.length && win == false; i++) {
 
-        //vertical
-        if(
-            (this.isEqual(this.cells[0][0], this.cells[1][0], this.cells[2][0]) && this.cells[0][0] != '' ) ||
-            (this.isEqual(this.cells[0][1], this.cells[1][1], this.cells[2][1]) && this.cells[0][1] != '') ||
-            (this.isEqual(this.cells[0][2], this.cells[1][2], this.cells[2][2]) && this.cells[0][2] != '')
-        ) {
-            return WIN;
-        }
-
-        //diagonal
-        if(
-            (this.isEqual(this.cells[0][0], this.cells[1][1], this.cells[2][2]) && this.cells[0][0] != '' ) ||
-            (this.isEqual(this.cells[2][0], this.cells[1][1], this.cells[0][2])  && this.cells[2][0] != '')
-        ) {
-            return WIN;
+           win = WINNING_COMBINATIONS[i].every(index => this.cells[Math.floor(index/3)][index % 3] == symbol);
+    
+           if(win == true) {
+               console.log(win, WINNING_COMBINATIONS[i])
+               return WIN;
+           }
         }
 
         // checa empate
@@ -187,9 +187,9 @@ export default class GameController {
         return null;
     }
 
-    isEqual(a, b, c) {
-        return (a == b && b == c);
-    }
+    // isEqual(a, b, c) {
+    //     return (a == b && b == c && a != '');
+    // }
 
     hasEmptyCells() {
         for(let i = 0; i < this.options.boardSize; i++) {
@@ -210,11 +210,8 @@ export default class GameController {
                     this.cellsEl[i*3 + j].classList.add('board__cell--empty');
                 } else {
                     this.cellsEl[i*3 + j].classList.remove('board__cell--empty');
-                }
-                
-                // this.cellsEl[i*3 + j].innerText = `${this.cells[i][j]}`;
-                this.cellsEl[i*3 + j].classList.add(`board__cell--${this.cells[i][j]}`);
-                    
+                    this.cellsEl[i*3 + j].classList.add(`board__cell--${this.cells[i][j]}`);
+                }                   
             }
         }
     }
@@ -275,43 +272,5 @@ export default class GameController {
         this.drawBoard();
 
         await this.switchPlayer();
-
-
-        /////
-
-        // const allRobots = this.players.find(player => player instanceof HumanPlayer) ? false : true;
-
-
-        // if(allRobots) {
-        //     //se todos robos
-        //     this.boardEl.classList.remove('board--human-turn');
-
-        //     while(this.status == null) {
-        //         this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
-                
-        //             const c = await this.players[this.currentPlayer].move(this.cells, this.options.boardSize);
-        //             console.log(c)
-        //             if(c){
-        //                 //TODO create method for Board
-        //                 this.cells[c.i][c.j] = this.players[this.currentPlayer].symbol;
-        //             }
-                
-        
-        //         this.status = this.checkWinner();
-        //         this.winner = this.players[this.currentPlayer];
-        //         // console.log(this.status, this.players[this.currentPlayer].name)
-        //         this.switchPlayer();
-        //         // console.log(this.board.cells);
-        //         this.drawBoard();
-        //     }
-    
-        //     // TODO mostrar tela de fim de jogo
-        //     console.log(this.status, this.winner);
-        // } else {
-        //     // se todos humanos
-        //     this.boardEl.classList.add('board--human-turn');
-        //     this.boardEl.classList.add(this.players[this.currentPlayer].symbol);
-        //     this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: your turn!`;
-        // }
     }
 }
