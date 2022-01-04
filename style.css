@@ -221,11 +221,11 @@ body {
     font-size: .85rem;
 }
 
-.screen--end {
+.screen--end-round {
     /* background-color: red; */
 }
 
-.screen--end .container {
+.screen--end-round .container {
     background-color: rgba(0, 0, 0, 0.4);
     position: absolute;
     top: 0;
@@ -238,7 +238,7 @@ body {
     z-index: 1;
 }
 
-.screen--end #nextRound {
+.screen--end-round #nextRound {
 
     color: white;
     /* background-color: white; */
@@ -250,19 +250,19 @@ body {
 
 }
 
-.screen--end .winnerMessage {
+.screen--end-round .winnerMessage {
     font-size: 3rem;
     color: var(--highlight-color);
     text-shadow: 5px 1px 0px #ffffff;
 }
 
-.screen--end .loading-icon {
+.screen--end-round .loading-icon {
     border-radius: 100%;
     transform: rotate(180deg);
     border: 2px solid black;
 }
 
-.screen--end.animating .loading-icon .path {
+.screen--end-round.animating .loading-icon .path {
     stroke-dasharray: 308;
     stroke-dashoffset: 308;
     animation: dash 5s linear forwards;
@@ -272,5 +272,39 @@ body {
     to {
       stroke-dashoffset: 0;
     }
+}
+.screen--end-game {
+    /* background-color: rgba(0, 0, 0, 0.5); */
+}
+
+.screen--end-game .container {
+    background-color: black;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.screen--end-game button {
+    color: white;
+    background-color: var(--highlight-color);
+    font-family: 'Audiowide', cursive;
+    font-size: 1rem;
+    padding: 1.2rem 5rem;
+    border: 2px solid black;
+    border-radius: 6px;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+
+.screen--end-game button:hover {
+    border-color: white;
+    background-color: black;
+    color: white;
 }
 

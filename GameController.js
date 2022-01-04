@@ -39,7 +39,8 @@ export default class GameController {
         
         this.startScreenEl = document.getElementById('start-screen');
         this.roundScreenEl = document.getElementById('round-screen');
-        this.endScreenEl = document.getElementById('end-screen');
+        this.endRoundScreenEl = document.getElementById('end-round-screen');
+        this.endGameScreenEl = document.getElementById('end-game-screen');
         
         
         this.boardScreenEl = document.getElementById('board-screen');
@@ -51,13 +52,16 @@ export default class GameController {
 
         window.addEventListener('resize', this.handleResize.bind(this));
 
+        this.startScreenEl.querySelector('form').addEventListener('submit', this.configurePlayers.bind(this));
+
         this.roundScreenEl.addEventListener("animationend", this.showBoardScreen.bind(this));
-        this.endScreenEl.addEventListener("animationend", this.startNewRound.bind(this));
+        this.endRoundScreenEl.addEventListener("animationend", this.startNewRound.bind(this));
+
+        this.endGameScreenEl.querySelector('button').addEventListener('click', this.restartGame.bind(this));
     }
 
     run() {
         this.startScreenEl.classList.add('screen--show');
-        this.startScreenEl.querySelector('form').addEventListener('submit', this.configurePlayers.bind(this));
     }
 
     configurePlayers(e) {
@@ -90,21 +94,33 @@ export default class GameController {
         this.showRoundScreen();
     }
 
+    restartGame() {
+        this.currentRound = -1;
+        this.score = [
+            { label: this.players[0].name , points: 0 },
+            { label: this.players[1].name , points: 0 },
+            { label: 'Draws' , points: 0 },
+        ];
+        this.startNewRound();
+        
+    }
+
     showRoundScreen() {
-        this.endScreenEl.classList.remove('screen--show');
+        this.endRoundScreenEl.classList.remove('screen--show');
+        this.endGameScreenEl.classList.remove('screen--show');
         this.roundScreenEl.querySelector('h1').innerText = `Round ${this.currentRound + 1}/${this.options.rounds}`;
         this.roundScreenEl.classList.add('screen--show');
         this.roundScreenEl.classList.add('animating');
     }
 
-    showEndScreen() {
+    showEndRoundScreen() {
         if(this.status == DRAW) {
-            this.endScreenEl.querySelector('h1').innerText = `Draw!`;
+            this.endRoundScreenEl.querySelector('h1').innerText = `Draw!`;
         } else if(this.status == WIN) {
-            this.endScreenEl.querySelector('h1').innerText = `${this.players[this.currentPlayer].name} won!`;
+            this.endRoundScreenEl.querySelector('h1').innerText = `${this.players[this.currentPlayer].name} won!`;
         }
-        this.endScreenEl.classList.add('screen--show');
-        this.endScreenEl.classList.add('animating');
+        this.endRoundScreenEl.classList.add('screen--show');
+        this.endRoundScreenEl.classList.add('animating');
 
     }
 
@@ -116,6 +132,28 @@ export default class GameController {
         this.startRound();
         this.roundScreenEl.classList.remove('screen--show');
         this.roundScreenEl.classList.remove('animating');
+    }
+
+    showEndGameScreen() {
+        const endGameScoreEl = this.endGameScreenEl.querySelector('.score');
+
+        endGameScoreEl.innerHTML = '';
+
+        const roundCounterEl = document.createElement('h1');
+        roundCounterEl.innerHTML = `Round: ${this.currentRound + 1}/${this.options.rounds}`;
+        endGameScoreEl.appendChild(roundCounterEl);
+
+        this.score.forEach(element => {
+            const h1 = document.createElement('h1');
+            h1.innerHTML = `${element.label}: ${element.points}`;
+            endGameScoreEl.appendChild(h1);
+        });
+
+        this.endGameScreenEl.classList.add('screen--show');
+        this.boardScreenEl.classList.remove('screen--show');
+        this.roundScreenEl.classList.remove('screen--show');
+        this.roundScreenEl.classList.remove('animating');
+
     }
 
     handleResize(e) {
@@ -183,7 +221,12 @@ export default class GameController {
                 // contabiliza empate
                 this.score[this.score.length - 1].points += 1;
             }
-            this.showEndScreen();
+            
+            if(this.currentRound == this.options.rounds - 1) {
+                this.showEndGameScreen();
+            } else {
+                this.showEndRoundScreen();
+            }
         } else {
             this.switchPlayer();
         }
@@ -279,7 +322,12 @@ export default class GameController {
                     // contabiliza empate
                     this.score[this.score.length - 1].points += 1;
                 }
-                this.showEndScreen();
+
+                if(this.currentRound == this.options.rounds - 1) {
+                    this.showEndGameScreen();
+                } else {
+                    this.showEndRoundScreen();
+                }
             } else {
                 this.switchPlayer();
             }
