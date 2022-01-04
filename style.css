@@ -3,7 +3,7 @@
 }
 
 :root {
-
+    --highlight-color: #9911bb;
 }
 
 body {
@@ -41,6 +41,8 @@ body {
 .screen--start h1 {
     font-size: 3rem;
     margin: 0;
+    color: var(--highlight-color);
+    text-shadow: 5px 1px 0px #ffffff;
 }
 
 .screen--start input[type="text"] {
@@ -59,8 +61,8 @@ body {
 }
 
 .screen--start button {
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: var(--highlight-color);
     font-family: 'Audiowide', cursive;
     font-size: 1rem;
     padding: 1.2rem 5rem;
@@ -92,6 +94,7 @@ body {
     pointer-events: none;
     opacity: 1;
     font-size: 1rem;
+    text-shadow: 5px 1px 0px var(--highlight-color);
     white-space: nowrap;
     text-align: center;
     z-index: 1;
@@ -217,4 +220,58 @@ body {
 .score h1 {
     margin: 15px;
     font-size: .85rem;
+}
+
+.screen--end {
+    /* background-color: red; */
+}
+
+.screen--end .container {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    font-size: 1rem;
+    z-index: 1;
+}
+
+.screen--end #nextRound {
+
+    color: white;
+    /* background-color: white; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+ 
+
+}
+
+.screen--end .winnerMessage {
+    font-size: 3rem;
+    color: var(--highlight-color);
+    text-shadow: 5px 1px 0px #ffffff;
+}
+
+.screen--end .loading-icon {
+    border-radius: 100%;
+    transform: rotate(180deg);
+    border: 2px solid black;
+}
+
+.screen--end .loading-icon .path {
+    stroke-dasharray: 308;
+    stroke-dashoffset: 308;
+    animation: dash 5s linear forwards;
+}
+  
+@keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
 }

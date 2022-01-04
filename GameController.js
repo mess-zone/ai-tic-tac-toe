@@ -39,6 +39,7 @@ export default class GameController {
         
         this.startScreenEl = document.getElementById('start-screen');
         this.roundScreenEl = document.getElementById('round-screen');
+        this.endScreenEl = document.getElementById('end-screen');
         
         
         this.boardScreenEl = document.getElementById('board-screen');
@@ -86,6 +87,12 @@ export default class GameController {
         this.roundScreenEl.querySelector('h1').innerText = `Round ${this.currentRound + 1}/${this.options.rounds}`;
         this.roundScreenEl.classList.add('screen--show');
         this.roundScreenEl.classList.add('animating');
+    }
+
+    showEndScreen() {
+        this.endScreenEl.querySelector('h1').innerText = `${this.players[this.currentPlayer].name} won!`;
+        this.endScreenEl.classList.add('screen--show');
+        this.endScreenEl.classList.add('animating');
     }
 
     showBoardScreen() {
@@ -153,9 +160,10 @@ export default class GameController {
             // TODO mostrar tela de fim de jogo
             console.log(this.status, this.winner);
             // this.startNewRound();
-            this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: you won!`;
+            this.hintEl.innerHTML = '';
             this.score[this.currentPlayer].points++;
             console.log(this.score)
+            this.showEndScreen();
         } else {
             this.switchPlayer();
         }
@@ -239,9 +247,10 @@ export default class GameController {
                 // TODO mostrar tela de fim de jogo
                 console.log('switch', this.status, this.winner);
                 // this.startNewRound();
-                this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: you won!`;
+                this.hintEl.innerHTML = '';
                 this.score[this.currentPlayer].points++;
                 console.log(this.score)
+                this.showEndScreen();
             } else {
                 this.switchPlayer();
             }
