@@ -107,7 +107,6 @@ body {
 
 @keyframes new-round {
     0% {
-        /* opacity: 1; */
         font-size: 1rem;
     }
     50% {
@@ -235,7 +234,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 1;
     font-size: 1rem;
     z-index: 1;
 }
@@ -275,3 +273,4 @@ body {
       stroke-dashoffset: 0;
     }
 }
+

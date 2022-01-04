@@ -90,13 +90,16 @@ export default class GameController {
     }
 
     showEndScreen() {
-        this.endScreenEl.querySelector('h1').innerText = `${this.players[this.currentPlayer].name} won!`;
+        if(this.status == DRAW) {
+            this.endScreenEl.querySelector('h1').innerText = `Draw!`;
+        } else if(this.status == WIN) {
+            this.endScreenEl.querySelector('h1').innerText = `${this.players[this.currentPlayer].name} won!`;
+        }
         this.endScreenEl.classList.add('screen--show');
-        this.endScreenEl.classList.add('animating');
     }
 
     showBoardScreen() {
-        console.log('show board scree')
+        console.log('show board screen')
         this.startScreenEl.classList.remove('screen--show');
         this.boardScreenEl.classList.add('screen--show');
         this.handleResize();
