@@ -75,6 +75,12 @@ export default class GameController {
         this.players = [];            
         this.players.push((player1.type == 'human') ? new HumanPlayer(player1.name, 'x') : new ComputerPlayer(player1.name, 'x'));
         this.players.push((player2.type == 'human') ? new HumanPlayer(player2.name, 'o') : new ComputerPlayer(player2.name, 'o'));
+
+        this.score = [
+            { label: this.players[0].name , points: 0 },
+            { label: this.players[1].name , points: 0 },
+            { label: 'Draws' , points: 0 },
+        ];
         
         this.startNewRound();
     }
@@ -167,9 +173,16 @@ export default class GameController {
             // TODO mostrar tela de fim de jogo
             console.log(this.status, this.winner);
             // this.startNewRound();
-            this.hintEl.innerHTML = '';
-            this.score[this.currentPlayer].points++;
-            console.log(this.score)
+            // TODO players não podem ter o mesmo nome!
+            if(this.status === WIN) {
+                const scr = this.score.find(element => element.label === this.players[this.currentPlayer].name);
+                scr.points += 1;
+                console.log(scr)
+                console.log(this.score)
+            } else {
+                // contabiliza empate
+                this.score[this.score.length - 1].points += 1;
+            }
             this.showEndScreen();
         } else {
             this.switchPlayer();
@@ -255,8 +268,17 @@ export default class GameController {
                 console.log('switch', this.status, this.winner);
                 // this.startNewRound();
                 this.hintEl.innerHTML = '';
-                this.score[this.currentPlayer].points++;
-                console.log(this.score)
+                // TODO codigo duplicado
+                // TODO players não podem ter o mesmo nome!
+                if(this.status === WIN) {
+                    const scr = this.score.find(element => element.label === this.players[this.currentPlayer].name);
+                    scr.points += 1;
+                    console.log(scr)
+                    console.log(this.score)
+                } else {
+                    // contabiliza empate
+                    this.score[this.score.length - 1].points += 1;
+                }
                 this.showEndScreen();
             } else {
                 this.switchPlayer();
@@ -276,35 +298,24 @@ export default class GameController {
         this.status = null;
         this.resetBoard();
 
-        this.score = [
-            { label: this.players[0].name , points: 0 },
-            { label: this.players[1].name , points: 0 },
-            { label: 'Draws' , points: 0 },
-        ];
+        this.updateScore();
+   
+        this.drawBoard();
 
+        await this.switchPlayer();
+    }
+
+    updateScore() {
         this.scoreEl.innerHTML = '';
 
         const roundCounterEl = document.createElement('h1');
         roundCounterEl.innerHTML = `Round: ${this.currentRound + 1}/${this.options.rounds}`;
         this.scoreEl.appendChild(roundCounterEl);
 
-        // this.players.forEach(player => {
-        //     const h1 = document.createElement('h1');
-        //     h1.innerHTML = `${player.name} (${player.symbol}): 0`;
-        //     this.scoreEl.appendChild(h1);
-        // });
-
         this.score.forEach(element => {
             const h1 = document.createElement('h1');
             h1.innerHTML = `${element.label}: ${element.points}`;
             this.scoreEl.appendChild(h1);
         });
-        // const drawsCountEl = document.createElement('h1');
-        // drawsCountEl.innerHTML = `Draws: ${this.score.draws}`;
-        // this.scoreEl.appendChild(drawsCountEl);
-
-        this.drawBoard();
-
-        await this.switchPlayer();
     }
 }
