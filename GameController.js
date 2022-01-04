@@ -25,6 +25,8 @@ export default class GameController {
             boardSize: 3, // 3x3
             rounds: 3,
         };
+
+        this.score = [];
         
         this.currentRound = -1;
 
@@ -150,6 +152,10 @@ export default class GameController {
         if(this.status != null) {
             // TODO mostrar tela de fim de jogo
             console.log(this.status, this.winner);
+            // this.startNewRound();
+            this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: you won!`;
+            this.score[this.currentPlayer].points++;
+            console.log(this.score)
         } else {
             this.switchPlayer();
         }
@@ -232,6 +238,10 @@ export default class GameController {
             if(this.status != null) {
                 // TODO mostrar tela de fim de jogo
                 console.log('switch', this.status, this.winner);
+                // this.startNewRound();
+                this.hintEl.innerHTML = `${this.players[this.currentPlayer].name}: you won!`;
+                this.score[this.currentPlayer].points++;
+                console.log(this.score)
             } else {
                 this.switchPlayer();
             }
@@ -250,13 +260,32 @@ export default class GameController {
         this.status = null;
         this.resetBoard();
 
+        this.score = [
+            { label: this.players[0].name , points: 0 },
+            { label: this.players[1].name , points: 0 },
+            { label: 'Draws' , points: 0 },
+        ];
+
         this.scoreEl.innerHTML = '';
-        // TODO mostrar também a contagem de empates
-        this.players.forEach(player => {
+
+        const roundCounterEl = document.createElement('h1');
+        roundCounterEl.innerHTML = `Round: ${this.currentRound + 1}/${this.options.rounds}`;
+        this.scoreEl.appendChild(roundCounterEl);
+
+        // this.players.forEach(player => {
+        //     const h1 = document.createElement('h1');
+        //     h1.innerHTML = `${player.name} (${player.symbol}): 0`;
+        //     this.scoreEl.appendChild(h1);
+        // });
+
+        this.score.forEach(element => {
             const h1 = document.createElement('h1');
-            h1.innerHTML = `${player.name} (${player.symbol}): 0 points`;
+            h1.innerHTML = `${element.label}: ${element.points}`;
             this.scoreEl.appendChild(h1);
         });
+        // const drawsCountEl = document.createElement('h1');
+        // drawsCountEl.innerHTML = `Draws: ${this.score.draws}`;
+        // this.scoreEl.appendChild(drawsCountEl);
 
         this.drawBoard();
 
