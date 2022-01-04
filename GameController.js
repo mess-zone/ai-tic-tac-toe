@@ -52,6 +52,7 @@ export default class GameController {
         window.addEventListener('resize', this.handleResize.bind(this));
 
         this.roundScreenEl.addEventListener("animationend", this.showBoardScreen.bind(this));
+        this.endScreenEl.addEventListener("animationend", this.startNewRound.bind(this));
     }
 
     run() {
@@ -84,6 +85,7 @@ export default class GameController {
     }
 
     showRoundScreen() {
+        this.endScreenEl.classList.remove('screen--show');
         this.roundScreenEl.querySelector('h1').innerText = `Round ${this.currentRound + 1}/${this.options.rounds}`;
         this.roundScreenEl.classList.add('screen--show');
         this.roundScreenEl.classList.add('animating');
@@ -96,6 +98,8 @@ export default class GameController {
             this.endScreenEl.querySelector('h1').innerText = `${this.players[this.currentPlayer].name} won!`;
         }
         this.endScreenEl.classList.add('screen--show');
+        this.endScreenEl.classList.add('animating');
+
     }
 
     showBoardScreen() {

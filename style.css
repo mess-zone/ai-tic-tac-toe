@@ -262,7 +262,7 @@ body {
     border: 2px solid black;
 }
 
-.screen--end .loading-icon .path {
+.screen--end.animating .loading-icon .path {
     stroke-dasharray: 308;
     stroke-dashoffset: 308;
     animation: dash 5s linear forwards;
