@@ -52,8 +52,7 @@ export default class Game {
             },
             currentRound: {
                 round: -1,
-                currentPlayer: 0,
-                // roundWinner: null,
+                currentPlayer: -1,
                 statusRound: null,
             },
             scores: [
@@ -120,13 +119,76 @@ export default class Game {
     }
 
     move(playerIndex, cellIndex) {
-        if(this.state.currentRound.currentPlayer == playerIndex) {
-            if(this.state.board.cells[cellIndex] == Symbols.EMPTY) {
-                this.state.board.cells[cellIndex] = this.state.players[playerIndex].symbol;
-
-                // switch player
-                this.state.currentRound.currentPlayer = (this.state.currentRound.currentPlayer + 1) % 2;
+        if(this.state.currentRound.statusRound === RoundStatus.PLAYING) {
+            if(this.state.currentRound.currentPlayer == playerIndex) {
+                if(this.state.board.cells[cellIndex] == Symbols.EMPTY) {
+                    console.log(`move p${playerIndex} to cell ${cellIndex}`)
+                    this.state.board.cells[cellIndex] = this.state.players[playerIndex].symbol;
+    
+                    // check end of round
+                    this.checkEndOfRound(this.state.players[playerIndex].symbol);
+    
+                    if(this.state.currentRound.statusRound === RoundStatus.PLAYING) {
+                        // switch player
+                        this.state.currentRound.currentPlayer = (this.state.currentRound.currentPlayer + 1) % 2;
+                    } else {
+                        console.log('END OF ROUND!')
+                    }
+                }
             }
         }
     }
+
+
+    searchWinningCombination(symbol) {
+        let hasWinner = false;
+        for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner == false; i++) {
+
+           hasWinner = WINNING_COMBINATIONS[i].every(index => this.state.board.cells[index] == symbol);
+    
+           if(hasWinner == true) {
+               return WINNING_COMBINATIONS[i];
+           }
+        }
+
+        return [];
+    }
+
+    checkEndOfRound(symbol) {
+        // console.log('check end of round for', symbol)
+        const winningCombination = this.searchWinningCombination(symbol);
+        // console.log(winningCombination, winningCombination.length)
+
+        // nenhuma combinação encontrada
+        if(winningCombination.length == 0) {
+            // console.log('  > nenhuma combinação encontrada')
+            
+            // checa empate
+            if(!this.hasEmptyCells()) {
+                this.state.currentRound.statusRound = RoundStatus.DRAW;
+                console.log('  > empate')
+                // return RoundStatus.DRAW;
+            }
+            // jogo não acabou
+            this.state.currentRound.statusRound = RoundStatus.PLAYING;
+            console.log('  > jogo não acabou')
+            // return RoundStatus.PLAYING;
+        } else {
+            // fim de jogo
+            this.state.currentRound.statusRound = RoundStatus.WIN;
+            console.log('  > fim de jogo')
+            // return RoundStatus.WIN;
+        }
+    }
+
+    hasEmptyCells() {
+        for(let i = 0; i < this.state.board.cells.length; i++) {
+            if(this.state.board.cells[i] == Symbols.EMPTY) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
