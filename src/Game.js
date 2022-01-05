@@ -118,4 +118,15 @@ export default class Game {
         console.log(`${this.state.board.cells[3]} | ${this.state.board.cells[4]} | ${this.state.board.cells[5]}`);
         console.log(`${this.state.board.cells[6]} | ${this.state.board.cells[7]} | ${this.state.board.cells[8]}`);
     }
+
+    move(playerIndex, cellIndex) {
+        if(this.state.currentRound.currentPlayer == playerIndex) {
+            if(this.state.board.cells[cellIndex] == Symbols.EMPTY) {
+                this.state.board.cells[cellIndex] = this.state.players[playerIndex].symbol;
+
+                // switch player
+                this.state.currentRound.currentPlayer = (this.state.currentRound.currentPlayer + 1) % 2;
+            }
+        }
+    }
 }
