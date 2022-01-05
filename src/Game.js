@@ -56,15 +56,15 @@ export default class Game {
                 statusRound: null,
             },
             scores: [
-                {
-                    winner: null,
-                },
-                {
-                    winner: null,
-                },
-                {
-                    winner: null,
-                },
+                // {
+                //     winner: null,
+                // },
+                // {
+                //     winner: null,
+                // },
+                // {
+                //     winner: null,
+                // },
             ],
             players: [
                 { 
@@ -132,6 +132,12 @@ export default class Game {
                         this.state.currentRound.currentPlayer = (this.state.currentRound.currentPlayer + 1) % 2;
                     } else {
                         console.log('END OF ROUND!')
+                        //contabiliza scores
+                        if(this.state.currentRound.statusRound === RoundStatus.DRAW) {
+                            this.state.scores.push({ winner: 'Draw'})
+                        } else {
+                            this.state.scores.push({ winner: this.state.players[playerIndex].symbol})
+                        }
                     }
                 }
             }
