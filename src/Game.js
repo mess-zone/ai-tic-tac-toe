@@ -38,7 +38,6 @@ const WINNING_COMBINATIONS = [
 
 export default class Game {
     constructor() {
-        console.log('Game');
 
         this.state = {
             statusGame: GameStatus.SETUP,
@@ -55,7 +54,7 @@ export default class Game {
                 round: -1,
                 currentPlayer: 0,
                 // roundWinner: null,
-                statusRound: RoundStatus.PLAYING,
+                statusRound: null,
             },
             scores: [
                 {
@@ -70,14 +69,53 @@ export default class Game {
             ],
             players: [
                 { 
-                    type: PlayerTypes.HUMAN,
+                    name: '',
+                    type: null,
                     symbol: Symbols.X,
                 },
                 { 
-                    type: PlayerTypes.HUMAN,
+                    name: '',
+                    type: null,
                     symbol: Symbols.O,
                 }
             ],
         }
+    }
+
+    setup(player1, player2) {
+        this.state.players[0].name = player1.name;
+        this.state.players[0].type = player1.type;
+
+        this.state.players[1].name = player2.name;
+        this.state.players[1].type = player2.type;
+
+        console.log(this.state.players);
+    }
+
+    startGame() {
+        this.state.statusGame = GameStatus.RUNNING;
+
+        //start round
+        this.state.board.cells = [
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+            ];
+        
+        this.state.currentRound = {
+                round: 1,
+                currentPlayer: 0,
+                // roundWinner: null,
+                statusRound: RoundStatus.PLAYING,
+            };
+
+        console.log(this.state.currentRound)
+
+    }
+
+    debugBoard() {
+        console.log(`${this.state.board.cells[0]} | ${this.state.board.cells[1]} | ${this.state.board.cells[2]}`);
+        console.log(`${this.state.board.cells[3]} | ${this.state.board.cells[4]} | ${this.state.board.cells[5]}`);
+        console.log(`${this.state.board.cells[6]} | ${this.state.board.cells[7]} | ${this.state.board.cells[8]}`);
     }
 }

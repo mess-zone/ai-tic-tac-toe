@@ -95,7 +95,13 @@
         import Game from "./src/Game.js";
 
         const game =  new Game();
-        console.log(game)
+        window.game= game;
+
+        console.log(game.state)
+        
+        game.setup({name: 'P1', type: 'HUMAN'}, {name: 'P2', type: 'HUMAN'});
+        game.startGame();
+
     </script>
 </body>
 </html>

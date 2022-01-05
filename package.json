@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Jogo da velha jogado por inteligência artificial usando o algoritmo Minimax. Inspirado nesse coding challenge https://www.youtube.com/watch?v=trKjYdBASyQ",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
