@@ -1,43 +1,43 @@
 
+export const GameStatus = {
+    SETUP: 'SETUP',
+    RUNNING: 'RUNNING',
+    ENDED: 'ENDED',
+}
 
-function createGame() {
+export const RoundStatus = {
+    PLAYING: 'PLAYING',
+    DRAW: 'DRAW',
+    WIN: 'WIN',
+}
 
-        const GameStatus = {
-            SETUP: 'SETUP',
-            RUNNING: 'RUNNING',
-            ENDED: 'ENDED',
-        }
+export const PlayerTypes = {
+    HUMAN: 'HUMAN',
+    COMPUTER: 'COMPUTER',
+}
 
-        const RoundStatus = {
-            PLAYING: 'PLAYING',
-            DRAW: 'DRAW',
-            WIN: 'WIN',
-        }
+export const Symbols = {
+    X: 'X',
+    O: 'O',
+    EMPTY: '',
+}
 
-        const PlayerTypes = {
-            HUMAN: 'HUMAN',
-            COMPUTER: 'COMPUTER',
-        }
+export const WINNING_COMBINATIONS = [
+    //horizontal
+    [ 0, 1, 2 ],
+    [ 3, 4, 5 ],
+    [ 6, 7, 8 ],
+    //vertical
+    [ 0, 3, 6 ],
+    [ 1, 4, 7 ],
+    [ 2, 5, 8 ],
+    //diagonal
+    [ 0, 4, 8 ],
+    [ 2, 4, 6 ],
+];
 
-        const Symbols = {
-            X: 'X',
-            O: 'O',
-            EMPTY: '',
-        }
+export default function createGame() {
 
-        const WINNING_COMBINATIONS = [
-            //horizontal
-            [ 0, 1, 2 ],
-            [ 3, 4, 5 ],
-            [ 6, 7, 8 ],
-            //vertical
-            [ 0, 3, 6 ],
-            [ 1, 4, 7 ],
-            [ 2, 5, 8 ],
-            //diagonal
-            [ 0, 4, 8 ],
-            [ 2, 4, 6 ],
-        ];
 
     const state = {
         statusGame: GameStatus.SETUP,
@@ -109,6 +109,7 @@ function createGame() {
         state.statusGame = GameStatus.ENDED;
     }
 
+    // TODO error: user can start next round even without finishing the current round
     function startNextRound() {
         if(state.statusGame == GameStatus.ENDED) return;
         if(state.currentRound.round == state.maxRounds - 1) return;
@@ -131,6 +132,7 @@ function createGame() {
         console.log(`${state.board.cells[6]} | ${state.board.cells[7]} | ${state.board.cells[8]}`);
     }
 
+    // TODO refatorar!
     function move(playerIndex, cellIndex) {
         if(state.currentRound.statusRound === RoundStatus.PLAYING) {
             if(state.currentRound.currentPlayer == playerIndex) {
@@ -231,5 +233,3 @@ function createGame() {
     }
 
 }
-
-export default createGame;
