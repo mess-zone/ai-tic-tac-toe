@@ -95,21 +95,20 @@ export default class Game {
         this.state.statusGame = GameStatus.RUNNING;
 
         //start round
+        this.startNextRound();
+    }
+
+    startNextRound() {
         this.state.board.cells = [
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-            ];
-        
-        this.state.currentRound = {
-                round: 1,
-                currentPlayer: 0,
-                // roundWinner: null,
-                statusRound: RoundStatus.PLAYING,
-            };
+            Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+            Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+            Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+        ];
 
-        console.log(this.state.currentRound)
-
+        this.state.currentRound.round += 1;
+        this.state.currentRound.currentPlayer = 0;
+        this.state.currentRound.statusRound = RoundStatus.PLAYING;
+        console.log('startNextRound', this.state.currentRound);
     }
 
     debugBoard() {
