@@ -94,11 +94,27 @@ export default class Game {
     startGame() {
         this.state.statusGame = GameStatus.RUNNING;
 
+        this.state.currentRound.round = -1;
+        this.state.currentRound.currentPlayer = -1;
+        this.state.currentRound.statusRound = null;
+
+        this.state.scores = [];
+        
         //start round
         this.startNextRound();
     }
+    
+    endGame() {
+        console.log('End of game')
+        this.state.statusGame = GameStatus.ENDED;
+
+
+    }
 
     startNextRound() {
+        if(this.state.statusGame == GameStatus.ENDED) return;
+        if(this.state.currentRound.round == this.state.maxRounds - 1) return;
+
         this.state.board.cells = [
             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
@@ -137,6 +153,11 @@ export default class Game {
                             this.state.scores.push({ winner: 'Draw'})
                         } else {
                             this.state.scores.push({ winner: this.state.players[playerIndex].symbol})
+                        }
+
+                        if(this.state.currentRound.round == this.state.maxRounds - 1) {
+                            //end of game
+                            this.endGame();
                         }
                     }
                 }
