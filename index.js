@@ -1,9 +1,9 @@
 
-import GameController from './GameController.js';
+// import GameController from './GameController.js';
 
-const gameController = new GameController();
+// const gameController = new GameController();
 
-gameController.run();
+// gameController.run();
 
 // gameController.startGame();
 
