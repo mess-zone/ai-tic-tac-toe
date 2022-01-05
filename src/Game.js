@@ -156,16 +156,18 @@ export default class Game {
     checkEndOfRound(symbol) {
         // console.log('check end of round for', symbol)
         const winningCombination = this.searchWinningCombination(symbol);
-        // console.log(winningCombination, winningCombination.length)
+        // console.log(winningCombination)
 
         // nenhuma combinação encontrada
         if(winningCombination.length == 0) {
             // console.log('  > nenhuma combinação encontrada')
             
             // checa empate
-            if(!this.hasEmptyCells()) {
+            console.log('empty cells', this.hasEmptyCells())
+            if(this.hasEmptyCells() == false) {
                 this.state.currentRound.statusRound = RoundStatus.DRAW;
                 console.log('  > empate')
+                return;
                 // return RoundStatus.DRAW;
             }
             // jogo não acabou
