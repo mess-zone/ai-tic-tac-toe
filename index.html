@@ -92,9 +92,9 @@
         </div>
     </section>
     <script type="module">
-        import Game from "./src/Game.js";
+        import createGame from "./src/createGame.js";
 
-        const game =  new Game();
+        const game = createGame();
         window.game= game;
 
         console.log(game.state)
