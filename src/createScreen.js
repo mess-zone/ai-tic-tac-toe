@@ -46,6 +46,8 @@ export default function createScreen(window) {
 
         nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
 
+        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', showStartScreen);
+
     }
 
     function handleResize(e) {
@@ -96,6 +98,13 @@ export default function createScreen(window) {
     }
 
     function showStartScreen() {
+        console.log('[screen] SHOW START SCREEN')
+        nodes.endGameScreenEl.classList.remove('screen--show');
+        nodes.roundScreenEl.classList.remove('screen--show');
+        nodes.roundScreenEl.classList.remove('animating');
+        nodes.endRoundScreenEl.classList.remove('screen--show');
+        nodes.endRoundScreenEl.classList.remove('animating');
+        
         nodes.startScreenEl.classList.add('screen--show');
     }
 
@@ -137,6 +146,8 @@ export default function createScreen(window) {
         switchTurn();
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
+        nodes.endRoundScreenEl.classList.remove('screen--show');
+        nodes.endRoundScreenEl.classList.remove('animating');
     }
 
     function switchTurn() {
