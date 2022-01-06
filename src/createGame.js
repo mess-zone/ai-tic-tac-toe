@@ -79,6 +79,27 @@ export default function createGame() {
             }
         ],
     };
+
+    const observers = [];
+
+    function subscribe(observerFunction) {
+        observers.push(observerFunction)
+    }
+
+    function notifyAll(command) {
+        for (const observerFunction of observers) {
+            observerFunction(command)
+        }
+    }
+
+    function executeCommand(command) {
+        console.log('[game] executeCommand ', command);
+
+        if(command.id == 'SETUP') {
+            setup(command.player1, command.player2)
+        }
+
+    }
     
 
     function setup(player1, player2) {
@@ -220,6 +241,10 @@ export default function createGame() {
     }
 
     return {
+        subscribe,
+        notifyAll,
+        observers,
+        executeCommand,
         state,
         setup,
         startGame,

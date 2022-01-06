@@ -1,6 +1,18 @@
 export default function createScreen(window) {
     let nodes = {};
 
+    const observers = [];
+
+    function subscribe(observerFunction) {
+        observers.push(observerFunction)
+    }
+
+    function notifyAll(command) {
+        for (const observerFunction of observers) {
+            observerFunction(command)
+        }
+    }
+
     function init() {
         console.log('[screen] init')
         nodes.startScreenEl = window.document.getElementById('start-screen');
@@ -30,6 +42,14 @@ export default function createScreen(window) {
         nodes.boardEl.style.height = side + 'px';
     }
 
+    function executeCommand(command) {
+        console.log('[screen] executeCommand ', command);
+
+        if(command.id == 'SETUP') {
+            showStartScreen();
+        }
+    }
+
     function showStartScreen() {
         nodes.startScreenEl.classList.add('screen--show');
     }
@@ -49,6 +69,7 @@ export default function createScreen(window) {
         console.log('configure players', player1, player2);
 
         // TODO notify game
+        notifyAll({ id: 'SETUP', player1, player2 });
         // this.players = [];            
         // this.players.push((player1.type == 'human') ? new HumanPlayer(player1.name, 'x') : new ComputerPlayer(player1.name, 'x'));
         // this.players.push((player2.type == 'human') ? new HumanPlayer(player2.name, 'o') : new ComputerPlayer(player2.name, 'o'));
@@ -63,6 +84,10 @@ export default function createScreen(window) {
     }
     
     return {
+        subscribe,
+        notifyAll,
+        observers,
+        executeCommand,
         nodes,
         init,
         showStartScreen,

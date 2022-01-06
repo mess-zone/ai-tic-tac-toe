@@ -22,10 +22,10 @@
                     <input id="player1-name" type="text" placeholder="player 1" />
                 </label>
                 <label>
-                    <input type="radio" name="player1-type"  value="human" checked> human
+                    <input type="radio" name="player1-type"  value="HUMAN" checked> human
                 </label>
                 <label>
-                    <input type="radio" name="player1-type"  value="computer"> computer
+                    <input type="radio" name="player1-type"  value="COMPUTER" disabled> computer
                 </label>
             </div>
             <div>
@@ -34,10 +34,10 @@
                     <input id="player2-name" type="text" placeholder="player 2" />
                 </label>
                 <label>
-                    <input type="radio" name="player2-type"  value="human" checked> human
+                    <input type="radio" name="player2-type"  value="HUMAN" checked> human
                 </label>
                 <label>
-                    <input type="radio" name="player2-type"  value="computer"> computer
+                    <input type="radio" name="player2-type"  value="COMPUTER" disabled> computer
                 </label>
             </div>
     
@@ -99,15 +99,19 @@
         gameScreen.init();
         window.gameScreen = gameScreen;
 
+        
+        
+        
+        const game = createGame();
+        window.game= game;
+        
+        console.log(game.state)
+        
+        game.subscribe(gameScreen.executeCommand);
+        gameScreen.subscribe(game.executeCommand);
+        
         gameScreen.showStartScreen();
 
-
-
-        // const game = createGame();
-        // window.game= game;
-
-        // console.log(game.state)
-        
         // game.setup({name: 'P1', type: 'HUMAN'}, {name: 'P2', type: 'HUMAN'});
         // game.startGame();
 
