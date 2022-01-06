@@ -100,7 +100,12 @@ export default function createGame() {
         } else if(command.id == 'MOVE') {
             move(command.playerIndex, command.cellIndex);
         } else if(command.id == 'START_NEXT_ROUND') {
-            startNextRound();
+            if(state.currentRound.round == state.maxRounds - 1) {
+                //end of game
+                endGame();
+            } else {
+                startNextRound();
+            }
         } 
 
     }
@@ -134,6 +139,11 @@ export default function createGame() {
     function endGame() {
         console.log('[game] End of game')
         state.statusGame = GameStatus.ENDED;
+
+        notifyAll({
+            id: 'END_GAME',
+            state,
+        });
     }
 
     // TODO error: user can start next round even without finishing the current round
@@ -194,12 +204,12 @@ export default function createGame() {
                         //update screen board
                         notifyAll({ id: 'END_ROUND', state});
 
-                        if(state.currentRound.round == state.maxRounds - 1) {
-                            //end of game
-                            endGame();
-                        } else {
-                            // startNextRound();
-                        }
+                        // if(state.currentRound.round == state.maxRounds - 1) {
+                        //     //end of game
+                        //     endGame();
+                        // } else {
+                        //     // startNextRound();
+                        // }
                     }
 
 

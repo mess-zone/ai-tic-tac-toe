@@ -23,7 +23,8 @@ export default function createScreen(window) {
         nodes.roundScreenEl = window.document.getElementById('round-screen');
         nodes.endRoundScreenEl = window.document.getElementById('end-round-screen');
         nodes.endGameScreenEl = window.document.getElementById('end-game-screen');
-
+        
+        nodes.endGameScoreEl = nodes.endGameScreenEl.querySelector('.score');
 
         nodes.boardScreenEl = window.document.getElementById('board-screen');
         nodes.scoreEl =  nodes.boardScreenEl.querySelector('#score');
@@ -35,6 +36,7 @@ export default function createScreen(window) {
         nodes.cellsEl.forEach(cellEl => {
             cellEl.addEventListener('click', handleCellClick);
         });
+        
 
         window.addEventListener('resize', handleResize);
 
@@ -43,6 +45,7 @@ export default function createScreen(window) {
         nodes.roundScreenEl.addEventListener("animationend", showBoardScreen);
 
         nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
+
     }
 
     function handleResize(e) {
@@ -82,6 +85,10 @@ export default function createScreen(window) {
             drawBoard();
             switchTurn();
             showEndRoundScreen();
+        } else if(command.id == 'END_GAME') {
+            state = {...command.state};
+            console.log('[screen] END GAME', state)
+            showEndGameScreen();
         }
         
         console.log('[screen] current state', state)
@@ -208,7 +215,7 @@ export default function createScreen(window) {
         nodes.scoreEl.appendChild(oScoreEl);
 
         const drawScoreEl = document.createElement('h1');
-        drawScoreEl.innerHTML = `Draw: ${state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
+        drawScoreEl.innerHTML = `Draws: ${state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
         nodes.scoreEl.appendChild(drawScoreEl);
     }
 
@@ -227,6 +234,31 @@ export default function createScreen(window) {
     function startNextRound() {
         console.log('[screen] start next round', state)
         notifyAll({id: 'START_NEXT_ROUND'});
+    }
+
+    function showEndGameScreen() {
+        nodes.endGameScoreEl.innerHTML = '';
+
+        const roundCounterEl = document.createElement('h1');
+        roundCounterEl.innerHTML = `Rounds: ${state.maxRounds}`;
+        nodes.endGameScoreEl.appendChild(roundCounterEl);
+
+        const xScoreEl = document.createElement('h1');
+        xScoreEl.innerHTML = `${state.players[0].name} (${state.players[0].symbol}): ${state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 )}`;
+        nodes.endGameScoreEl.appendChild(xScoreEl);
+
+        const oScoreEl = document.createElement('h1');
+        oScoreEl.innerHTML = `${state.players[1].name} (${state.players[1].symbol}): ${state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 )}`;
+        nodes.endGameScoreEl.appendChild(oScoreEl);
+
+        const drawScoreEl = document.createElement('h1');
+        drawScoreEl.innerHTML = `Draws: ${state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
+        nodes.endGameScoreEl.appendChild(drawScoreEl);
+
+        nodes.endGameScreenEl.classList.add('screen--show');
+        nodes.boardScreenEl.classList.remove('screen--show');
+        nodes.roundScreenEl.classList.remove('screen--show');
+        nodes.roundScreenEl.classList.remove('animating');
     }
     
     return {
