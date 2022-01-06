@@ -72,6 +72,12 @@ export default function createScreen(window) {
             updateScore();
             drawBoard();
             switchTurn();
+        } else if(command.id == 'END_ROUND') {
+            state = {...command.state};
+            console.log('[screen] END ROUND', state)
+            updateScore();
+            drawBoard();
+            switchTurn();
         }
         
         console.log('[screen] current state', state)

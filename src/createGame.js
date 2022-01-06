@@ -177,6 +177,9 @@ export default function createGame() {
                     if(state.currentRound.statusRound === RoundStatus.PLAYING) {
                         // switch player
                         state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % 2;
+
+                        //update screen board
+                        notifyAll({ id: 'UPDATE_BOARD', state});
                     } else {
                         console.log('[game] END OF ROUND!')
                         //contabiliza scores
@@ -186,14 +189,16 @@ export default function createGame() {
                             state.scores.push({ winner: state.players[playerIndex].symbol, combination: winningCombination})
                         }
 
+                        //update screen board
+                        notifyAll({ id: 'END_ROUND', state});
+
                         if(state.currentRound.round == state.maxRounds - 1) {
                             //end of game
                             endGame();
                         }
                     }
 
-                    //update screen board
-                    notifyAll({ id: 'UPDATE_BOARD', state});
+
                 }
             }
         }
