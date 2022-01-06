@@ -110,6 +110,8 @@ export default function createGame() {
         state.players[1].type = player2.type;
 
         console.log(state.players);
+
+        startGame();
     }
 
     function startGame() {
@@ -145,6 +147,11 @@ export default function createGame() {
         state.currentRound.currentPlayer = 0;
         state.currentRound.statusRound = RoundStatus.PLAYING;
         console.log('startNextRound', state.currentRound);
+
+        notifyAll({
+            id: 'START_ROUND',
+            state,
+        });
     }
 
     function debugBoard() {

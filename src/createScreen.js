@@ -47,11 +47,21 @@ export default function createScreen(window) {
 
         if(command.id == 'SETUP') {
             showStartScreen();
+        } else if(command.id == 'START_ROUND') {
+            showRoundScreen();
         }
     }
 
     function showStartScreen() {
         nodes.startScreenEl.classList.add('screen--show');
+    }
+
+    function showRoundScreen() {
+        nodes.endRoundScreenEl.classList.remove('screen--show');
+        nodes.endGameScreenEl.classList.remove('screen--show');
+        nodes.roundScreenEl.querySelector('h1').innerText = `Round ?/??`;
+        nodes.roundScreenEl.classList.add('screen--show');
+        nodes.roundScreenEl.classList.add('animating');
     }
 
     function configurePlayers(e) {
