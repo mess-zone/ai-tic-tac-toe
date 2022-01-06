@@ -1,4 +1,4 @@
-import { Symbols, PlayerTypes } from "./createGame.js";
+import { Symbols, PlayerTypes, RoundStatus } from "./createGame.js";
 
 export default function createScreen(window) {
     const nodes = {};
@@ -71,7 +71,7 @@ export default function createScreen(window) {
             console.log('[screen] UPDATE BOARD', state)
             updateScore();
             drawBoard();
-            waitPlayer();
+            switchTurn();
         }
         
         console.log('[screen] current state', state)
@@ -125,22 +125,32 @@ export default function createScreen(window) {
         handleResize();
         updateScore();
         drawBoard();
-        waitPlayer();
+        switchTurn();
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
     }
 
-    function waitPlayer() {
-        console.log('[screen] waitPlayer ', state.currentRound)
-        const previousPlayerIndex = (state.currentRound.currentPlayer - 1) % state.players.length;
+    function switchTurn() {
+        console.log('[screen] switchTurn ', state.currentRound)
+        const previousPlayerIndex = Math.abs((state.currentRound.currentPlayer - 1) % state.players.length);
+        // console.log('[screen] previous player', previousPlayerIndex, state.players[previousPlayerIndex]?.symbol)
         nodes.boardEl.classList.remove('turn--' + state.players[previousPlayerIndex]?.symbol);
         // state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
         nodes.boardEl.classList.add('turn--' + state.players[state.currentRound.currentPlayer].symbol);
-        nodes.hintEl.innerHTML = `${state.players[state.currentRound.currentPlayer].name}: your turn!`;
+
+        if(state.currentRound.statusRound == RoundStatus.PLAYING) {
+            nodes.hintEl.innerHTML = `${state.players[state.currentRound.currentPlayer].name}: your turn!`;
+        } else {
+            nodes.hintEl.innerHTML = '';
+        }
 
         if(state.players[state.currentRound.currentPlayer].type === PlayerTypes.HUMAN) {
             nodes.boardEl.classList.add('board--human-turn');
         } else {
+            nodes.boardEl.classList.remove('board--human-turn');
+        }
+        
+        if(state.currentRound.statusRound == RoundStatus.DRAW || state.currentRound.statusRound == RoundStatus.WIN) {
             nodes.boardEl.classList.remove('board--human-turn');
         }
     }
