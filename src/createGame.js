@@ -57,13 +57,13 @@ export default function createGame() {
         },
         scores: [
             // {
-            //     winner: null,
+            //     winner: null, combination: [0, 1, 2],
             // },
             // {
-            //     winner: null,
+            //     winner: null, combination: [0, 1, 2],
             // },
             // {
-            //     winner: null,
+            //     winner: null, combination: [0, 1, 2],
             // },
         ],
         players: [
@@ -172,7 +172,7 @@ export default function createGame() {
                     state.board.cells[cellIndex] = state.players[playerIndex].symbol;
 
                     // check end of round
-                    checkEndOfRound(state.players[playerIndex].symbol);
+                    const winningCombination = checkEndOfRound(state.players[playerIndex].symbol);
     
                     if(state.currentRound.statusRound === RoundStatus.PLAYING) {
                         // switch player
@@ -181,9 +181,9 @@ export default function createGame() {
                         console.log('[game] END OF ROUND!')
                         //contabiliza scores
                         if(state.currentRound.statusRound === RoundStatus.DRAW) {
-                            state.scores.push({ winner: 'Draw'})
+                            state.scores.push({ winner: 'Draw', combination: winningCombination})
                         } else {
-                            state.scores.push({ winner: state.players[playerIndex].symbol})
+                            state.scores.push({ winner: state.players[playerIndex].symbol, combination: winningCombination})
                         }
 
                         if(state.currentRound.round == state.maxRounds - 1) {
@@ -214,6 +214,7 @@ export default function createGame() {
         return [];
     }
 
+    // TODO refactor
     function checkEndOfRound(symbol) {
         // console.log('[game] check end of round for', symbol)
         const winningCombination = searchWinningCombination(symbol);
@@ -228,17 +229,19 @@ export default function createGame() {
             if(hasEmptyCells() == false) {
                 state.currentRound.statusRound = RoundStatus.DRAW;
                 console.log('[game]   > empate')
-                return;
+                return winningCombination;
                 // return RoundStatus.DRAW;
             }
             // jogo não acabou
             state.currentRound.statusRound = RoundStatus.PLAYING;
             console.log('[game]   > jogo não acabou')
+            return winningCombination;
             // return RoundStatus.PLAYING;
         } else {
             // fim de jogo
             state.currentRound.statusRound = RoundStatus.WIN;
             console.log('[game]   > fim de jogo')
+            return winningCombination
             // return RoundStatus.WIN;
         }
     }

@@ -156,14 +156,25 @@ export default function createScreen(window) {
     }
 
     function drawBoard() {
-        console.log('[screen] drawBoard', state.board)
+        console.log('[screen] drawBoard', state.board, state.scores)
+
         for(let i = 0; i < state.board.cells.length; i++) {
-            if(state.board.cells[i] == '') {
+            if(state.board.cells[i] == Symbols.EMPTY) {
                 nodes.cellsEl[i].classList.add('board__cell--empty');
             } else {
                 nodes.cellsEl[i].classList.remove('board__cell--empty');
                 nodes.cellsEl[i].classList.add(`board__cell--${state.board.cells[i]}`);
-            }                   
+            }   
+            
+            nodes.cellsEl[i].classList.remove('board__cell--highlight');
+        }
+
+        if(state.scores.length) {
+            const winningCombination = state.scores[state.scores.length - 1].combination;
+            winningCombination.forEach(cellIndex => {
+                nodes.cellsEl[cellIndex].classList.add('board__cell--highlight');
+            });
+            // console.log('[screen] winning combination', winningCombination)
         }
     }
 
