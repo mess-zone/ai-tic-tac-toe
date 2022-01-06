@@ -41,6 +41,8 @@ export default function createScreen(window) {
         nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
 
         nodes.roundScreenEl.addEventListener("animationend", showBoardScreen);
+
+        // nodes.endRoundScreenEl.addEventListener("animationend", startNewRound);
     }
 
     function handleResize(e) {
@@ -78,6 +80,7 @@ export default function createScreen(window) {
             updateScore();
             drawBoard();
             switchTurn();
+            showEndRoundScreen();
         }
         
         console.log('[screen] current state', state)
@@ -103,17 +106,6 @@ export default function createScreen(window) {
         console.log('[screen] configure players', player1, player2);
 
         notifyAll({ id: 'SETUP', player1, player2 });
-        // this.players = [];            
-        // this.players.push((player1.type == 'human') ? new HumanPlayer(player1.name, 'x') : new ComputerPlayer(player1.name, 'x'));
-        // this.players.push((player2.type == 'human') ? new HumanPlayer(player2.name, 'o') : new ComputerPlayer(player2.name, 'o'));
-
-        // this.score = [
-        //     { label: this.players[0].name , points: 0 },
-        //     { label: this.players[1].name , points: 0 },
-        //     { label: 'Draws' , points: 0 },
-        // ];
-        
-        // startNewRound();
     }
 
     function showRoundScreen() {
@@ -202,6 +194,18 @@ export default function createScreen(window) {
         const drawScoreEl = document.createElement('h1');
         drawScoreEl.innerHTML = `Draw: ${state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
         nodes.scoreEl.appendChild(drawScoreEl);
+    }
+
+    function showEndRoundScreen() {
+        console.log('[screen] showEndRound', state)
+        if(state.currentRound.statusRound == RoundStatus.DRAW) {
+            nodes.endRoundScreenEl.querySelector('h1').innerText = `Draw!`;
+        } else if(state.currentRound.statusRound == RoundStatus.WIN) {
+            nodes.endRoundScreenEl.querySelector('h1').innerText = `${state.players[state.currentRound.currentPlayer].name} won!`;
+        }
+        nodes.endRoundScreenEl.classList.add('screen--show');
+        nodes.endRoundScreenEl.classList.add('animating');
+
     }
     
     return {
