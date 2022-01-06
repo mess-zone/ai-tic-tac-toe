@@ -99,7 +99,9 @@ export default function createGame() {
             setup(command.player1, command.player2)
         } else if(command.id == 'MOVE') {
             move(command.playerIndex, command.cellIndex);
-        }
+        } else if(command.id == 'START_NEXT_ROUND') {
+            startNextRound();
+        } 
 
     }
     
@@ -148,7 +150,7 @@ export default function createGame() {
         state.currentRound.round += 1;
         state.currentRound.currentPlayer = 0;
         state.currentRound.statusRound = RoundStatus.PLAYING;
-        console.log('[game] startNextRound', state.currentRound);
+        console.log('[game] startNextRound', state);
 
         notifyAll({
             id: 'START_ROUND',
@@ -195,6 +197,8 @@ export default function createGame() {
                         if(state.currentRound.round == state.maxRounds - 1) {
                             //end of game
                             endGame();
+                        } else {
+                            // startNextRound();
                         }
                     }
 

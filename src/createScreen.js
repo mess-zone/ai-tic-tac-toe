@@ -42,7 +42,7 @@ export default function createScreen(window) {
 
         nodes.roundScreenEl.addEventListener("animationend", showBoardScreen);
 
-        // nodes.endRoundScreenEl.addEventListener("animationend", startNewRound);
+        nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
     }
 
     function handleResize(e) {
@@ -67,6 +67,7 @@ export default function createScreen(window) {
             showStartScreen();
         } else if(command.id == 'START_ROUND') {
             state = {...command.state};
+            console.log('[screen] starting round', state)
             showRoundScreen();
         } else if(command.id == 'UPDATE_BOARD') {
             state = {...command.state};
@@ -109,6 +110,9 @@ export default function createScreen(window) {
     }
 
     function showRoundScreen() {
+
+        resetBoard();
+
         nodes.endRoundScreenEl.classList.remove('screen--show');
         nodes.endGameScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.querySelector('h1').innerText = `Round ${state.currentRound.round + 1}/${state.maxRounds}`;
@@ -153,6 +157,17 @@ export default function createScreen(window) {
         }
     }
 
+    function resetBoard() {
+        console.log('[screen] resetBoard', state.board, state.scores)
+
+        for(let i = 0; i < nodes.cellsEl.length; i++) {
+            nodes.cellsEl[i].classList.add('board__cell--empty');
+            nodes.cellsEl[i].classList.remove('board__cell--X');
+            nodes.cellsEl[i].classList.remove('board__cell--O');
+            nodes.cellsEl[i].classList.remove('board__cell--highlight');
+        }
+    }
+
     function drawBoard() {
         console.log('[screen] drawBoard', state.board, state.scores)
 
@@ -164,11 +179,12 @@ export default function createScreen(window) {
                 nodes.cellsEl[i].classList.add(`board__cell--${state.board.cells[i]}`);
             }   
             
-            nodes.cellsEl[i].classList.remove('board__cell--highlight');
+            // nodes.cellsEl[i].classList.remove('board__cell--highlight');
         }
 
-        if(state.scores.length) {
-            const winningCombination = state.scores[state.scores.length - 1].combination;
+        // TODO ERRO AO INICIAR NOVO ROUND
+        if(state.scores[state.currentRound.round]) {
+            const winningCombination = state.scores[state.currentRound.round].combination;
             winningCombination.forEach(cellIndex => {
                 nodes.cellsEl[cellIndex].classList.add('board__cell--highlight');
             });
@@ -206,6 +222,11 @@ export default function createScreen(window) {
         nodes.endRoundScreenEl.classList.add('screen--show');
         nodes.endRoundScreenEl.classList.add('animating');
 
+    }
+
+    function startNextRound() {
+        console.log('[screen] start next round', state)
+        notifyAll({id: 'START_NEXT_ROUND'});
     }
     
     return {
