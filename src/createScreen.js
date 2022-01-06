@@ -1,7 +1,7 @@
 import { Symbols, PlayerTypes } from "./createGame.js";
 
 export default function createScreen(window) {
-    let nodes = {};
+    const nodes = {};
 
     let state = {};
 
@@ -32,6 +32,10 @@ export default function createScreen(window) {
         nodes.boardEl =  nodes.boardScreenEl.querySelector('#board');
         nodes.cellsEl =  nodes.boardEl.querySelectorAll('.board__cell');
 
+        nodes.cellsEl.forEach(cellEl => {
+            cellEl.addEventListener('click', handleCellClick);
+        });
+
         window.addEventListener('resize', handleResize);
 
         nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
@@ -46,15 +50,32 @@ export default function createScreen(window) {
         nodes.boardEl.style.height = side + 'px';
     }
 
+    function handleCellClick(e) {
+        console.log('[screen] cell clicked', e.target.dataset?.i, state);
+
+        //notifica game
+        notifyAll({ id: 'MOVE', playerIndex: state.currentRound.currentPlayer, cellIndex: e.target.dataset?.i });
+
+    }
+
     function executeCommand(command) {
         console.log('[screen] executeCommand ', command);
 
         if(command.id == 'SETUP') {
             showStartScreen();
         } else if(command.id == 'START_ROUND') {
-            state = command.state;
+            state = {...command.state};
             showRoundScreen();
+        } else if(command.id == 'UPDATE_BOARD') {
+            state = {...command.state};
+            console.log('[screen] UPDATE BOARD', state)
+            updateScore();
+            drawBoard();
+            waitPlayer();
         }
+        
+        console.log('[screen] current state', state)
+        console.log('[screen] current state.board', state.board)
     }
 
     function showStartScreen() {
@@ -73,7 +94,7 @@ export default function createScreen(window) {
             type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
         };
 
-        console.log('configure players', player1, player2);
+        console.log('[screen] configure players', player1, player2);
 
         notifyAll({ id: 'SETUP', player1, player2 });
         // this.players = [];            
@@ -110,6 +131,7 @@ export default function createScreen(window) {
     }
 
     function waitPlayer() {
+        console.log('[screen] waitPlayer ', state.currentRound)
         const previousPlayerIndex = (state.currentRound.currentPlayer - 1) % state.players.length;
         nodes.boardEl.classList.remove('turn--' + state.players[previousPlayerIndex]?.symbol);
         // state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
@@ -124,6 +146,7 @@ export default function createScreen(window) {
     }
 
     function drawBoard() {
+        console.log('[screen] drawBoard', state.board)
         for(let i = 0; i < state.board.cells.length; i++) {
             if(state.board.cells[i] == '') {
                 nodes.cellsEl[i].classList.add('board__cell--empty');
@@ -160,6 +183,7 @@ export default function createScreen(window) {
         observers,
         executeCommand,
         nodes,
+        state,
         init,
         showStartScreen,
     }

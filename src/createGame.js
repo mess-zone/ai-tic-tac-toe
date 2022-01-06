@@ -97,6 +97,8 @@ export default function createGame() {
 
         if(command.id == 'SETUP') {
             setup(command.player1, command.player2)
+        } else if(command.id == 'MOVE') {
+            move(command.playerIndex, command.cellIndex);
         }
 
     }
@@ -109,7 +111,7 @@ export default function createGame() {
         state.players[1].name = player2.name;
         state.players[1].type = player2.type;
 
-        console.log(state.players);
+        console.log('[game]', state.players);
 
         startGame();
     }
@@ -128,7 +130,7 @@ export default function createGame() {
     }
     
     function endGame() {
-        console.log('End of game')
+        console.log('[game] End of game')
         state.statusGame = GameStatus.ENDED;
     }
 
@@ -146,7 +148,7 @@ export default function createGame() {
         state.currentRound.round += 1;
         state.currentRound.currentPlayer = 0;
         state.currentRound.statusRound = RoundStatus.PLAYING;
-        console.log('startNextRound', state.currentRound);
+        console.log('[game] startNextRound', state.currentRound);
 
         notifyAll({
             id: 'START_ROUND',
@@ -155,6 +157,7 @@ export default function createGame() {
     }
 
     function debugBoard() {
+        console.log('[game]');
         console.log(`${state.board.cells[0]} | ${state.board.cells[1]} | ${state.board.cells[2]}`);
         console.log(`${state.board.cells[3]} | ${state.board.cells[4]} | ${state.board.cells[5]}`);
         console.log(`${state.board.cells[6]} | ${state.board.cells[7]} | ${state.board.cells[8]}`);
@@ -165,9 +168,9 @@ export default function createGame() {
         if(state.currentRound.statusRound === RoundStatus.PLAYING) {
             if(state.currentRound.currentPlayer == playerIndex) {
                 if(state.board.cells[cellIndex] == Symbols.EMPTY) {
-                    console.log(`move p${playerIndex} to cell ${cellIndex}`)
+                    console.log(`[game] move p${playerIndex} to cell ${cellIndex}`)
                     state.board.cells[cellIndex] = state.players[playerIndex].symbol;
-    
+
                     // check end of round
                     checkEndOfRound(state.players[playerIndex].symbol);
     
@@ -175,7 +178,7 @@ export default function createGame() {
                         // switch player
                         state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % 2;
                     } else {
-                        console.log('END OF ROUND!')
+                        console.log('[game] END OF ROUND!')
                         //contabiliza scores
                         if(state.currentRound.statusRound === RoundStatus.DRAW) {
                             state.scores.push({ winner: 'Draw'})
@@ -188,6 +191,9 @@ export default function createGame() {
                             endGame();
                         }
                     }
+
+                    //update screen board
+                    notifyAll({ id: 'UPDATE_BOARD', state});
                 }
             }
         }
@@ -209,30 +215,30 @@ export default function createGame() {
     }
 
     function checkEndOfRound(symbol) {
-        // console.log('check end of round for', symbol)
+        // console.log('[game] check end of round for', symbol)
         const winningCombination = searchWinningCombination(symbol);
-        // console.log(winningCombination)
+        // console.log('[game]', winningCombination)
 
         // nenhuma combinação encontrada
         if(winningCombination.length == 0) {
-            // console.log('  > nenhuma combinação encontrada')
+            // console.log('[game]   > nenhuma combinação encontrada')
             
             // checa empate
-            console.log('empty cells', hasEmptyCells())
+            console.log('[game] empty cells', hasEmptyCells())
             if(hasEmptyCells() == false) {
                 state.currentRound.statusRound = RoundStatus.DRAW;
-                console.log('  > empate')
+                console.log('[game]   > empate')
                 return;
                 // return RoundStatus.DRAW;
             }
             // jogo não acabou
             state.currentRound.statusRound = RoundStatus.PLAYING;
-            console.log('  > jogo não acabou')
+            console.log('[game]   > jogo não acabou')
             // return RoundStatus.PLAYING;
         } else {
             // fim de jogo
             state.currentRound.statusRound = RoundStatus.WIN;
-            console.log('  > fim de jogo')
+            console.log('[game]   > fim de jogo')
             // return RoundStatus.WIN;
         }
     }
