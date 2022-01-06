@@ -1,4 +1,4 @@
-import { Symbols } from "./createGame.js";
+import { Symbols, PlayerTypes } from "./createGame.js";
 
 export default function createScreen(window) {
     let nodes = {};
@@ -104,8 +104,23 @@ export default function createScreen(window) {
         handleResize();
         updateScore();
         drawBoard();
+        waitPlayer();
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
+    }
+
+    function waitPlayer() {
+        const previousPlayerIndex = (state.currentRound.currentPlayer - 1) % state.players.length;
+        nodes.boardEl.classList.remove('turn--' + state.players[previousPlayerIndex]?.symbol);
+        // state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
+        nodes.boardEl.classList.add('turn--' + state.players[state.currentRound.currentPlayer].symbol);
+        nodes.hintEl.innerHTML = `${state.players[state.currentRound.currentPlayer].name}: your turn!`;
+
+        if(state.players[state.currentRound.currentPlayer].type === PlayerTypes.HUMAN) {
+            nodes.boardEl.classList.add('board--human-turn');
+        } else {
+            nodes.boardEl.classList.remove('board--human-turn');
+        }
     }
 
     function drawBoard() {
@@ -127,11 +142,11 @@ export default function createScreen(window) {
         nodes.scoreEl.appendChild(roundCounterEl);
 
         const xScoreEl = document.createElement('h1');
-        xScoreEl.innerHTML = `${Symbols.X}: ${state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 )}`;
+        xScoreEl.innerHTML = `${state.players[0].name} (${state.players[0].symbol}): ${state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 )}`;
         nodes.scoreEl.appendChild(xScoreEl);
 
         const oScoreEl = document.createElement('h1');
-        oScoreEl.innerHTML = `${Symbols.O}: ${state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 )}`;
+        oScoreEl.innerHTML = `${state.players[1].name} (${state.players[1].symbol}): ${state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 )}`;
         nodes.scoreEl.appendChild(oScoreEl);
 
         const drawScoreEl = document.createElement('h1');
