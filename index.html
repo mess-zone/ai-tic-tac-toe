@@ -110,7 +110,7 @@
         game.subscribe(gameScreen.executeCommand);
         gameScreen.subscribe(game.executeCommand);
         
-        gameScreen.showStartScreen();
+        gameScreen.executeCommand({id: "SETUP"});
 
         // game.setup({name: 'P1', type: 'HUMAN'}, {name: 'P2', type: 'HUMAN'});
         // game.startGame();
