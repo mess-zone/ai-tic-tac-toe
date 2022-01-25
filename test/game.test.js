@@ -181,13 +181,14 @@ describe('game', function() {
 
         });
 
-        it('Should not start the next round if is out of the limit of maxRounds', function() {
+        it('Should end game if is out of the limit of maxRounds', function() {
             for(let i = 0; i <= game.state.maxRounds; i++) {
                 game.startNextRound();
                 game.state.currentRound.statusRound = RoundStatus.WIN;
             }
             console.log(game.state)
             expect(game.state.currentRound.round).to.equal(game.state.maxRounds - 1);
+            expect(game.state.statusGame).to.equal(GameStatus.ENDED);
 
         });
 

@@ -128,14 +128,12 @@ export default function createGame() {
     }
 
     function startNextRoundCommand() {
-        if(state.currentRound.round == state.maxRounds - 1) return endGame();
-        
         startNextRound();
     }
 
 
 
-    
+    // tested
     function switchPlayer() {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return;
 
@@ -184,7 +182,7 @@ export default function createGame() {
     // tested
     function startNextRound() {
         if(state.statusGame == GameStatus.ENDED) return;
-        if(state.currentRound.round == state.maxRounds - 1) return;
+        if(state.currentRound.round == state.maxRounds - 1) return endGame();
         if(state.currentRound.statusRound == RoundStatus.PLAYING) return;
 
         state.board.cells = [
