@@ -194,7 +194,9 @@ export default function createGame() {
 
     function checkEndOfRound(playerIndex) {
 
-        const winningCombination = getWinningcombination(state.players[playerIndex].symbol);
+        const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
+
+        updateRoundStatus(winningCombination.length >= 0)
 
         if(state.currentRound.statusRound === RoundStatus.PLAYING) {
             // switch player
@@ -216,8 +218,29 @@ export default function createGame() {
         }
     }
 
+    // tested (helper)
+    function updateRoundStatus(hasWinningCombination) {
+        if(hasWinningCombination) {
+            // fim de jogo
+            state.currentRound.statusRound = RoundStatus.WIN;
+            console.log('[game]   > fim de jogo')
+            return
+        }
+        
+        // checa empate
+        if(hasEmptyCells()) {
+            // jogo não acabou
+            state.currentRound.statusRound = RoundStatus.PLAYING;
+            console.log('[game]   > jogo não acabou')
+        } else {
+            // empate
+            state.currentRound.statusRound = RoundStatus.DRAW;
+            console.log('[game]   > empate')
+        }
+        
+    }
 
-    // tested
+    // tested (helper)
     function searchWinningCombination(symbol) {
         let hasWinner = false;
         for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner == false; i++) {
@@ -232,38 +255,7 @@ export default function createGame() {
         return [];
     }
 
-    // TODO refactor
-    function getWinningcombination(symbol) {
-        // console.log('[game] check end of round for', symbol)
-        const winningCombination = searchWinningCombination(symbol);
-        // console.log('[game]', winningCombination)
-
-        // nenhuma combinação encontrada
-        if(winningCombination.length == 0) {
-            // console.log('[game]   > nenhuma combinação encontrada')
-            
-            // checa empate
-            console.log('[game] empty cells', hasEmptyCells())
-            if(hasEmptyCells() == false) {
-                state.currentRound.statusRound = RoundStatus.DRAW;
-                console.log('[game]   > empate')
-                return winningCombination;
-                // return RoundStatus.DRAW;
-            }
-            // jogo não acabou
-            state.currentRound.statusRound = RoundStatus.PLAYING;
-            console.log('[game]   > jogo não acabou')
-            return winningCombination;
-            // return RoundStatus.PLAYING;
-        } else {
-            // fim de jogo
-            state.currentRound.statusRound = RoundStatus.WIN;
-            console.log('[game]   > fim de jogo')
-            return winningCombination
-            // return RoundStatus.WIN;
-        }
-    }
-
+    //tested (helper)
     function hasEmptyCells() {
         for(let i = 0; i < state.board.cells.length; i++) {
             if(state.board.cells[i] == Symbols.EMPTY) {
@@ -286,10 +278,10 @@ export default function createGame() {
         endGame,
         startNextRound,
         checkEndOfRound,
+        updateRoundStatus,
         debugBoard,
         move,
         searchWinningCombination,
-        getWinningcombination,
         hasEmptyCells,
     }
 

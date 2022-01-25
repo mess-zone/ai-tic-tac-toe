@@ -268,7 +268,7 @@ describe('game', function() {
 
     });
 
-    describe.only('#searchWinningCombination', function() {
+    describe('#searchWinningCombination()', function() {
         beforeEach(function() {
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
@@ -417,27 +417,52 @@ describe('game', function() {
         });
     });
 
-    describe('#checkEndOfRound()', function() {
+    describe.only('#updateRoundStatus()', function() {
         beforeEach(function() {
-            console.log('create new Game')
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
-            game.startGame();
-            game.move(0, 0);
-            game.move(1, 2);
-            game.move(0, 3);
-            game.move(1, 1);
-            game.move(0, 6);
         });
 
-        it('Draw');
-        it('X won', function() {
-            game.checkEndOfRound(Symbols.X);
+        it('Draw', function() {
+            game.state.board.cells[0] = Symbols.X;
+            game.state.board.cells[1] = Symbols.O;
+            game.state.board.cells[2] = Symbols.X;
+            game.state.board.cells[3] = Symbols.X;
+            game.state.board.cells[4] = Symbols.O;
+            game.state.board.cells[5] = Symbols.X;
+            game.state.board.cells[6] = Symbols.O;
+            game.state.board.cells[7] = Symbols.X;
+            game.state.board.cells[8] = Symbols.O;
 
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(game.hasEmptyCells()).to.equal(false);
+            const hasWinningCombination = false;
+            game.updateRoundStatus(hasWinningCombination);
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.DRAW);
+        });
+        it('Victory', function() {
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            const hasWinningCombination = true;
+            game.updateRoundStatus(hasWinningCombination);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.WIN);
         });
-        it('O won');
-        it('Round stil in progress');
+        it('Round stil in progress', function() {
+            game.state.board.cells[0] = Symbols.X;
+            game.state.board.cells[1] = Symbols.O;
+            game.state.board.cells[2] = Symbols.X;
+            game.state.board.cells[3] = Symbols.X;
+            game.state.board.cells[4] = Symbols.O;
+            game.state.board.cells[5] = Symbols.X;
+            game.state.board.cells[6] = Symbols.O;
+            game.state.board.cells[7] = Symbols.X;
+            game.state.board.cells[8] = Symbols.EMPTY;
+
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(game.hasEmptyCells()).to.equal(true);
+            const hasWinningCombination = false;
+            game.updateRoundStatus(hasWinningCombination);
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+        });
     });
 
     describe('#hasEmptyCells()', function() {
@@ -445,16 +470,39 @@ describe('game', function() {
             console.log('create new Game')
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
-            game.startGame();
-            game.move(0, 0);
-            game.move(1, 2);
-            game.move(0, 3);
-            game.move(1, 1);
-            game.move(0, 6);
         });
 
-        it('Does not have empty cells');
-        it('Has empty cells', function() {
+        it('Does not have empty cells', function() {
+            game.state.board.cells[0] = Symbols.X;
+            game.state.board.cells[1] = Symbols.O;
+            game.state.board.cells[2] = Symbols.X;
+            game.state.board.cells[3] = Symbols.X;
+            game.state.board.cells[4] = Symbols.O;
+            game.state.board.cells[5] = Symbols.X;
+            game.state.board.cells[6] = Symbols.O;
+            game.state.board.cells[7] = Symbols.X;
+            game.state.board.cells[8] = Symbols.O;
+
+            const hasEmptyCells = game.hasEmptyCells();
+
+            expect(hasEmptyCells).to.equal(false);
+        });
+        it('Does have some empty cells', function() {
+            game.state.board.cells[0] = Symbols.X;
+            game.state.board.cells[1] = Symbols.O;
+            game.state.board.cells[2] = Symbols.X;
+            game.state.board.cells[3] = Symbols.EMPTY;
+            game.state.board.cells[4] = Symbols.O;
+            game.state.board.cells[5] = Symbols.X;
+            game.state.board.cells[6] = Symbols.O;
+            game.state.board.cells[7] = Symbols.X;
+            game.state.board.cells[8] = Symbols.O;
+
+            const hasEmptyCells = game.hasEmptyCells();
+
+            expect(hasEmptyCells).to.equal(true);
+        });
+        it('Has all empty cells', function() {
             const hasEmptyCells = game.hasEmptyCells();
 
             expect(hasEmptyCells).to.equal(true);
