@@ -95,11 +95,11 @@ export default function createGame() {
     function executeCommand(command) {
         console.log('[game] executeCommand ', command);
 
-        if(command.id == 'SETUP') {
+        if(command.id === 'SETUP') {
             setupCommand(command.player1, command.player2)
-        } else if(command.id == 'MOVE') {
+        } else if(command.id === 'MOVE') {
             moveCommand(command.playerIndex, command.cellIndex);
-        } else if(command.id == 'START_NEXT_ROUND') {
+        } else if(command.id === 'START_NEXT_ROUND') {
             startNextRoundCommand();
         } 
 
@@ -181,9 +181,9 @@ export default function createGame() {
 
     // tested
     function startNextRound() {
-        if(state.statusGame == GameStatus.ENDED) return;
-        if(state.currentRound.round == state.maxRounds - 1) return endGame();
-        if(state.currentRound.statusRound == RoundStatus.PLAYING) return;
+        if(state.statusGame === GameStatus.ENDED) return;
+        if(state.currentRound.round === state.maxRounds - 1) return endGame();
+        if(state.currentRound.statusRound === RoundStatus.PLAYING) return;
 
         state.board.cells = [
             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
@@ -238,7 +238,7 @@ export default function createGame() {
 
     // tested (helper)
     function updateRoundStatus(hasWinningCombination) {
-        if(hasWinningCombination === true) {
+        if(hasWinningCombination) {
             // fim de jogo
             state.currentRound.statusRound = RoundStatus.WIN;
             console.log('[game]   > fim de jogo')
@@ -261,11 +261,11 @@ export default function createGame() {
     // tested (helper)
     function searchWinningCombination(symbol) {
         let hasWinner = false;
-        for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner == false; i++) {
+        for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner === false; i++) {
 
-           hasWinner = WINNING_COMBINATIONS[i].every(index => state.board.cells[index] == symbol);
+           hasWinner = WINNING_COMBINATIONS[i].every(index => state.board.cells[index] === symbol);
     
-           if(hasWinner == true) {
+           if(hasWinner) {
                return WINNING_COMBINATIONS[i];
            }
         }
@@ -276,7 +276,7 @@ export default function createGame() {
     //tested (helper)
     function hasEmptyCells() {
         for(let i = 0; i < state.board.cells.length; i++) {
-            if(state.board.cells[i] == Symbols.EMPTY) {
+            if(state.board.cells[i] === Symbols.EMPTY) {
                 return true;
             }
         }
