@@ -417,7 +417,7 @@ describe('game', function() {
         });
     });
 
-    describe.only('#updateRoundStatus()', function() {
+    describe('#updateRoundStatus()', function() {
         beforeEach(function() {
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
@@ -465,9 +465,31 @@ describe('game', function() {
         });
     });
 
+    describe.only("#switchPlayer()", function() {
+        beforeEach(function() {
+            game = createGame();
+            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+        });
+
+        it('switch player\'s turn', function() {
+            expect(game.state.currentRound.currentPlayer).to.equal(0);
+            game.switchPlayer();
+            expect(game.state.currentRound.currentPlayer).to.equal(1);
+            game.switchPlayer();
+            expect(game.state.currentRound.currentPlayer).to.equal(0);
+        })
+        it('Does not switch player when round status is not PLAYING', function() {
+            expect(game.state.currentRound.currentPlayer).to.equal(0);
+            game.state.currentRound.statusRound = RoundStatus.WIN; 
+            game.switchPlayer();
+            expect(game.state.currentRound.currentPlayer).to.equal(0);
+        });
+
+        it('notify UPDATE_BOARD')
+    });
+
     describe('#hasEmptyCells()', function() {
         beforeEach(function() {
-            console.log('create new Game')
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });

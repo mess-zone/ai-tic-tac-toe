@@ -99,7 +99,16 @@ export default function createGame() {
             setup(command.player1, command.player2)
         } else if(command.id == 'MOVE') {
             move(command.playerIndex, command.cellIndex);
-            checkEndOfRound(command.playerIndex);
+            
+            const winningCombination = searchWinningCombination(state.players[command.playerIndex].symbol);
+            
+            updateRoundStatus(winningCombination.length >= 0);
+            
+            switchPlayer();
+            
+            checkEndOfRound(winningCombination);
+            
+
         } else if(command.id == 'START_NEXT_ROUND') {
             if(state.currentRound.round == state.maxRounds - 1) {
                 //end of game
@@ -111,6 +120,15 @@ export default function createGame() {
 
     }
     
+    function switchPlayer() {
+        if(state.currentRound.statusRound !== RoundStatus.PLAYING) return;
+
+        // switch player
+        state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
+
+        //update screen board
+        notifyAll({ id: 'UPDATE_BOARD', state});
+    }
 
     function setup(player1, player2) { 
         setPlayers(player1, player2);
@@ -192,25 +210,14 @@ export default function createGame() {
         state.board.cells[cellIndex] = state.players[playerIndex].symbol;
     }
 
-    function checkEndOfRound(playerIndex) {
-
-        const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
-
-        updateRoundStatus(winningCombination.length >= 0)
-
-        if(state.currentRound.statusRound === RoundStatus.PLAYING) {
-            // switch player
-            state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % 2;
-
-            //update screen board
-            notifyAll({ id: 'UPDATE_BOARD', state});
-        } else {
+    function checkEndOfRound(winningCombination) {
+        if(state.currentRound.statusRound !== RoundStatus.PLAYING) {
             console.log('[game] END OF ROUND!')
             //contabiliza scores
             if(state.currentRound.statusRound === RoundStatus.DRAW) {
                 state.scores.push({ winner: 'Draw', combination: winningCombination})
             } else {
-                state.scores.push({ winner: state.players[playerIndex].symbol, combination: winningCombination})
+                state.scores.push({ winner: state.players[command.playerIndex].symbol, combination: winningCombination})
             }
 
             //update screen board
@@ -279,6 +286,7 @@ export default function createGame() {
         startNextRound,
         checkEndOfRound,
         updateRoundStatus,
+        switchPlayer,
         debugBoard,
         move,
         searchWinningCombination,
