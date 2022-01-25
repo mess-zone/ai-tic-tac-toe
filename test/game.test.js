@@ -125,7 +125,7 @@ describe('game', function() {
 
         beforeEach(function() {
             game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });
 
         it('Should end the game', function() {
@@ -216,7 +216,7 @@ describe('game', function() {
     describe('#move()', function() {
 
         game = createGame();
-        game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+        game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
 
 
         it('Should move player 1 to empty destination cell', function() {
@@ -271,7 +271,7 @@ describe('game', function() {
     describe('#searchWinningCombination()', function() {
         beforeEach(function() {
             game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });
 
         it('Should find winning combination 0 1 2', function() {
@@ -420,7 +420,7 @@ describe('game', function() {
     describe('#updateRoundStatus()', function() {
         beforeEach(function() {
             game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });
 
         it('Draw', function() {
@@ -468,7 +468,7 @@ describe('game', function() {
     describe("#switchPlayer()", function() {
         beforeEach(function() {
             game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });
 
         it('switch player\'s turn', function() {
@@ -488,10 +488,10 @@ describe('game', function() {
         it('notify UPDATE_BOARD')
     });
 
-    describe.only("#checkEndOfRound()", function() {
+    describe("#checkEndOfRound()", function() {
         beforeEach(function() {
             game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });
 
         it('Not update scores if round is not ended', function() {
@@ -514,7 +514,7 @@ describe('game', function() {
             game.state.currentRound.statusRound = RoundStatus.WIN;
             const winningCombination = [0, 1, 2];
             game.checkEndOfRound(winningCombination);
-            
+
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal(Symbols.X);
             expect(game.state.scores[0].combination).to.equal(winningCombination);
@@ -526,7 +526,7 @@ describe('game', function() {
     describe('#hasEmptyCells()', function() {
         beforeEach(function() {
             game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });
 
         it('Does not have empty cells', function() {

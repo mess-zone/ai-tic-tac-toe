@@ -96,7 +96,7 @@ export default function createGame() {
         console.log('[game] executeCommand ', command);
 
         if(command.id == 'SETUP') {
-            setup(command.player1, command.player2)
+            setupCommand(command.player1, command.player2)
         } else if(command.id == 'MOVE') {
             move(command.playerIndex, command.cellIndex);
             
@@ -119,6 +119,20 @@ export default function createGame() {
         } 
 
     }
+
+    /*
+        USE CASES
+    */
+   
+    function setupCommand(player1, player2) { 
+        setPlayers(player1, player2);
+        resetGame();
+        //start round
+        startNextRound();
+    }
+
+
+
     
     function switchPlayer() {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return;
@@ -130,12 +144,7 @@ export default function createGame() {
         notifyAll({ id: 'UPDATE_BOARD', state});
     }
 
-    function setup(player1, player2) { 
-        setPlayers(player1, player2);
-        resetGame();
-        //start round
-        startNextRound();
-    }
+
 
     // tested
     function setPlayers(player1, player2) {
@@ -210,9 +219,10 @@ export default function createGame() {
         state.board.cells[cellIndex] = state.players[playerIndex].symbol;
     }
 
+    // tested
     function checkEndOfRound(winningCombination) {
         if(state.currentRound.statusRound === RoundStatus.PLAYING) return;
-        
+
         console.log('[game] END OF ROUND!')
         //contabiliza scores
         if(state.currentRound.statusRound === RoundStatus.DRAW) {
@@ -280,7 +290,7 @@ export default function createGame() {
         observers,
         executeCommand,
         state,
-        setup,
+        setupCommand,
         setPlayers,
         resetGame,
         endGame,
