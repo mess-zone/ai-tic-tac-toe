@@ -98,24 +98,9 @@ export default function createGame() {
         if(command.id == 'SETUP') {
             setupCommand(command.player1, command.player2)
         } else if(command.id == 'MOVE') {
-            move(command.playerIndex, command.cellIndex);
-            
-            const winningCombination = searchWinningCombination(state.players[command.playerIndex].symbol);
-            
-            updateRoundStatus(winningCombination.length >= 0);
-            
-            checkEndOfRound(winningCombination);
-            switchPlayer();
-            
-            
-
+            moveCommand(command.playerIndex, command.cellIndex);
         } else if(command.id == 'START_NEXT_ROUND') {
-            if(state.currentRound.round == state.maxRounds - 1) {
-                //end of game
-                endGame();
-            } else {
-                startNextRound();
-            }
+            startNextRoundCommand();
         } 
 
     }
@@ -123,12 +108,32 @@ export default function createGame() {
     /*
         USE CASES
     */
-   
+
     function setupCommand(player1, player2) { 
         setPlayers(player1, player2);
         resetGame();
         //start round
         startNextRound();
+    }
+
+    function moveCommand(playerIndex, cellIndex) {
+        move(playerIndex, cellIndex);
+            
+        const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
+        
+        updateRoundStatus(winningCombination.length >= 0);
+        
+        checkEndOfRound(winningCombination);
+        switchPlayer();
+    }
+
+    function startNextRoundCommand() {
+        if(state.currentRound.round == state.maxRounds - 1) {
+            //end of game
+            endGame();
+        } else {
+            startNextRound();
+        }
     }
 
 
@@ -291,6 +296,8 @@ export default function createGame() {
         executeCommand,
         state,
         setupCommand,
+        moveCommand,
+        startNextRoundCommand,
         setPlayers,
         resetGame,
         endGame,
