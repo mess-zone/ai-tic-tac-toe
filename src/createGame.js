@@ -109,17 +109,17 @@ export default function createGame() {
         USE CASES
     */
 
-    function setupCommand(command) { 
-        setPlayers(command.player1, command.player2);
+    function setupCommand({ player1, player2 }) { 
+        setPlayers(player1, player2);
         resetGame();
         //start round
         startNextRound();
     }
 
-    function moveCommand(command) {
-        move(command.playerIndex, command.cellIndex);
+    function moveCommand({ playerIndex, cellIndex }) {
+        move(playerIndex, cellIndex);
             
-        const winningCombination = searchWinningCombination(state.players[command.playerIndex].symbol);
+        const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
         
         updateRoundStatus(winningCombination.length > 0);
         
