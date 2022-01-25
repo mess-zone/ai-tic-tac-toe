@@ -121,10 +121,9 @@ describe('game', function() {
 
     });
 
-    describe.only('#endGame()', function() {
+    describe('#endGame()', function() {
 
         beforeEach(function() {
-            console.log('create new Game')
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         });
@@ -143,17 +142,23 @@ describe('game', function() {
     describe('#startNextRound()', function() {
 
         beforeEach(function() {
-            console.log('create new Game')
             game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
-            game.startGame();
+            game.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.resetGame();
         });
 
-        it('Should not start the next round without finishing the current');
-        it('Should not start the next round if is out of the limit of maxRounds');
-        it('Should not start the next round if the game is ENDED');
+        it('Should start the 1º round', function() {
+            game.startNextRound();
 
-        it('Should start the second round', function() {
+            expect(game.state.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
+            expect(game.state.currentRound.round).to.equal(0);
+            expect(game.state.currentRound.currentPlayer).to.equal(0);
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+
+        });
+        it('Should start the 2º round', function() {
+            game.startNextRound();
+            game.state.currentRound.statusRound = RoundStatus.WIN;
             game.startNextRound();
 
             expect(game.state.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
@@ -162,13 +167,55 @@ describe('game', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
 
         });
+        it('Should start the 3º round', function() {
+            game.startNextRound();
+            game.state.currentRound.statusRound = RoundStatus.WIN;
+            game.startNextRound();
+            game.state.currentRound.statusRound = RoundStatus.WIN;
+            game.startNextRound();
+
+            expect(game.state.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
+            expect(game.state.currentRound.round).to.equal(2);
+            expect(game.state.currentRound.currentPlayer).to.equal(0);
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+
+        });
+
+        it('Should not start the next round if is out of the limit of maxRounds', function() {
+            for(let i = 0; i <= game.state.maxRounds; i++) {
+                game.startNextRound();
+                game.state.currentRound.statusRound = RoundStatus.WIN;
+            }
+            console.log(game.state)
+            expect(game.state.currentRound.round).to.equal(game.state.maxRounds - 1);
+
+        });
+
+        it('Should not start the next round if the game is ENDED', function() {
+            game.startNextRound();
+            game.endGame();
+            expect(game.state.statusGame).to.equal(GameStatus.ENDED)
+
+            game.startNextRound();
+            expect(game.state.statusGame).to.equal(GameStatus.ENDED)
+            expect(game.state.currentRound.round).to.equal(0);
+
+        });
+
+        it('Should not start the next round without finishing the current', function() {
+            game.startNextRound();
+            game.startNextRound();
+            expect(game.state.currentRound.round).to.equal(0);
+
+        });
+
+        it('Should notify START_ROUND');
 
     });
 
-    describe('#move()', function() {
+    describe.only('#move()', function() {
 
         // beforeEach(function() {
-            console.log('create new Game')
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
             // game.startGame();

@@ -149,10 +149,10 @@ export default function createGame() {
         });
     }
 
-    // TODO error: user can start next round even without finishing the current round
     function startNextRound() {
         if(state.statusGame == GameStatus.ENDED) return;
         if(state.currentRound.round == state.maxRounds - 1) return;
+        if(state.currentRound.statusRound == RoundStatus.PLAYING) return;
 
         state.board.cells = [
             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
