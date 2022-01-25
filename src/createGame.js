@@ -96,11 +96,11 @@ export default function createGame() {
         console.log('[game] executeCommand ', command);
 
         if(command.id === 'SETUP') {
-            setupCommand(command.player1, command.player2)
+            setupCommand(command)
         } else if(command.id === 'MOVE') {
-            moveCommand(command.playerIndex, command.cellIndex);
+            moveCommand(command);
         } else if(command.id === 'START_NEXT_ROUND') {
-            startNextRoundCommand();
+            startNextRoundCommand(command);
         } 
 
     }
@@ -109,17 +109,17 @@ export default function createGame() {
         USE CASES
     */
 
-    function setupCommand(player1, player2) { 
-        setPlayers(player1, player2);
+    function setupCommand(command) { 
+        setPlayers(command.player1, command.player2);
         resetGame();
         //start round
         startNextRound();
     }
 
-    function moveCommand(playerIndex, cellIndex) {
-        move(playerIndex, cellIndex);
+    function moveCommand(command) {
+        move(command.playerIndex, command.cellIndex);
             
-        const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
+        const winningCombination = searchWinningCombination(state.players[command.playerIndex].symbol);
         
         updateRoundStatus(winningCombination.length > 0);
         
@@ -127,7 +127,7 @@ export default function createGame() {
         switchPlayer();
     }
 
-    function startNextRoundCommand() {
+    function startNextRoundCommand(command) {
         startNextRound();
     }
 
@@ -148,6 +148,7 @@ export default function createGame() {
 
     // tested
     function setPlayers(player1, player2) {
+        console.log('HHHHERRE ', player1, player2)
         state.players[0].name = player1.name || 'player 1';
         state.players[0].type = player1.type || PlayerTypes.HUMAN;
 

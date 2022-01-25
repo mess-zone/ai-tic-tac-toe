@@ -17,7 +17,7 @@ describe('game', function() {
             game.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
 
             expect(game.state.players).to.have.lengthOf(2);
-
+            
             expect(game.state.players[0].name).to.equal('player 1');
             expect(game.state.players[0].type).to.equal(PlayerTypes.HUMAN);
             expect(game.state.players[0].symbol).to.equal(Symbols.X);
@@ -125,7 +125,12 @@ describe('game', function() {
 
         beforeEach(function() {
             game = createGame();
-            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            const command = {
+                id: 'SETUP',
+                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
+            }
+            game.setupCommand(command);
         });
 
         it('Should end the game', function() {
@@ -217,8 +222,12 @@ describe('game', function() {
     describe('#move()', function() {
 
         game = createGame();
-        game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
-
+        const command = {
+            id: 'SETUP',
+            player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+            player2: { name: 'player 2', type: PlayerTypes.HUMAN },
+        }
+        game.setupCommand(command);
 
         it('Should move player 1 to empty destination cell', function() {
             game.state.currentRound.currentPlayer = 0
@@ -272,7 +281,12 @@ describe('game', function() {
     describe('#searchWinningCombination()', function() {
         beforeEach(function() {
             game = createGame();
-            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            const command = {
+                id: 'SETUP',
+                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
+            }
+            game.setupCommand(command);
         });
 
         it('Should find winning combination 0 1 2', function() {
@@ -421,7 +435,12 @@ describe('game', function() {
     describe('#updateRoundStatus()', function() {
         beforeEach(function() {
             game = createGame();
-            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            const command = {
+                id: 'SETUP',
+                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
+            }
+            game.setupCommand(command);
         });
 
         it('Draw', function() {
@@ -469,7 +488,12 @@ describe('game', function() {
     describe("#switchPlayer()", function() {
         beforeEach(function() {
             game = createGame();
-            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            const command = {
+                id: 'SETUP',
+                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
+            }
+            game.setupCommand(command);
         });
 
         it('switch player\'s turn', function() {
@@ -492,14 +516,18 @@ describe('game', function() {
     describe("#checkEndOfRound()", function() {
         beforeEach(function() {
             game = createGame();
-            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            const command = {
+                id: 'SETUP',
+                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
+            }
+            game.setupCommand(command);
         });
 
         it('Not update scores if round is not ended', function() {
             game.state.currentRound.statusRound = RoundStatus.PLAYING;
             const winningCombination = [];
             game.checkEndOfRound(winningCombination);
-            // expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             expect(game.state.scores.length).to.equal(0);
         })
         it('Update scores with "Draw" if round ended with draw', function() {
@@ -527,7 +555,12 @@ describe('game', function() {
     describe('#hasEmptyCells()', function() {
         beforeEach(function() {
             game = createGame();
-            game.setupCommand({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            const command = {
+                id: 'SETUP',
+                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
+            }
+            game.setupCommand(command);
         });
 
         it('Does not have empty cells', function() {
