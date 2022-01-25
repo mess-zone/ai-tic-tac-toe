@@ -121,19 +121,16 @@ export default function createGame() {
             
         const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
         
-        updateRoundStatus(winningCombination.length >= 0);
+        updateRoundStatus(winningCombination.length > 0);
         
         checkEndOfRound(winningCombination);
         switchPlayer();
     }
 
     function startNextRoundCommand() {
-        if(state.currentRound.round == state.maxRounds - 1) {
-            //end of game
-            endGame();
-        } else {
-            startNextRound();
-        }
+        if(state.currentRound.round == state.maxRounds - 1) return endGame();
+        
+        startNextRound();
     }
 
 
@@ -243,7 +240,7 @@ export default function createGame() {
 
     // tested (helper)
     function updateRoundStatus(hasWinningCombination) {
-        if(hasWinningCombination) {
+        if(hasWinningCombination === true) {
             // fim de jogo
             state.currentRound.statusRound = RoundStatus.WIN;
             console.log('[game]   > fim de jogo')
