@@ -130,6 +130,7 @@ export default function createGame() {
         console.log('[game]', state.players);
     }
 
+    // tested
     function resetGame() {
         state.statusGame = GameStatus.RUNNING;
 
@@ -140,6 +141,7 @@ export default function createGame() {
         state.scores = [];
     }
     
+    // tested
     function endGame() {
         console.log('[game] End of game')
         state.statusGame = GameStatus.ENDED;
@@ -150,6 +152,7 @@ export default function createGame() {
         });
     }
 
+    // tested
     function startNextRound() {
         if(state.statusGame == GameStatus.ENDED) return;
         if(state.currentRound.round == state.maxRounds - 1) return;
@@ -179,7 +182,7 @@ export default function createGame() {
         console.log(`${state.board.cells[6]} | ${state.board.cells[7]} | ${state.board.cells[8]}`);
     }
 
-    // TODO refatorar!
+    // tested
     function move(playerIndex, cellIndex) {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return;
         if(state.currentRound.currentPlayer !== playerIndex) return;
@@ -214,6 +217,7 @@ export default function createGame() {
     }
 
 
+    // tested
     function searchWinningCombination(symbol) {
         let hasWinner = false;
         for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner == false; i++) {
