@@ -180,45 +180,35 @@ export default function createGame() {
 
     // TODO refatorar!
     function move(playerIndex, cellIndex) {
+        if(state.currentRound.statusRound !== RoundStatus.PLAYING) return
+        if(state.currentRound.currentPlayer !== playerIndex) return;
+        if(state.board.cells[cellIndex] !== Symbols.EMPTY) return;
+
+        console.log(`[game] move p${playerIndex} to cell ${cellIndex}`)
+        state.board.cells[cellIndex] = state.players[playerIndex].symbol;
+
+        // check end of round
+        const winningCombination = checkEndOfRound(state.players[playerIndex].symbol);
+
         if(state.currentRound.statusRound === RoundStatus.PLAYING) {
-            if(state.currentRound.currentPlayer == playerIndex) {
-                if(state.board.cells[cellIndex] == Symbols.EMPTY) {
-                    console.log(`[game] move p${playerIndex} to cell ${cellIndex}`)
-                    state.board.cells[cellIndex] = state.players[playerIndex].symbol;
+            // switch player
+            state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % 2;
 
-                    // check end of round
-                    const winningCombination = checkEndOfRound(state.players[playerIndex].symbol);
-    
-                    if(state.currentRound.statusRound === RoundStatus.PLAYING) {
-                        // switch player
-                        state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % 2;
-
-                        //update screen board
-                        notifyAll({ id: 'UPDATE_BOARD', state});
-                    } else {
-                        console.log('[game] END OF ROUND!')
-                        //contabiliza scores
-                        if(state.currentRound.statusRound === RoundStatus.DRAW) {
-                            state.scores.push({ winner: 'Draw', combination: winningCombination})
-                        } else {
-                            state.scores.push({ winner: state.players[playerIndex].symbol, combination: winningCombination})
-                        }
-
-                        //update screen board
-                        notifyAll({ id: 'END_ROUND', state});
-
-                        // if(state.currentRound.round == state.maxRounds - 1) {
-                        //     //end of game
-                        //     endGame();
-                        // } else {
-                        //     // startNextRound();
-                        // }
-                    }
-
-
-                }
+            //update screen board
+            notifyAll({ id: 'UPDATE_BOARD', state});
+        } else {
+            console.log('[game] END OF ROUND!')
+            //contabiliza scores
+            if(state.currentRound.statusRound === RoundStatus.DRAW) {
+                state.scores.push({ winner: 'Draw', combination: winningCombination})
+            } else {
+                state.scores.push({ winner: state.players[playerIndex].symbol, combination: winningCombination})
             }
+
+            //update screen board
+            notifyAll({ id: 'END_ROUND', state});
         }
+        
     }
 
 

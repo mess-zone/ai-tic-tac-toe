@@ -231,11 +231,34 @@ describe('game', function() {
 
             expect(game.state.board.cells[2]).to.equal(Symbols.O);
         });
-        it('Should not move player if game status is not RUNNING');
-        it('Should not move player if round status is not PLAYING');
-        it('Should not move player if it is not his current turn');
-        it('Should not move player if it destination cell is not empty');
-        it('Should not move player if it destination cell does not exists');
+        it('Should not move player if it destination cell is not empty', function() {
+            game.move(0, 2);
+
+            expect(game.state.board.cells[2]).to.equal(Symbols.O);
+        });
+        it('Should not move player if it destination cell does not exists', function() {
+            game.move(0, 9);
+
+            expect(game.state.board.cells[9]).to.equal(undefined);
+        });
+        it('Should not move player if it is not his current turn', function() {
+            game.move(1, 1);
+
+            expect(game.state.board.cells[1]).to.equal(Symbols.EMPTY);
+        });
+        it('Should not move player if round status is not PLAYING', function() {
+            game.state.currentRound.statusRound = RoundStatus.DRAW
+            game.move(0, 1);
+
+            expect(game.state.board.cells[1]).to.equal(Symbols.EMPTY);
+        });
+
+        it('Should not move player if game status is not RUNNING', function() {
+            game.state.statusGame = GameStatus.ENDED
+            game.move(0, 1);
+
+            expect(game.state.board.cells[1]).to.equal(Symbols.EMPTY);
+        });
 
     });
 
