@@ -465,7 +465,7 @@ describe('game', function() {
         });
     });
 
-    describe.only("#switchPlayer()", function() {
+    describe("#switchPlayer()", function() {
         beforeEach(function() {
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
@@ -486,6 +486,41 @@ describe('game', function() {
         });
 
         it('notify UPDATE_BOARD')
+    });
+
+    describe.only("#checkEndOfRound()", function() {
+        beforeEach(function() {
+            game = createGame();
+            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+        });
+
+        it('Not update scores if round is not ended', function() {
+            game.state.currentRound.statusRound = RoundStatus.PLAYING;
+            const winningCombination = [];
+            game.checkEndOfRound(winningCombination);
+            // expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(game.state.scores.length).to.equal(0);
+        })
+        it('Update scores with "Draw" if round ended with draw', function() {
+            game.state.currentRound.statusRound = RoundStatus.DRAW;
+            const winningCombination = [];
+            game.checkEndOfRound(winningCombination);
+
+            expect(game.state.scores.length).to.equal(1);
+            expect(game.state.scores[0].winner).to.equal('Draw');
+            expect(game.state.scores[0].combination).to.equal(winningCombination);
+        });
+        it('Update scores with "winner" if round ended with victory', function() {
+            game.state.currentRound.statusRound = RoundStatus.WIN;
+            const winningCombination = [0, 1, 2];
+            game.checkEndOfRound(winningCombination);
+            
+            expect(game.state.scores.length).to.equal(1);
+            expect(game.state.scores[0].winner).to.equal(Symbols.X);
+            expect(game.state.scores[0].combination).to.equal(winningCombination);
+        });
+
+        it('notify END_ROUND')
     });
 
     describe('#hasEmptyCells()', function() {

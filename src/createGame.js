@@ -104,9 +104,9 @@ export default function createGame() {
             
             updateRoundStatus(winningCombination.length >= 0);
             
+            checkEndOfRound(winningCombination);
             switchPlayer();
             
-            checkEndOfRound(winningCombination);
             
 
         } else if(command.id == 'START_NEXT_ROUND') {
@@ -211,18 +211,19 @@ export default function createGame() {
     }
 
     function checkEndOfRound(winningCombination) {
-        if(state.currentRound.statusRound !== RoundStatus.PLAYING) {
-            console.log('[game] END OF ROUND!')
-            //contabiliza scores
-            if(state.currentRound.statusRound === RoundStatus.DRAW) {
-                state.scores.push({ winner: 'Draw', combination: winningCombination})
-            } else {
-                state.scores.push({ winner: state.players[command.playerIndex].symbol, combination: winningCombination})
-            }
-
-            //update screen board
-            notifyAll({ id: 'END_ROUND', state});
+        if(state.currentRound.statusRound === RoundStatus.PLAYING) return;
+        
+        console.log('[game] END OF ROUND!')
+        //contabiliza scores
+        if(state.currentRound.statusRound === RoundStatus.DRAW) {
+            state.scores.push({ winner: 'Draw', combination: winningCombination})
+        } else {
+            state.scores.push({ winner: state.players[state.currentRound.currentPlayer].symbol, combination: winningCombination})
         }
+
+        //update screen board
+        notifyAll({ id: 'END_ROUND', state});
+        
     }
 
     // tested (helper)
