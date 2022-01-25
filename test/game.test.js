@@ -213,40 +213,45 @@ describe('game', function() {
 
     });
 
-    describe.only('#move()', function() {
+    describe('#move()', function() {
 
-        // beforeEach(function() {
-            game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
-            // game.startGame();
-        // });
+        game = createGame();
+        game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+
 
         it('Should move player 1 to empty destination cell', function() {
+            game.state.currentRound.currentPlayer = 0
             game.move(0, 0);
 
             expect(game.state.board.cells[0]).to.equal(Symbols.X);
         });
         it('Should move player 2 to empty destination cell', function() {
+            game.state.currentRound.currentPlayer = 1
+            console.log('CURRENT PLAYER: ', game.state.currentRound.currentPlayer)
             game.move(1, 2);
 
             expect(game.state.board.cells[2]).to.equal(Symbols.O);
         });
         it('Should not move player if it destination cell is not empty', function() {
+            game.state.currentRound.currentPlayer = 0
             game.move(0, 2);
 
             expect(game.state.board.cells[2]).to.equal(Symbols.O);
         });
         it('Should not move player if it destination cell does not exists', function() {
+            game.state.currentRound.currentPlayer = 0
             game.move(0, 9);
 
             expect(game.state.board.cells[9]).to.equal(undefined);
         });
         it('Should not move player if it is not his current turn', function() {
+            game.state.currentRound.currentPlayer = 0
             game.move(1, 1);
 
             expect(game.state.board.cells[1]).to.equal(Symbols.EMPTY);
         });
         it('Should not move player if round status is not PLAYING', function() {
+            game.state.currentRound.currentPlayer = 0
             game.state.currentRound.statusRound = RoundStatus.DRAW
             game.move(0, 1);
 
@@ -254,6 +259,7 @@ describe('game', function() {
         });
 
         it('Should not move player if game status is not RUNNING', function() {
+            game.state.currentRound.currentPlayer = 0
             game.state.statusGame = GameStatus.ENDED
             game.move(0, 1);
 

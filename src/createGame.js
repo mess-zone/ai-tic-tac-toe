@@ -99,6 +99,7 @@ export default function createGame() {
             setup(command.player1, command.player2)
         } else if(command.id == 'MOVE') {
             move(command.playerIndex, command.cellIndex);
+            checkEndOfRound(command.playerIndex);
         } else if(command.id == 'START_NEXT_ROUND') {
             if(state.currentRound.round == state.maxRounds - 1) {
                 //end of game
@@ -180,18 +181,16 @@ export default function createGame() {
 
     // TODO refatorar!
     function move(playerIndex, cellIndex) {
-        if(state.currentRound.statusRound !== RoundStatus.PLAYING) return
+        if(state.currentRound.statusRound !== RoundStatus.PLAYING) return;
         if(state.currentRound.currentPlayer !== playerIndex) return;
         if(state.board.cells[cellIndex] !== Symbols.EMPTY) return;
 
         console.log(`[game] move p${playerIndex} to cell ${cellIndex}`)
         state.board.cells[cellIndex] = state.players[playerIndex].symbol;
-
-        // check end of round
-        checkEndOfRound(playerIndex);
     }
 
     function checkEndOfRound(playerIndex) {
+
         const winningCombination = getWinningcombination(state.players[playerIndex].symbol);
 
         if(state.currentRound.statusRound === RoundStatus.PLAYING) {
