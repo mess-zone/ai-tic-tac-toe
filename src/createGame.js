@@ -111,19 +111,25 @@ export default function createGame() {
     }
     
 
-    function setup(player1, player2) {
-        state.players[0].name = player1.name;
-        state.players[0].type = player1.type;
-
-        state.players[1].name = player2.name;
-        state.players[1].type = player2.type;
-
-        console.log('[game]', state.players);
-
-        startGame();
+    function setup(player1, player2) { 
+        setPlayers(player1, player2);
+        resetGame();
+        //start round
+        startNextRound();
     }
 
-    function startGame() {
+    // tested
+    function setPlayers(player1, player2) {
+        state.players[0].name = player1.name || 'player 1';
+        state.players[0].type = player1.type || PlayerTypes.HUMAN;
+
+        state.players[1].name = player2.name || 'player 2';
+        state.players[1].type = player2.type || PlayerTypes.HUMAN;
+
+        console.log('[game]', state.players);
+    }
+
+    function resetGame() {
         state.statusGame = GameStatus.RUNNING;
 
         state.currentRound.round = -1;
@@ -131,9 +137,6 @@ export default function createGame() {
         state.currentRound.statusRound = null;
 
         state.scores = [];
-        
-        //start round
-        startNextRound();
     }
     
     function endGame() {
@@ -282,7 +285,8 @@ export default function createGame() {
         executeCommand,
         state,
         setup,
-        startGame,
+        setPlayers,
+        resetGame,
         endGame,
         startNextRound,
         debugBoard,

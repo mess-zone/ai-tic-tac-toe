@@ -6,16 +6,15 @@ describe('game', function() {
     let game = {};
     
     
-    describe('#setup()', function() {
+    describe('#setPlayers()', function() {
 
         beforeEach(function() {
             game = createGame();
-            console.log('create new Game')
         });
 
         it('Should create 2 users of type human', function() {
 
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            game.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
 
             expect(game.state.players).to.have.lengthOf(2);
 
@@ -28,37 +27,106 @@ describe('game', function() {
             expect(game.state.players[1].symbol).to.equal(Symbols.O);
         });
 
-        it('Should create users with default names');
+        it('Should create a user of type human and a user of type computer', function() {
 
-        it('Should create users with default types');
-    });
+            game.setPlayers({ name: 'human', type: PlayerTypes.HUMAN }, { name: 'computer', type: PlayerTypes.COMPUTER });
 
-    describe('#startGame()', function() {
+            expect(game.state.players).to.have.lengthOf(2);
 
-        beforeEach(function() {
-            console.log('create new Game')
-            game = createGame();
-            game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
+            expect(game.state.players[0].name).to.equal('human');
+            expect(game.state.players[0].type).to.equal(PlayerTypes.HUMAN);
+            expect(game.state.players[0].symbol).to.equal(Symbols.X);
+
+            expect(game.state.players[1].name).to.equal('computer');
+            expect(game.state.players[1].type).to.equal(PlayerTypes.COMPUTER);
+            expect(game.state.players[1].symbol).to.equal(Symbols.O);
         });
 
-        it('Should start the scores e rounds', function() {
-            game.startGame();
+        it('Should create users with default names', function() {
+
+            game.setPlayers({ type: PlayerTypes.HUMAN }, { type: PlayerTypes.HUMAN });
+
+            expect(game.state.players).to.have.lengthOf(2);
+
+            expect(game.state.players[0].name).to.equal('player 1');
+            expect(game.state.players[0].type).to.equal(PlayerTypes.HUMAN);
+            expect(game.state.players[0].symbol).to.equal(Symbols.X);
+
+            expect(game.state.players[1].name).to.equal('player 2');
+            expect(game.state.players[1].type).to.equal(PlayerTypes.HUMAN);
+            expect(game.state.players[1].symbol).to.equal(Symbols.O);
+        });
+
+        it('Should create users with default types', function() {
+
+            game.setPlayers({ }, { });
+
+            expect(game.state.players).to.have.lengthOf(2);
+
+            expect(game.state.players[0].name).to.equal('player 1');
+            expect(game.state.players[0].type).to.equal(PlayerTypes.HUMAN);
+            expect(game.state.players[0].symbol).to.equal(Symbols.X);
+
+            expect(game.state.players[1].name).to.equal('player 2');
+            expect(game.state.players[1].type).to.equal(PlayerTypes.HUMAN);
+            expect(game.state.players[1].symbol).to.equal(Symbols.O);
+        });
+
+
+    });
+
+    describe('#resetGame()', function() {
+
+        beforeEach(function() {
+            game = createGame();
+        });
+
+        it('Should reset the scores e rounds', function() {
+            game.resetGame();
 
             expect(game.state.statusGame).to.equal(GameStatus.RUNNING);
+            expect(game.state.currentRound.round).to.equal(-1);
+            expect(game.state.currentRound.currentPlayer).to.equal(-1);
+            expect(game.state.currentRound.statusRound).to.equal(null);
             expect(game.state.scores).to.have.lengthOf(0);
 
         });
-        it('Should restart the scores e rounds after ended the game');
+        it('Should restart the scores e rounds after ended the game', function() {
+            game.statusGame = GameStatus.ENDED;
+            game.state.currentRound.round = 2;
+            game.state.currentRound.currentPlayer = 1;
+            game.state.currentRound.statusRound = RoundStatus.DRAW;
+    
+            game.state.scores = [
+                {
+                    winner: 0, combination: [0, 1, 2],
+                },
+                {
+                    winner: 1, combination: [0, 1, 2],
+                },
+                {
+                    winner: 1, combination: [0, 1, 2],
+                },
+            ];
+
+            game.resetGame();
+
+            expect(game.state.statusGame).to.equal(GameStatus.RUNNING);
+            expect(game.state.currentRound.round).to.equal(-1);
+            expect(game.state.currentRound.currentPlayer).to.equal(-1);
+            expect(game.state.currentRound.statusRound).to.equal(null);
+            expect(game.state.scores).to.have.lengthOf(0);
+
+        });
 
     });
 
-    describe('#endGame()', function() {
+    describe.only('#endGame()', function() {
 
         beforeEach(function() {
             console.log('create new Game')
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
-            game.startGame();
         });
 
         it('Should end the game', function() {
@@ -67,6 +135,8 @@ describe('game', function() {
             expect(game.state.statusGame).to.equal(GameStatus.ENDED);
 
         });
+
+        it('Should notify END_GAME')
 
     });
 
@@ -101,7 +171,7 @@ describe('game', function() {
             console.log('create new Game')
             game = createGame();
             game.setup({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
-            game.startGame();
+            // game.startGame();
         // });
 
         it('Should move player 1 to empty destination cell', function() {
