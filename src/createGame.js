@@ -188,7 +188,11 @@ export default function createGame() {
         state.board.cells[cellIndex] = state.players[playerIndex].symbol;
 
         // check end of round
-        const winningCombination = checkEndOfRound(state.players[playerIndex].symbol);
+        checkEndOfRound(playerIndex);
+    }
+
+    function checkEndOfRound(playerIndex) {
+        const winningCombination = getWinningcombination(state.players[playerIndex].symbol);
 
         if(state.currentRound.statusRound === RoundStatus.PLAYING) {
             // switch player
@@ -208,7 +212,6 @@ export default function createGame() {
             //update screen board
             notifyAll({ id: 'END_ROUND', state});
         }
-        
     }
 
 
@@ -227,7 +230,7 @@ export default function createGame() {
     }
 
     // TODO refactor
-    function checkEndOfRound(symbol) {
+    function getWinningcombination(symbol) {
         // console.log('[game] check end of round for', symbol)
         const winningCombination = searchWinningCombination(symbol);
         // console.log('[game]', winningCombination)
@@ -279,10 +282,11 @@ export default function createGame() {
         resetGame,
         endGame,
         startNextRound,
+        checkEndOfRound,
         debugBoard,
         move,
         searchWinningCombination,
-        checkEndOfRound,
+        getWinningcombination,
         hasEmptyCells,
     }
 
