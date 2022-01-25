@@ -124,7 +124,12 @@ export default function createGame() {
         updateRoundStatus(winningCombination.length > 0);
         
         checkEndOfRound(winningCombination);
-        switchPlayer();
+        const result = switchPlayer();
+        if(result) {
+            //update screen board
+            notifyAll({ id: 'UPDATE_BOARD', state});
+        }
+
     }
 
     function startNextRoundCommand(command) {
@@ -140,8 +145,10 @@ export default function createGame() {
         // switch player
         state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
 
-        //update screen board
-        notifyAll({ id: 'UPDATE_BOARD', state});
+        // //update screen board
+        // notifyAll({ id: 'UPDATE_BOARD', state});
+
+        return true;
     }
 
 
@@ -294,6 +301,7 @@ export default function createGame() {
         setupCommand,
         moveCommand,
         startNextRoundCommand,
+
         setPlayers,
         resetGame,
         endGame,

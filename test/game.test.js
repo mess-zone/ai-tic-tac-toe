@@ -498,19 +498,21 @@ describe('game', function() {
 
         it('switch player\'s turn', function() {
             expect(game.state.currentRound.currentPlayer).to.equal(0);
-            game.switchPlayer();
+            const result1 = game.switchPlayer();
+            expect(result1).to.equal(true);
             expect(game.state.currentRound.currentPlayer).to.equal(1);
-            game.switchPlayer();
+            const result2 = game.switchPlayer();
+            expect(result2).to.equal(true);
             expect(game.state.currentRound.currentPlayer).to.equal(0);
         })
         it('Does not switch player when round status is not PLAYING', function() {
             expect(game.state.currentRound.currentPlayer).to.equal(0);
             game.state.currentRound.statusRound = RoundStatus.WIN; 
-            game.switchPlayer();
+            const result = game.switchPlayer();
+            expect(result).to.equal(undefined);
             expect(game.state.currentRound.currentPlayer).to.equal(0);
         });
 
-        it('notify UPDATE_BOARD')
     });
 
     describe("#checkEndOfRound()", function() {
