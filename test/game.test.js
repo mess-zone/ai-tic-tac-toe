@@ -130,7 +130,7 @@ describe('game', function() {
                 player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
                 player2: { name: 'player 2', type: PlayerTypes.HUMAN },
             }
-            game.setupCommand(command);
+            game.SETUP(command);
         });
 
         it('Should end the game', function() {
@@ -238,7 +238,7 @@ describe('game', function() {
             player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
             player2: { name: 'player 2', type: PlayerTypes.HUMAN },
         }
-        game.setupCommand(command);
+        game.SETUP(command);
 
         it('Should move player 1 to empty destination cell', function() {
             game.state.currentRound.currentPlayer = 0
@@ -297,7 +297,7 @@ describe('game', function() {
                 player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
                 player2: { name: 'player 2', type: PlayerTypes.HUMAN },
             }
-            game.setupCommand(command);
+            game.SETUP(command);
         });
 
         it('Should find winning combination 0 1 2', function() {
@@ -451,7 +451,7 @@ describe('game', function() {
                 player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
                 player2: { name: 'player 2', type: PlayerTypes.HUMAN },
             }
-            game.setupCommand(command);
+            game.SETUP(command);
         });
 
         it('Draw', function() {
@@ -504,7 +504,7 @@ describe('game', function() {
                 player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
                 player2: { name: 'player 2', type: PlayerTypes.HUMAN },
             }
-            game.setupCommand(command);
+            game.SETUP(command);
         });
 
         it('switch player\'s turn', function() {
@@ -534,7 +534,7 @@ describe('game', function() {
                 player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
                 player2: { name: 'player 2', type: PlayerTypes.HUMAN },
             }
-            game.setupCommand(command);
+            game.SETUP(command);
         });
 
         it('Not update scores if round is not ended', function() {
@@ -572,7 +572,7 @@ describe('game', function() {
                 player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
                 player2: { name: 'player 2', type: PlayerTypes.HUMAN },
             }
-            game.setupCommand(command);
+            game.SETUP(command);
         });
 
         it('Does not have empty cells', function() {
