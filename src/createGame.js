@@ -126,8 +126,8 @@ export default function createGame() {
                 notifyAll({ id: 'END_ROUND', state});
             }
     
-            const isPlayerSwitched = switchPlayer();
-            if(isPlayerSwitched) {
+            const isSwitch = switchPlayer();
+            if(isSwitch) {
                 //update screen board
                 notifyAll({ id: 'UPDATE_BOARD', state});
             }
@@ -143,8 +143,7 @@ export default function createGame() {
                 });
                 return;
             }
-            
-    
+                
             const shouldStartNextRound = startNextRound();
     
             if(shouldStartNextRound) {
@@ -169,7 +168,6 @@ export default function createGame() {
     }
 
     function setPlayers(player1, player2) {
-        console.log('HHHHERRE ', player1, player2)
         state.players[0].name = player1.name || 'player 1';
         state.players[0].type = player1.type || PlayerTypes.HUMAN;
 
@@ -229,9 +227,9 @@ export default function createGame() {
     function checkEndOfRound() {
         const combination = searchWinningCombination(state.players[state.currentRound.currentPlayer].symbol, state.board.cells);
         const hasWinningCombination = combination.length > 0;
-        const hasEmpty = hasEmptyCells(state.board.cells);
+        const hasEmptyCell = hasEmptyCells(state.board.cells);
 
-        if(!hasWinningCombination && hasEmpty) {
+        if(!hasWinningCombination && hasEmptyCell) {
             // round não acabou
             state.currentRound.statusRound = RoundStatus.PLAYING;
             return false;
@@ -249,6 +247,7 @@ export default function createGame() {
     }
 
     // helper
+    // TODO .some .every
     function searchWinningCombination(symbol, boardCells) {
         let hasWinner = false;
 
