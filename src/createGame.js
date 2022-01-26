@@ -98,7 +98,7 @@ export default function createGame() {
         if(command.id === 'SETUP') {
             SETUP(command);
         } else if(command.id === 'MOVE') {
-            moveCommand(command);
+            MOVE(command);
         } else if(command.id === 'START_NEXT_ROUND') {
             startNextRoundCommand(command);
         } 
@@ -123,7 +123,7 @@ export default function createGame() {
         }
     }
 
-    function moveCommand({ playerIndex, cellIndex }) {
+    function MOVE({ playerIndex, cellIndex }) {
         move(playerIndex, cellIndex);
             
         const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
@@ -319,7 +319,7 @@ export default function createGame() {
         executeCommand,
         state,
         SETUP,
-        moveCommand,
+        MOVE,
         startNextRoundCommand,
 
         setPlayers,
