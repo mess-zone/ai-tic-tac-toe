@@ -101,10 +101,6 @@ export default function createGame() {
         commands[commandId](command);
     }
 
-    /*
-        COMMANDS
-    */
-
     const commands = {
         SETUP: ({ player1, player2 }) => { 
             setPlayers(player1, player2);
@@ -164,7 +160,9 @@ export default function createGame() {
         },
     }
 
-    // tested
+
+
+
     function switchPlayer() {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return false;
 
@@ -174,7 +172,6 @@ export default function createGame() {
         return true;
     }
 
-    // tested
     function setPlayers(player1, player2) {
         console.log('HHHHERRE ', player1, player2)
         state.players[0].name = player1.name || 'player 1';
@@ -186,7 +183,6 @@ export default function createGame() {
         console.log('[game]', state.players);
     }
 
-    // tested
     function resetGame() {
         state.statusGame = GameStatus.RUNNING;
 
@@ -197,7 +193,6 @@ export default function createGame() {
         state.scores = [];
     }
     
-    // tested
     function endGame() {
         console.log('[game] End of game')
         state.statusGame = GameStatus.ENDED;
@@ -205,7 +200,6 @@ export default function createGame() {
         return true;
     }
 
-    // tested
     function startNextRound() {
         if(state.statusGame === GameStatus.ENDED) return false;
         if(state.currentRound.round === state.maxRounds - 1) return false;
@@ -225,14 +219,6 @@ export default function createGame() {
         return true;
     }
 
-    function debugBoard() {
-        console.log('[game]');
-        console.log(`${state.board.cells[0]} | ${state.board.cells[1]} | ${state.board.cells[2]}`);
-        console.log(`${state.board.cells[3]} | ${state.board.cells[4]} | ${state.board.cells[5]}`);
-        console.log(`${state.board.cells[6]} | ${state.board.cells[7]} | ${state.board.cells[8]}`);
-    }
-
-    // tested
     function move(playerIndex, cellIndex) {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return;
         if(state.currentRound.currentPlayer !== playerIndex) return;
@@ -242,7 +228,6 @@ export default function createGame() {
         state.board.cells[cellIndex] = state.players[playerIndex].symbol;
     }
 
-    // tested
     function checkEndOfRound(winningCombination) {
         if(state.currentRound.statusRound === RoundStatus.PLAYING) return false;
 
@@ -258,7 +243,6 @@ export default function createGame() {
         
     }
 
-    // tested (helper)
     function updateRoundStatus(hasWinningCombination) {
         if(hasWinningCombination) {
             // fim de jogo
@@ -280,7 +264,6 @@ export default function createGame() {
         
     }
 
-    // tested (helper)
     function searchWinningCombination(symbol) {
         let hasWinner = false;
         for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner === false; i++) {
@@ -295,7 +278,6 @@ export default function createGame() {
         return [];
     }
 
-    //tested (helper)
     function hasEmptyCells() {
         for(let i = 0; i < state.board.cells.length; i++) {
             if(state.board.cells[i] === Symbols.EMPTY) {
@@ -304,6 +286,13 @@ export default function createGame() {
         }
 
         return false;
+    }
+
+    function debugBoard() {
+        console.log('[game]');
+        console.log(`${state.board.cells[0]} | ${state.board.cells[1]} | ${state.board.cells[2]}`);
+        console.log(`${state.board.cells[3]} | ${state.board.cells[4]} | ${state.board.cells[5]}`);
+        console.log(`${state.board.cells[6]} | ${state.board.cells[7]} | ${state.board.cells[8]}`);
     }
 
     return {
@@ -322,10 +311,10 @@ export default function createGame() {
         checkEndOfRound,
         updateRoundStatus,
         switchPlayer,
-        debugBoard,
         move,
         searchWinningCombination,
         hasEmptyCells,
+        debugBoard,
     }
 
 }
