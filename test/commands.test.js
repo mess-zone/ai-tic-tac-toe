@@ -41,6 +41,45 @@ describe('commands', function() {
             commands.SETUP(command);
             
         });
+        it('Should call setPlayers, resetGame, startNextRound and notifyAll when receive valid params', function() {
+            gameState = createState();
+           
+            function createLogicSpy() {
+                const params = {};
+
+                const setPlayers = (player1, player2) => {
+                    params.p1 = player1;
+                    params.p2 = player2;
+                }
+
+                return {
+                    params,
+                    setPlayers,
+                    resetGame() {
+                        params.resetGame = true;
+                    },
+                    startNextRound() {
+                        params.startNextRound = true;
+                    },
+                }
+            };
+            const logicSpy = createLogicSpy();
+            
+
+            observerControllerSpy = createObserverController();
+            commands = createCommands(logicSpy, observerControllerSpy);
+            const command = { 
+                id: 'SETUP',
+                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
+                player2: { name: 'player 2', type: PlayerTypes.HUMAN } 
+            };
+            commands.SETUP(command);
+         
+            expect(logicSpy.params.p1).to.deep.equal(command.player1);
+            expect(logicSpy.params.p2).to.deep.equal(command.player2);
+            expect(logicSpy.params.resetGame).to.deep.equal(true);
+            expect(logicSpy.params.startNextRound).to.deep.equal(true);
+        });
 
         it('Should throw an error if receive invalid params', function() {
             gameState = createState();
