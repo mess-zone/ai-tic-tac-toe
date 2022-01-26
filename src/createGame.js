@@ -36,50 +36,48 @@ export const WINNING_COMBINATIONS = [
     [ 2, 4, 6 ],
 ];
 
-
+// export const state = {
+//     statusGame: GameStatus.SETUP,
+//     maxRounds: 3,
+//     board: {
+//         boardSize: 3, // 3x3
+//         cells: [
+//             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+//             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+//             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+//         ],
+//     },
+//     currentRound: {
+//         round: -1,
+//         currentPlayer: -1,
+//         statusRound: null,
+//     },
+//     scores: [
+//         // {
+//         //     winner: null, combination: [0, 1, 2],
+//         // },
+//         // {
+//         //     winner: null, combination: [0, 1, 2],
+//         // },
+//         // {
+//         //     winner: null, combination: [0, 1, 2],
+//         // },
+//     ],
+//     players: [
+//         { 
+//             name: '',
+//             type: null,
+//             symbol: Symbols.X,
+//         },
+//         { 
+//             name: '',
+//             type: null,
+//             symbol: Symbols.O,
+//         }
+//     ],
+// };
 
 export default function createGame() {
-
-    const state = {
-        statusGame: GameStatus.SETUP,
-        maxRounds: 3,
-        board: {
-            boardSize: 3, // 3x3
-            cells: [
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-            ],
-        },
-        currentRound: {
-            round: -1,
-            currentPlayer: -1,
-            statusRound: null,
-        },
-        scores: [
-            // {
-            //     winner: null, combination: [0, 1, 2],
-            // },
-            // {
-            //     winner: null, combination: [0, 1, 2],
-            // },
-            // {
-            //     winner: null, combination: [0, 1, 2],
-            // },
-        ],
-        players: [
-            { 
-                name: '',
-                type: null,
-                symbol: Symbols.X,
-            },
-            { 
-                name: '',
-                type: null,
-                symbol: Symbols.O,
-            }
-        ],
-    };
 
     const observers = [];
 
@@ -155,9 +153,19 @@ export default function createGame() {
         },
     }
 
+    return {
+        subscribe,
+        notifyAll,
+        observers,
+        executeCommand,
+        commands,
+    }
 
+}
 
-
+export function createLogic(initialState) {
+    const state = initialState;
+    
     function switchPlayer() {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return false;
 
@@ -269,14 +277,7 @@ export default function createGame() {
     }
 
     return {
-        subscribe,
-        notifyAll,
-        observers,
-        executeCommand,
         state,
-        commands,
-
-
         setPlayers,
         resetGame,
         checkEndOfGame,
@@ -284,11 +285,11 @@ export default function createGame() {
         checkEndOfRound,
         switchPlayer,
         move,
-
+    
         //helper functions
         searchWinningCombination,
         hasEmptyCells,
         debugBoard,
     }
-
 }
+
