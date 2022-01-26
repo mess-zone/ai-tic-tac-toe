@@ -226,22 +226,24 @@ export default function createGame() {
     
     function checkEndOfRound() {
         const combination = searchWinningCombination(state.players[state.currentRound.currentPlayer].symbol, state.board.cells);
-        const hasWinningCombination = combination;
         const hasEmptyCell = hasEmptyCells(state.board.cells);
 
-        if(!hasWinningCombination && hasEmptyCell) {
+        if(!combination && hasEmptyCell) {
             // round não acabou
             state.currentRound.statusRound = RoundStatus.PLAYING;
             return false;
         }
 
         // fim de round
-        state.currentRound.statusRound = hasWinningCombination ? RoundStatus.WIN : RoundStatus.DRAW;
+        state.currentRound.statusRound = combination ? RoundStatus.WIN : RoundStatus.DRAW;
         console.log(`[game] Status round: ${state.currentRound.statusRound}`);
 
         //contabiliza scores
-        const winner = hasWinningCombination ? state.players[state.currentRound.currentPlayer].symbol : 'Draw';
-        state.scores.push({ winner, combination });
+        const winner = combination ? state.players[state.currentRound.currentPlayer].symbol : 'Draw';
+        state.scores.push({ 
+            winner, 
+            combination: combination || [] 
+        });
 
         return true;
     }
