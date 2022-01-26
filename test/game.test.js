@@ -321,7 +321,7 @@ describe('game', function() {
             game.state.board.cells[8] = Symbols.O;
 
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            expect(game.hasEmptyCells()).to.equal(false);
+            expect(game.hasEmptyCells(game.state.board.cells)).to.equal(false);
             const winningCombination = [];
             
             const isEndOfRound = game.checkEndOfRound(winningCombination);
@@ -355,7 +355,7 @@ describe('game', function() {
             game.state.board.cells[8] = Symbols.EMPTY;
 
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            expect(game.hasEmptyCells()).to.equal(true);
+            expect(game.hasEmptyCells(game.state.board.cells)).to.equal(true);
             const winningCombination = [];
             const isEndOfRound = game.checkEndOfRound(winningCombination);
 
@@ -396,7 +396,7 @@ describe('game', function() {
     });
 
     // helpers
-    
+
     describe('#searchWinningCombination()', function() {
         let cells;
 
@@ -540,48 +540,41 @@ describe('game', function() {
     });
 
     describe('#hasEmptyCells()', function() {
+        let cells;
+
         beforeEach(function() {
             game = createGame();
-            const command = {
-                id: 'SETUP',
-                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
-                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
-            }
-            game.commands.SETUP(command);
+            cells = [
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+            ];
         });
 
         it('Does not have empty cells', function() {
-            game.state.board.cells[0] = Symbols.X;
-            game.state.board.cells[1] = Symbols.O;
-            game.state.board.cells[2] = Symbols.X;
-            game.state.board.cells[3] = Symbols.X;
-            game.state.board.cells[4] = Symbols.O;
-            game.state.board.cells[5] = Symbols.X;
-            game.state.board.cells[6] = Symbols.O;
-            game.state.board.cells[7] = Symbols.X;
-            game.state.board.cells[8] = Symbols.O;
+            cells = [
+                Symbols.X, Symbols.O, Symbols.X, 
+                Symbols.X, Symbols.O, Symbols.X, 
+                Symbols.O, Symbols.X, Symbols.O, 
+            ];
 
-            const hasEmptyCells = game.hasEmptyCells();
+            const hasEmptyCells = game.hasEmptyCells(cells);
 
             expect(hasEmptyCells).to.equal(false);
         });
         it('Does have some empty cells', function() {
-            game.state.board.cells[0] = Symbols.X;
-            game.state.board.cells[1] = Symbols.O;
-            game.state.board.cells[2] = Symbols.X;
-            game.state.board.cells[3] = Symbols.EMPTY;
-            game.state.board.cells[4] = Symbols.O;
-            game.state.board.cells[5] = Symbols.X;
-            game.state.board.cells[6] = Symbols.O;
-            game.state.board.cells[7] = Symbols.X;
-            game.state.board.cells[8] = Symbols.O;
+            cells = [
+                Symbols.X, Symbols.O, Symbols.X, 
+                Symbols.EMPTY, Symbols.O, Symbols.X, 
+                Symbols.O, Symbols.X, Symbols.O, 
+            ];
 
-            const hasEmptyCells = game.hasEmptyCells();
+            const hasEmptyCells = game.hasEmptyCells(cells);
 
             expect(hasEmptyCells).to.equal(true);
         });
         it('Has all empty cells', function() {
-            const hasEmptyCells = game.hasEmptyCells();
+            const hasEmptyCells = game.hasEmptyCells(cells);
 
             expect(hasEmptyCells).to.equal(true);
         });

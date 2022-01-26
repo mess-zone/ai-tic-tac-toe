@@ -230,8 +230,9 @@ export default function createGame() {
     
     function checkEndOfRound(winningCombination) {
         const hasWinningCombination = winningCombination.length > 0;
+        const hasEmpty = hasEmptyCells(state.board.cells);
 
-        if(!hasWinningCombination && hasEmptyCells()) {
+        if(!hasWinningCombination && hasEmpty) {
             // round não acabou
             state.currentRound.statusRound = RoundStatus.PLAYING;
             return false;
@@ -264,16 +265,12 @@ export default function createGame() {
         return [];
     }
 
-    function hasEmptyCells() {
-        for(let i = 0; i < state.board.cells.length; i++) {
-            if(state.board.cells[i] === Symbols.EMPTY) {
-                return true;
-            }
-        }
-
-        return false;
+    // helper
+    function hasEmptyCells(boardCells) {
+        return boardCells.some(cell => cell === Symbols.EMPTY);
     }
 
+    // helper
     function debugBoard() {
         console.log('[game]');
         console.log(`${state.board.cells[0]} | ${state.board.cells[1]} | ${state.board.cells[2]}`);
