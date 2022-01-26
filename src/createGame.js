@@ -100,7 +100,7 @@ export default function createGame() {
         } else if(command.id === 'MOVE') {
             MOVE(command);
         } else if(command.id === 'START_NEXT_ROUND') {
-            startNextRoundCommand(command);
+            START_NEXT_ROUND(command);
         } 
 
     }
@@ -144,7 +144,7 @@ export default function createGame() {
 
     }
 
-    function startNextRoundCommand(command) {
+    function START_NEXT_ROUND(command) {
         if(state.currentRound.round === state.maxRounds - 1) {
             const result = endGame();
             if(result) {
@@ -320,7 +320,7 @@ export default function createGame() {
         state,
         SETUP,
         MOVE,
-        startNextRoundCommand,
+        START_NEXT_ROUND,
 
         setPlayers,
         resetGame,
