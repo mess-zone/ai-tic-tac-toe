@@ -121,9 +121,9 @@ export default function createGame() {
                 
             const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
             
-            updateRoundStatus(winningCombination.length > 0);
+            const isEndOfRound = checkEndOfRound(winningCombination.length > 0);
+            updateScores(winningCombination);
             
-            const isEndOfRound = checkEndOfRound(winningCombination);
             if(isEndOfRound) {
                 //update screen board
                 notifyAll({ id: 'END_ROUND', state});
@@ -228,41 +228,42 @@ export default function createGame() {
         state.board.cells[cellIndex] = state.players[playerIndex].symbol;
     }
 
-    function checkEndOfRound(winningCombination) {
-        if(state.currentRound.statusRound === RoundStatus.PLAYING) return false;
+    
+    function checkEndOfRound(hasWinningCombination) {
+        if(hasWinningCombination) {
+            // fim de jogo
+            state.currentRound.statusRound = RoundStatus.WIN;
+            console.log('[game] END OF ROUND!')
+            return true;
+        }
+        
+        // checa empate
+        if(hasEmptyCells()) {
+            // round não acabou
+            state.currentRound.statusRound = RoundStatus.PLAYING;
+            console.log('[game] ROUND IS STILL PLAYING');
+            return false;
+        } else {
+            // empate
+            state.currentRound.statusRound = RoundStatus.DRAW;
+            console.log('[game] DRAW')
+            return true;
+        }
+        
+    }
 
-        console.log('[game] END OF ROUND!')
+    function updateScores(winningCombination) {
+        if(state.currentRound.statusRound === RoundStatus.PLAYING) return;
+
         //contabiliza scores
         if(state.currentRound.statusRound === RoundStatus.DRAW) {
             state.scores.push({ winner: 'Draw', combination: winningCombination})
         } else {
             state.scores.push({ winner: state.players[state.currentRound.currentPlayer].symbol, combination: winningCombination})
         }
-
-        return true;
         
     }
 
-    function updateRoundStatus(hasWinningCombination) {
-        if(hasWinningCombination) {
-            // fim de jogo
-            state.currentRound.statusRound = RoundStatus.WIN;
-            console.log('[game]   > fim de jogo')
-            return
-        }
-        
-        // checa empate
-        if(hasEmptyCells()) {
-            // jogo não acabou
-            state.currentRound.statusRound = RoundStatus.PLAYING;
-            console.log('[game]   > jogo não acabou')
-        } else {
-            // empate
-            state.currentRound.statusRound = RoundStatus.DRAW;
-            console.log('[game]   > empate')
-        }
-        
-    }
 
     function searchWinningCombination(symbol) {
         let hasWinner = false;
@@ -308,8 +309,8 @@ export default function createGame() {
         resetGame,
         checkEndOfGame,
         startNextRound,
+        updateScores,
         checkEndOfRound,
-        updateRoundStatus,
         switchPlayer,
         move,
         searchWinningCombination,

@@ -452,7 +452,7 @@ describe('game', function() {
         });
     });
 
-    describe('#updateRoundStatus()', function() {
+    describe('#checkEndOfRound()', function() {
         beforeEach(function() {
             game = createGame();
             const command = {
@@ -477,13 +477,15 @@ describe('game', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             expect(game.hasEmptyCells()).to.equal(false);
             const hasWinningCombination = false;
-            game.updateRoundStatus(hasWinningCombination);
+            const isEndOfRound = game.checkEndOfRound(hasWinningCombination);
+            expect(isEndOfRound).to.equal(true);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.DRAW);
         });
         it('Victory', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             const hasWinningCombination = true;
-            game.updateRoundStatus(hasWinningCombination);
+            const isEndOfRound = game.checkEndOfRound(hasWinningCombination);
+            expect(isEndOfRound).to.equal(true);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.WIN);
         });
         it('Round stil in progress', function() {
@@ -500,7 +502,8 @@ describe('game', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             expect(game.hasEmptyCells()).to.equal(true);
             const hasWinningCombination = false;
-            game.updateRoundStatus(hasWinningCombination);
+            const isEndOfRound = game.checkEndOfRound(hasWinningCombination);
+            expect(isEndOfRound).to.equal(false);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
         });
     });
@@ -535,7 +538,7 @@ describe('game', function() {
 
     });
 
-    describe("#checkEndOfRound()", function() {
+    describe("#updateScores()", function() {
         beforeEach(function() {
             game = createGame();
             const command = {
@@ -549,15 +552,13 @@ describe('game', function() {
         it('Not update scores if round is not ended', function() {
             game.state.currentRound.statusRound = RoundStatus.PLAYING;
             const winningCombination = [];
-            const result = game.checkEndOfRound(winningCombination);
-            expect(result).to.not.equal(true);
+            game.updateScores(winningCombination);
             expect(game.state.scores.length).to.equal(0);
         })
         it('Update scores with "Draw" if round ended with draw', function() {
             game.state.currentRound.statusRound = RoundStatus.DRAW;
             const winningCombination = [];
-            const result = game.checkEndOfRound(winningCombination);
-            expect(result).to.equal(true);
+            game.updateScores(winningCombination);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal('Draw');
             expect(game.state.scores[0].combination).to.equal(winningCombination);
@@ -565,8 +566,7 @@ describe('game', function() {
         it('Update scores with "winner" if round ended with victory', function() {
             game.state.currentRound.statusRound = RoundStatus.WIN;
             const winningCombination = [0, 1, 2];
-            const result = game.checkEndOfRound(winningCombination);
-            expect(result).to.equal(true);
+            game.updateScores(winningCombination);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal(Symbols.X);
             expect(game.state.scores[0].combination).to.equal(winningCombination);
