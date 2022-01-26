@@ -122,9 +122,9 @@ export default function createGame() {
             const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
             
             const isEndOfRound = checkEndOfRound(winningCombination.length > 0);
-            updateScores(winningCombination);
             
             if(isEndOfRound) {
+                updateScores(winningCombination);
                 //update screen board
                 notifyAll({ id: 'END_ROUND', state});
             }
@@ -230,25 +230,22 @@ export default function createGame() {
 
     
     function checkEndOfRound(hasWinningCombination) {
+        if(!hasWinningCombination && hasEmptyCells()) {
+            // round não acabou
+            state.currentRound.statusRound = RoundStatus.PLAYING;
+            return false;
+        }
+
         if(hasWinningCombination) {
             // fim de jogo
             state.currentRound.statusRound = RoundStatus.WIN;
-            console.log('[game] END OF ROUND!')
-            return true;
-        }
-        
-        // checa empate
-        if(hasEmptyCells()) {
-            // round não acabou
-            state.currentRound.statusRound = RoundStatus.PLAYING;
-            console.log('[game] ROUND IS STILL PLAYING');
-            return false;
         } else {
             // empate
             state.currentRound.statusRound = RoundStatus.DRAW;
-            console.log('[game] DRAW')
-            return true;
         }
+
+        console.log(`[game] Status round: ${state.currentRound.statusRound}`);
+        return true;
         
     }
 
@@ -256,12 +253,9 @@ export default function createGame() {
         if(state.currentRound.statusRound === RoundStatus.PLAYING) return;
 
         //contabiliza scores
-        if(state.currentRound.statusRound === RoundStatus.DRAW) {
-            state.scores.push({ winner: 'Draw', combination: winningCombination})
-        } else {
-            state.scores.push({ winner: state.players[state.currentRound.currentPlayer].symbol, combination: winningCombination})
-        }
-        
+        const winner = state.currentRound.statusRound === RoundStatus.DRAW ? 'Draw' : state.players[state.currentRound.currentPlayer].symbol;
+
+        state.scores.push({ winner, combination: winningCombination});
     }
 
 
