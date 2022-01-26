@@ -152,8 +152,9 @@ describe('game', function() {
         });
 
         it('Should start the 1º round', function() {
-            game.startNextRound();
+            const result = game.startNextRound();
 
+            expect(result).to.equal(true);
             expect(game.state.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
             expect(game.state.currentRound.round).to.equal(0);
             expect(game.state.currentRound.currentPlayer).to.equal(0);
@@ -161,9 +162,11 @@ describe('game', function() {
 
         });
         it('Should start the 2º round', function() {
-            game.startNextRound();
+            const result1 = game.startNextRound();
+            expect(result1).to.equal(true);
             game.state.currentRound.statusRound = RoundStatus.WIN;
-            game.startNextRound();
+            const result2 = game.startNextRound();
+            expect(result2).to.equal(true);
 
             expect(game.state.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
             expect(game.state.currentRound.round).to.equal(1);
@@ -172,11 +175,14 @@ describe('game', function() {
 
         });
         it('Should start the 3º round', function() {
-            game.startNextRound();
+            const result1 = game.startNextRound();
+            expect(result1).to.equal(true);
             game.state.currentRound.statusRound = RoundStatus.WIN;
-            game.startNextRound();
+            const result2 = game.startNextRound();
+            expect(result2).to.equal(true);
             game.state.currentRound.statusRound = RoundStatus.WIN;
-            game.startNextRound();
+            const result3 = game.startNextRound();
+            expect(result3).to.equal(true);
 
             expect(game.state.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
             expect(game.state.currentRound.round).to.equal(2);
@@ -186,34 +192,41 @@ describe('game', function() {
         });
 
         it('Should not start the next round if is out of the limit of maxRounds', function() {
-            for(let i = 0; i <= game.state.maxRounds; i++) {
-                game.startNextRound();
+            for(let i = 0; i < game.state.maxRounds; i++) {
+                const result = game.startNextRound();
+                expect(result).to.equal(true);
                 game.state.currentRound.statusRound = RoundStatus.WIN;
             }
+
+            const result = game.startNextRound();
+            expect(result).to.not.equal(true);
             expect(game.state.currentRound.round).to.equal(game.state.maxRounds - 1);
             expect(game.state.statusGame).to.equal(GameStatus.RUNNING);
 
         });
 
         it('Should not start the next round if the game is ENDED', function() {
-            game.startNextRound();
+            const result1 = game.startNextRound();
+            expect(result1).to.equal(true);
             game.endGame();
             expect(game.state.statusGame).to.equal(GameStatus.ENDED)
 
-            game.startNextRound();
+            const result2 = game.startNextRound();
+            expect(result2).to.not.equal(true);
             expect(game.state.statusGame).to.equal(GameStatus.ENDED)
             expect(game.state.currentRound.round).to.equal(0);
 
         });
 
         it('Should not start the next round without finishing the current', function() {
-            game.startNextRound();
-            game.startNextRound();
+            const result1 = game.startNextRound();
+            expect(result1).to.equal(true);
+            
+            const result2 = game.startNextRound();
+            expect(result2).to.not.equal(true);
             expect(game.state.currentRound.round).to.equal(0);
 
         });
-
-        it('Should notify START_ROUND');
 
     });
 
@@ -507,7 +520,7 @@ describe('game', function() {
             expect(game.state.currentRound.currentPlayer).to.equal(0);
             game.state.currentRound.statusRound = RoundStatus.WIN; 
             const result = game.switchPlayer();
-            expect(result).to.equal(undefined);
+            expect(result).to.not.equal(true);
             expect(game.state.currentRound.currentPlayer).to.equal(0);
         });
 
@@ -527,14 +540,15 @@ describe('game', function() {
         it('Not update scores if round is not ended', function() {
             game.state.currentRound.statusRound = RoundStatus.PLAYING;
             const winningCombination = [];
-            game.checkEndOfRound(winningCombination);
+            const result = game.checkEndOfRound(winningCombination);
+            expect(result).to.not.equal(true);
             expect(game.state.scores.length).to.equal(0);
         })
         it('Update scores with "Draw" if round ended with draw', function() {
             game.state.currentRound.statusRound = RoundStatus.DRAW;
             const winningCombination = [];
-            game.checkEndOfRound(winningCombination);
-
+            const result = game.checkEndOfRound(winningCombination);
+            expect(result).to.equal(true);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal('Draw');
             expect(game.state.scores[0].combination).to.equal(winningCombination);
@@ -542,14 +556,12 @@ describe('game', function() {
         it('Update scores with "winner" if round ended with victory', function() {
             game.state.currentRound.statusRound = RoundStatus.WIN;
             const winningCombination = [0, 1, 2];
-            game.checkEndOfRound(winningCombination);
-
+            const result = game.checkEndOfRound(winningCombination);
+            expect(result).to.equal(true);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal(Symbols.X);
             expect(game.state.scores[0].combination).to.equal(winningCombination);
         });
-
-        it('notify END_ROUND')
     });
 
     describe('#hasEmptyCells()', function() {

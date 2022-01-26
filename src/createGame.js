@@ -112,8 +112,15 @@ export default function createGame() {
     function setupCommand({ player1, player2 }) { 
         setPlayers(player1, player2);
         resetGame();
-        //start round
-        startNextRound();
+        
+        const result = startNextRound();
+
+        if(result) {
+            notifyAll({
+                id: 'START_ROUND',
+                state,
+            });
+        }
     }
 
     function moveCommand({ playerIndex, cellIndex }) {
@@ -123,7 +130,12 @@ export default function createGame() {
         
         updateRoundStatus(winningCombination.length > 0);
         
-        checkEndOfRound(winningCombination);
+        const isEndOfRound = checkEndOfRound(winningCombination);
+        if(isEndOfRound) {
+            //update screen board
+            notifyAll({ id: 'END_ROUND', state});
+        }
+
         const result = switchPlayer();
         if(result) {
             //update screen board
@@ -144,7 +156,14 @@ export default function createGame() {
             return;
         }
 
-        startNextRound();
+        const result = startNextRound();
+
+        if(result) {
+            notifyAll({
+                id: 'START_ROUND',
+                state,
+            });
+        }
     }
 
 
@@ -217,10 +236,12 @@ export default function createGame() {
         state.currentRound.statusRound = RoundStatus.PLAYING;
         console.log('[game] startNextRound', state);
 
-        notifyAll({
-            id: 'START_ROUND',
-            state,
-        });
+        // notifyAll({
+        //     id: 'START_ROUND',
+        //     state,
+        // });
+
+        return true;
     }
 
     function debugBoard() {
@@ -252,8 +273,10 @@ export default function createGame() {
             state.scores.push({ winner: state.players[state.currentRound.currentPlayer].symbol, combination: winningCombination})
         }
 
-        //update screen board
-        notifyAll({ id: 'END_ROUND', state});
+        // //update screen board
+        // notifyAll({ id: 'END_ROUND', state});
+
+        return true;
         
     }
 
