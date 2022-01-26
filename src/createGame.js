@@ -226,7 +226,7 @@ export default function createGame() {
     
     function checkEndOfRound() {
         const combination = searchWinningCombination(state.players[state.currentRound.currentPlayer].symbol, state.board.cells);
-        const hasWinningCombination = combination.length > 0;
+        const hasWinningCombination = combination;
         const hasEmptyCell = hasEmptyCells(state.board.cells);
 
         if(!hasWinningCombination && hasEmptyCell) {
@@ -247,20 +247,10 @@ export default function createGame() {
     }
 
     // helper
-    // TODO .some .every
     function searchWinningCombination(symbol, boardCells) {
-        let hasWinner = false;
-
-        for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner === false; i++) {
-
-           hasWinner = WINNING_COMBINATIONS[i].every(index => boardCells[index] === symbol);
-    
-           if(hasWinner) {
-               return WINNING_COMBINATIONS[i];
-           }
-        }
-
-        return [];
+        return WINNING_COMBINATIONS.find((combination) => 
+            combination.every(index => boardCells[index] === symbol)
+        );
     }
 
     // helper

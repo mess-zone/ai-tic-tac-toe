@@ -330,7 +330,7 @@ describe('game', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.DRAW);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal('Draw');
-            expect(game.state.scores[0].combination.length).to.equal(0);
+            expect(game.state.scores[0].combination).to.equal(undefined);
         });
         it('Draw, player 2 turn', function() {
             game.state.board.cells[0] = Symbols.X;
@@ -353,7 +353,7 @@ describe('game', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.DRAW);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal('Draw');
-            expect(game.state.scores[0].combination.length).to.equal(0);
+            expect(game.state.scores[0].combination).to.equal(undefined);
         });
         it('Victory', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
@@ -560,19 +560,19 @@ describe('game', function() {
             ];
 
             const combinationX = game.searchWinningCombination(Symbols.X, cells);
-            expect(combinationX).to.have.lengthOf(0);
+            expect(combinationX).to.equal(undefined);
             
             const combinationO = game.searchWinningCombination(Symbols.O, cells);
-            expect(combinationO).to.have.lengthOf(0);
+            expect(combinationO).to.equal(undefined);
 
         });
 
         it('Should not find winning combination when the board is empty', function() {
             const combinationX = game.searchWinningCombination(Symbols.X, cells);
-            expect(combinationX).to.have.lengthOf(0);
+            expect(combinationX).to.equal(undefined);
             
             const combinationO = game.searchWinningCombination(Symbols.O, cells);
-            expect(combinationO).to.have.lengthOf(0);
+            expect(combinationO).to.equal(undefined);
         });
     });
 
