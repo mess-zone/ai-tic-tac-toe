@@ -476,17 +476,26 @@ describe('game', function() {
 
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             expect(game.hasEmptyCells()).to.equal(false);
-            const hasWinningCombination = false;
-            const isEndOfRound = game.checkEndOfRound(hasWinningCombination);
+            const winningCombination = [];
+            
+            const isEndOfRound = game.checkEndOfRound(winningCombination);
+
             expect(isEndOfRound).to.equal(true);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.DRAW);
+            expect(game.state.scores.length).to.equal(1);
+            expect(game.state.scores[0].winner).to.equal('Draw');
+            expect(game.state.scores[0].combination).to.equal(winningCombination);
         });
         it('Victory', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            const hasWinningCombination = true;
-            const isEndOfRound = game.checkEndOfRound(hasWinningCombination);
+            const winningCombination = [0, 1, 2];
+            const isEndOfRound = game.checkEndOfRound(winningCombination);
+
             expect(isEndOfRound).to.equal(true);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.WIN);
+            expect(game.state.scores.length).to.equal(1);
+            expect(game.state.scores[0].winner).to.equal(Symbols.X);
+            expect(game.state.scores[0].combination).to.equal(winningCombination);
         });
         it('Round stil in progress', function() {
             game.state.board.cells[0] = Symbols.X;
@@ -501,10 +510,12 @@ describe('game', function() {
 
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             expect(game.hasEmptyCells()).to.equal(true);
-            const hasWinningCombination = false;
-            const isEndOfRound = game.checkEndOfRound(hasWinningCombination);
+            const winningCombination = [];
+            const isEndOfRound = game.checkEndOfRound(winningCombination);
+
             expect(isEndOfRound).to.equal(false);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(game.state.scores.length).to.equal(0);
         });
     });
 
@@ -536,41 +547,6 @@ describe('game', function() {
             expect(game.state.currentRound.currentPlayer).to.equal(0);
         });
 
-    });
-
-    describe("#updateScores()", function() {
-        beforeEach(function() {
-            game = createGame();
-            const command = {
-                id: 'SETUP',
-                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
-                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
-            }
-            game.commands.SETUP(command);
-        });
-
-        it('Not update scores if round is not ended', function() {
-            game.state.currentRound.statusRound = RoundStatus.PLAYING;
-            const winningCombination = [];
-            game.updateScores(winningCombination);
-            expect(game.state.scores.length).to.equal(0);
-        })
-        it('Update scores with "Draw" if round ended with draw', function() {
-            game.state.currentRound.statusRound = RoundStatus.DRAW;
-            const winningCombination = [];
-            game.updateScores(winningCombination);
-            expect(game.state.scores.length).to.equal(1);
-            expect(game.state.scores[0].winner).to.equal('Draw');
-            expect(game.state.scores[0].combination).to.equal(winningCombination);
-        });
-        it('Update scores with "winner" if round ended with victory', function() {
-            game.state.currentRound.statusRound = RoundStatus.WIN;
-            const winningCombination = [0, 1, 2];
-            game.updateScores(winningCombination);
-            expect(game.state.scores.length).to.equal(1);
-            expect(game.state.scores[0].winner).to.equal(Symbols.X);
-            expect(game.state.scores[0].combination).to.equal(winningCombination);
-        });
     });
 
     describe('#hasEmptyCells()', function() {

@@ -121,10 +121,9 @@ export default function createGame() {
                 
             const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
             
-            const isEndOfRound = checkEndOfRound(winningCombination.length > 0);
+            const isEndOfRound = checkEndOfRound(winningCombination);
             
             if(isEndOfRound) {
-                updateScores(winningCombination);
                 //update screen board
                 notifyAll({ id: 'END_ROUND', state});
             }
@@ -229,35 +228,25 @@ export default function createGame() {
     }
 
     
-    function checkEndOfRound(hasWinningCombination) {
+    function checkEndOfRound(winningCombination) {
+        const hasWinningCombination = winningCombination.length > 0;
+
         if(!hasWinningCombination && hasEmptyCells()) {
             // round não acabou
             state.currentRound.statusRound = RoundStatus.PLAYING;
             return false;
         }
 
-        if(hasWinningCombination) {
-            // fim de jogo
-            state.currentRound.statusRound = RoundStatus.WIN;
-        } else {
-            // empate
-            state.currentRound.statusRound = RoundStatus.DRAW;
-        }
-
+        // fim de round
+        state.currentRound.statusRound = hasWinningCombination ? RoundStatus.WIN : RoundStatus.DRAW;
         console.log(`[game] Status round: ${state.currentRound.statusRound}`);
-        return true;
-        
-    }
-
-    function updateScores(winningCombination) {
-        if(state.currentRound.statusRound === RoundStatus.PLAYING) return;
 
         //contabiliza scores
-        const winner = state.currentRound.statusRound === RoundStatus.DRAW ? 'Draw' : state.players[state.currentRound.currentPlayer].symbol;
-
+        const winner = hasWinningCombination ? state.players[state.currentRound.currentPlayer].symbol : 'Draw';
         state.scores.push({ winner, combination: winningCombination});
-    }
 
+        return true;
+    }
 
     function searchWinningCombination(symbol) {
         let hasWinner = false;
@@ -303,7 +292,6 @@ export default function createGame() {
         resetGame,
         checkEndOfGame,
         startNextRound,
-        updateScores,
         checkEndOfRound,
         switchPlayer,
         move,
