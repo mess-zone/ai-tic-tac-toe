@@ -106,9 +106,9 @@ export default function createGame() {
             setPlayers(player1, player2);
             resetGame();
             
-            const result = startNextRound();
+            const shouldStartNextRound = startNextRound();
     
-            if(result) {
+            if(shouldStartNextRound) {
                 notifyAll({
                     id: 'START_ROUND',
                     state,
@@ -129,8 +129,8 @@ export default function createGame() {
                 notifyAll({ id: 'END_ROUND', state});
             }
     
-            const result = switchPlayer();
-            if(result) {
+            const isPlayerSwitched = switchPlayer();
+            if(isPlayerSwitched) {
                 //update screen board
                 notifyAll({ id: 'UPDATE_BOARD', state});
             }
@@ -138,20 +138,19 @@ export default function createGame() {
         },
 
         START_NEXT_ROUND: (command) => {
-            if(state.currentRound.round === state.maxRounds - 1) {
-                const result = endGame();
-                if(result) {
-                    notifyAll({
-                        id: 'END_GAME',
-                        state,
-                    });
-                }
+            const isEndOfGame = checkEndOfGame();
+            if(isEndOfGame) {
+                notifyAll({
+                    id: 'END_GAME',
+                    state,
+                });
                 return;
             }
+            
     
-            const result = startNextRound();
+            const shouldStartNextRound = startNextRound();
     
-            if(result) {
+            if(shouldStartNextRound) {
                 notifyAll({
                     id: 'START_ROUND',
                     state,
@@ -193,10 +192,11 @@ export default function createGame() {
         state.scores = [];
     }
     
-    function endGame() {
+    function checkEndOfGame() {
+        if(state.currentRound.round < state.maxRounds - 1) return false;
+
         console.log('[game] End of game')
         state.statusGame = GameStatus.ENDED;
-
         return true;
     }
 
@@ -306,7 +306,7 @@ export default function createGame() {
 
         setPlayers,
         resetGame,
-        endGame,
+        checkEndOfGame,
         startNextRound,
         checkEndOfRound,
         updateRoundStatus,

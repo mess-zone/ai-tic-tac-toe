@@ -121,7 +121,7 @@ describe('game', function() {
 
     });
 
-    describe('#endGame()', function() {
+    describe('#checkEndOfGame()', function() {
 
         beforeEach(function() {
             game = createGame();
@@ -133,13 +133,21 @@ describe('game', function() {
             game.commands.SETUP(command);
         });
 
-        it('Should end the game', function() {
-            const result = game.endGame();
+        it('Should end the game if next round is out of the limit of maxRounds', function() {
+            game.state.currentRound.round = game.state.maxRounds - 1;
+            const result = game.checkEndOfGame();
 
             expect(result).to.equal(true);
             expect(game.state.statusGame).to.equal(GameStatus.ENDED);
 
         });
+        it('Should not end the game if next round is out of the limit of maxRounds', function() {
+            const result = game.checkEndOfGame();
+
+            expect(result).to.equal(false);
+            expect(game.state.statusGame).to.equal(GameStatus.RUNNING);
+
+        })
 
     });
 
@@ -208,13 +216,14 @@ describe('game', function() {
         it('Should not start the next round if the game is ENDED', function() {
             const result1 = game.startNextRound();
             expect(result1).to.equal(true);
-            game.endGame();
+            game.state.currentRound.round = game.state.maxRounds - 1;
+            game.checkEndOfGame();
             expect(game.state.statusGame).to.equal(GameStatus.ENDED)
 
             const result2 = game.startNextRound();
             expect(result2).to.not.equal(true);
             expect(game.state.statusGame).to.equal(GameStatus.ENDED)
-            expect(game.state.currentRound.round).to.equal(0);
+            expect(game.state.currentRound.round).to.equal(2);
 
         });
 
