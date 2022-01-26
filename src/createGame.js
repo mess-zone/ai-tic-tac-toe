@@ -118,10 +118,8 @@ export default function createGame() {
 
         MOVE: ({ playerIndex, cellIndex }) => {
             move(playerIndex, cellIndex);
-                
-            const winningCombination = searchWinningCombination(state.players[playerIndex].symbol, state.board.cells);
             
-            const isEndOfRound = checkEndOfRound(winningCombination);
+            const isEndOfRound = checkEndOfRound();
             
             if(isEndOfRound) {
                 //update screen board
@@ -228,8 +226,9 @@ export default function createGame() {
     }
 
     
-    function checkEndOfRound(winningCombination) {
-        const hasWinningCombination = winningCombination.length > 0;
+    function checkEndOfRound() {
+        const combination = searchWinningCombination(state.players[state.currentRound.currentPlayer].symbol, state.board.cells);
+        const hasWinningCombination = combination.length > 0;
         const hasEmpty = hasEmptyCells(state.board.cells);
 
         if(!hasWinningCombination && hasEmpty) {
@@ -244,7 +243,7 @@ export default function createGame() {
 
         //contabiliza scores
         const winner = hasWinningCombination ? state.players[state.currentRound.currentPlayer].symbol : 'Draw';
-        state.scores.push({ winner, combination: winningCombination});
+        state.scores.push({ winner, combination });
 
         return true;
     }
@@ -294,6 +293,7 @@ export default function createGame() {
         checkEndOfRound,
         switchPlayer,
         move,
+
         //helper functions
         searchWinningCombination,
         hasEmptyCells,

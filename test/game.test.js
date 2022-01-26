@@ -309,7 +309,7 @@ describe('game', function() {
             game.commands.SETUP(command);
         });
 
-        it('Draw', function() {
+        it('Draw, player 1 turn', function() {
             game.state.board.cells[0] = Symbols.X;
             game.state.board.cells[1] = Symbols.O;
             game.state.board.cells[2] = Symbols.X;
@@ -322,26 +322,62 @@ describe('game', function() {
 
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             expect(game.hasEmptyCells(game.state.board.cells)).to.equal(false);
-            const winningCombination = [];
-            
-            const isEndOfRound = game.checkEndOfRound(winningCombination);
+
+            game.state.currentRound.currentPlayer = 0;
+            const isEndOfRound = game.checkEndOfRound();
 
             expect(isEndOfRound).to.equal(true);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.DRAW);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal('Draw');
-            expect(game.state.scores[0].combination).to.equal(winningCombination);
+            expect(game.state.scores[0].combination.length).to.equal(0);
+        });
+        it('Draw, player 2 turn', function() {
+            game.state.board.cells[0] = Symbols.X;
+            game.state.board.cells[1] = Symbols.O;
+            game.state.board.cells[2] = Symbols.X;
+            game.state.board.cells[3] = Symbols.X;
+            game.state.board.cells[4] = Symbols.O;
+            game.state.board.cells[5] = Symbols.X;
+            game.state.board.cells[6] = Symbols.O;
+            game.state.board.cells[7] = Symbols.X;
+            game.state.board.cells[8] = Symbols.O;
+
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(game.hasEmptyCells(game.state.board.cells)).to.equal(false);
+            
+            game.state.currentRound.currentPlayer = 1;
+            const isEndOfRound = game.checkEndOfRound();
+
+            expect(isEndOfRound).to.equal(true);
+            expect(game.state.currentRound.statusRound).to.equal(RoundStatus.DRAW);
+            expect(game.state.scores.length).to.equal(1);
+            expect(game.state.scores[0].winner).to.equal('Draw');
+            expect(game.state.scores[0].combination.length).to.equal(0);
         });
         it('Victory', function() {
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            const winningCombination = [0, 1, 2];
-            const isEndOfRound = game.checkEndOfRound(winningCombination);
+            game.state.board.cells[0] = Symbols.X;
+            game.state.board.cells[1] = Symbols.X;
+            game.state.board.cells[2] = Symbols.X;
+            game.state.board.cells[3] = Symbols.X;
+            game.state.board.cells[4] = Symbols.O;
+            game.state.board.cells[5] = Symbols.X;
+            game.state.board.cells[6] = Symbols.O;
+            game.state.board.cells[7] = Symbols.X;
+            game.state.board.cells[8] = Symbols.O;
+
+            game.state.currentRound.currentPlayer = 0;
+            const isEndOfRound = game.checkEndOfRound();
 
             expect(isEndOfRound).to.equal(true);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.WIN);
             expect(game.state.scores.length).to.equal(1);
             expect(game.state.scores[0].winner).to.equal(Symbols.X);
-            expect(game.state.scores[0].combination).to.equal(winningCombination);
+            expect(game.state.scores[0].combination.length).to.equal(3);
+            expect(game.state.scores[0].combination[0]).to.equal(0);
+            expect(game.state.scores[0].combination[1]).to.equal(1);
+            expect(game.state.scores[0].combination[2]).to.equal(2);
         });
         it('Round stil in progress', function() {
             game.state.board.cells[0] = Symbols.X;
@@ -356,8 +392,9 @@ describe('game', function() {
 
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
             expect(game.hasEmptyCells(game.state.board.cells)).to.equal(true);
-            const winningCombination = [];
-            const isEndOfRound = game.checkEndOfRound(winningCombination);
+
+            game.state.currentRound.currentPlayer = 1;
+            const isEndOfRound = game.checkEndOfRound();
 
             expect(isEndOfRound).to.equal(false);
             expect(game.state.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
