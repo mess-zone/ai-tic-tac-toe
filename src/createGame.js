@@ -36,8 +36,9 @@ export const WINNING_COMBINATIONS = [
     [ 2, 4, 6 ],
 ];
 
-export default function createGame() {
 
+
+export default function createGame() {
 
     const state = {
         statusGame: GameStatus.SETUP,
@@ -95,78 +96,73 @@ export default function createGame() {
     function executeCommand(command) {
         console.log('[game] executeCommand ', command);
 
-        if(command.id === 'SETUP') {
-            SETUP(command);
-        } else if(command.id === 'MOVE') {
-            MOVE(command);
-        } else if(command.id === 'START_NEXT_ROUND') {
-            START_NEXT_ROUND(command);
-        } 
+        const commandId = command.id;
 
+        commands[commandId](command);
     }
 
     /*
-        USE CASES
+        COMMANDS
     */
 
-    function SETUP({ player1, player2 }) { 
-        setPlayers(player1, player2);
-        resetGame();
-        
-        const result = startNextRound();
-
-        if(result) {
-            notifyAll({
-                id: 'START_ROUND',
-                state,
-            });
-        }
-    }
-
-    function MOVE({ playerIndex, cellIndex }) {
-        move(playerIndex, cellIndex);
+    const commands = {
+        SETUP: ({ player1, player2 }) => { 
+            setPlayers(player1, player2);
+            resetGame();
             
-        const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
-        
-        updateRoundStatus(winningCombination.length > 0);
-        
-        const isEndOfRound = checkEndOfRound(winningCombination);
-        if(isEndOfRound) {
-            //update screen board
-            notifyAll({ id: 'END_ROUND', state});
-        }
-
-        const result = switchPlayer();
-        if(result) {
-            //update screen board
-            notifyAll({ id: 'UPDATE_BOARD', state});
-        }
-
-    }
-
-    function START_NEXT_ROUND(command) {
-        if(state.currentRound.round === state.maxRounds - 1) {
-            const result = endGame();
+            const result = startNextRound();
+    
             if(result) {
                 notifyAll({
-                    id: 'END_GAME',
+                    id: 'START_ROUND',
                     state,
                 });
             }
-            return;
-        }
+        },
 
-        const result = startNextRound();
+        MOVE: ({ playerIndex, cellIndex }) => {
+            move(playerIndex, cellIndex);
+                
+            const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
+            
+            updateRoundStatus(winningCombination.length > 0);
+            
+            const isEndOfRound = checkEndOfRound(winningCombination);
+            if(isEndOfRound) {
+                //update screen board
+                notifyAll({ id: 'END_ROUND', state});
+            }
+    
+            const result = switchPlayer();
+            if(result) {
+                //update screen board
+                notifyAll({ id: 'UPDATE_BOARD', state});
+            }
+    
+        },
 
-        if(result) {
-            notifyAll({
-                id: 'START_ROUND',
-                state,
-            });
-        }
+        START_NEXT_ROUND: (command) => {
+            if(state.currentRound.round === state.maxRounds - 1) {
+                const result = endGame();
+                if(result) {
+                    notifyAll({
+                        id: 'END_GAME',
+                        state,
+                    });
+                }
+                return;
+            }
+    
+            const result = startNextRound();
+    
+            if(result) {
+                notifyAll({
+                    id: 'START_ROUND',
+                    state,
+                });
+            }
+        },
     }
-
-
 
     // tested
     function switchPlayer() {
@@ -177,8 +173,6 @@ export default function createGame() {
 
         return true;
     }
-
-
 
     // tested
     function setPlayers(player1, player2) {
@@ -318,9 +312,8 @@ export default function createGame() {
         observers,
         executeCommand,
         state,
-        SETUP,
-        MOVE,
-        START_NEXT_ROUND,
+        commands,
+
 
         setPlayers,
         resetGame,
