@@ -298,160 +298,6 @@ describe('game', function() {
 
     });
 
-    describe('#searchWinningCombination()', function() {
-        beforeEach(function() {
-            game = createGame();
-            const command = {
-                id: 'SETUP',
-                player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
-                player2: { name: 'player 2', type: PlayerTypes.HUMAN },
-            }
-            game.commands.SETUP(command);
-        });
-
-        it('Should find winning combination 0 1 2', function() {
-            game.state.board.cells[0] = Symbols.X;
-            game.state.board.cells[1] = Symbols.X;
-            game.state.board.cells[2] = Symbols.X;
-
-            const combination = game.searchWinningCombination(Symbols.X);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(0);
-            expect(combination[1]).to.equal(1);
-            expect(combination[2]).to.equal(2);
-        });
-
-        it('Should find winning combination 3 4 5', function() {
-            game.state.board.cells[3] = Symbols.X;
-            game.state.board.cells[4] = Symbols.X;
-            game.state.board.cells[5] = Symbols.X;
-
-            const combination = game.searchWinningCombination(Symbols.X);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(3);
-            expect(combination[1]).to.equal(4);
-            expect(combination[2]).to.equal(5);
-        });
-
-        it('Should find winning combination 6 7 8', function() {
-            game.state.board.cells[6] = Symbols.X;
-            game.state.board.cells[7] = Symbols.X;
-            game.state.board.cells[8] = Symbols.X;
-
-            const combination = game.searchWinningCombination(Symbols.X);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(6);
-            expect(combination[1]).to.equal(7);
-            expect(combination[2]).to.equal(8);
-        });
-
-        it('Should find winning combination 0 3 6', function() {
-            game.state.board.cells[0] = Symbols.O;
-            game.state.board.cells[3] = Symbols.O;
-            game.state.board.cells[6] = Symbols.O;
-
-            const combination = game.searchWinningCombination(Symbols.O);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(0);
-            expect(combination[1]).to.equal(3);
-            expect(combination[2]).to.equal(6);
-        });
-
-        it('Should find winning combination 1 4 7', function() {
-            game.state.board.cells[1] = Symbols.O;
-            game.state.board.cells[4] = Symbols.O;
-            game.state.board.cells[7] = Symbols.O;
-
-            const combination = game.searchWinningCombination(Symbols.O);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(1);
-            expect(combination[1]).to.equal(4);
-            expect(combination[2]).to.equal(7);
-        });
-
-        it('Should find winning combination 2 5 8', function() {
-            game.state.board.cells[2] = Symbols.O;
-            game.state.board.cells[5] = Symbols.O;
-            game.state.board.cells[8] = Symbols.O;
-
-            const combination = game.searchWinningCombination(Symbols.O);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(2);
-            expect(combination[1]).to.equal(5);
-            expect(combination[2]).to.equal(8);
-        });
-
-        it('Should find winning combination 0 4 8', function() {
-            game.state.board.cells[0] = Symbols.X;
-            game.state.board.cells[4] = Symbols.X;
-            game.state.board.cells[8] = Symbols.X;
-
-            const combination = game.searchWinningCombination(Symbols.X);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(0);
-            expect(combination[1]).to.equal(4);
-            expect(combination[2]).to.equal(8);
-        });
-
-        it('Should find winning combination 2 4 6', function() {
-            game.state.board.cells[2] = Symbols.X;
-            game.state.board.cells[4] = Symbols.X;
-            game.state.board.cells[6] = Symbols.X;
-
-            const combination = game.searchWinningCombination(Symbols.X);
-
-            expect(combination).to.have.lengthOf(3);
-            expect(combination[0]).to.equal(2);
-            expect(combination[1]).to.equal(4);
-            expect(combination[2]).to.equal(6);
-        });
-
-
-        it('Should not find winning combination when is draw', function() {
-            game.state.board.cells[0] = Symbols.X;
-            game.state.board.cells[1] = Symbols.O;
-            game.state.board.cells[2] = Symbols.X;
-            game.state.board.cells[3] = Symbols.X;
-            game.state.board.cells[4] = Symbols.O;
-            game.state.board.cells[5] = Symbols.X;
-            game.state.board.cells[6] = Symbols.O;
-            game.state.board.cells[7] = Symbols.X;
-            game.state.board.cells[8] = Symbols.O;
-
-            const combinationX = game.searchWinningCombination(Symbols.X);
-            expect(combinationX).to.have.lengthOf(0);
-            
-            const combinationO = game.searchWinningCombination(Symbols.O);
-            expect(combinationO).to.have.lengthOf(0);
-
-        });
-
-        it('Should not find winning combination when the board is empty', function() {
-            game.state.board.cells[0] = Symbols.EMPTY;
-            game.state.board.cells[1] = Symbols.EMPTY;
-            game.state.board.cells[2] = Symbols.EMPTY;
-            game.state.board.cells[3] = Symbols.EMPTY;
-            game.state.board.cells[4] = Symbols.EMPTY;
-            game.state.board.cells[5] = Symbols.EMPTY;
-            game.state.board.cells[6] = Symbols.EMPTY;
-            game.state.board.cells[7] = Symbols.EMPTY;
-            game.state.board.cells[8] = Symbols.EMPTY;
-
-            const combinationX = game.searchWinningCombination(Symbols.X);
-            expect(combinationX).to.have.lengthOf(0);
-            
-            const combinationO = game.searchWinningCombination(Symbols.O);
-            expect(combinationO).to.have.lengthOf(0);
-        });
-    });
-
     describe('#checkEndOfRound()', function() {
         beforeEach(function() {
             game = createGame();
@@ -547,6 +393,150 @@ describe('game', function() {
             expect(game.state.currentRound.currentPlayer).to.equal(0);
         });
 
+    });
+
+    // helpers
+    
+    describe('#searchWinningCombination()', function() {
+        let cells;
+
+        beforeEach(function() {
+            game = createGame();
+            cells = [
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+            ];
+        });
+
+        it('Should find winning combination 0 1 2', function() {
+            cells[0] = Symbols.X;
+            cells[1] = Symbols.X;
+            cells[2] = Symbols.X;
+
+
+            const combination = game.searchWinningCombination(Symbols.X, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(0);
+            expect(combination[1]).to.equal(1);
+            expect(combination[2]).to.equal(2);
+        });
+
+        it('Should find winning combination 3 4 5', function() {
+            cells[3] = Symbols.X;
+            cells[4] = Symbols.X;
+            cells[5] = Symbols.X;
+
+            const combination = game.searchWinningCombination(Symbols.X, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(3);
+            expect(combination[1]).to.equal(4);
+            expect(combination[2]).to.equal(5);
+        });
+
+        it('Should find winning combination 6 7 8', function() {
+            cells[6] = Symbols.X;
+            cells[7] = Symbols.X;
+            cells[8] = Symbols.X;
+
+            const combination = game.searchWinningCombination(Symbols.X, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(6);
+            expect(combination[1]).to.equal(7);
+            expect(combination[2]).to.equal(8);
+        });
+
+        it('Should find winning combination 0 3 6', function() {
+            cells[0] = Symbols.O;
+            cells[3] = Symbols.O;
+            cells[6] = Symbols.O;
+
+            const combination = game.searchWinningCombination(Symbols.O, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(0);
+            expect(combination[1]).to.equal(3);
+            expect(combination[2]).to.equal(6);
+        });
+
+        it('Should find winning combination 1 4 7', function() {
+            cells[1] = Symbols.O;
+            cells[4] = Symbols.O;
+            cells[7] = Symbols.O;
+
+            const combination = game.searchWinningCombination(Symbols.O, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(1);
+            expect(combination[1]).to.equal(4);
+            expect(combination[2]).to.equal(7);
+        });
+
+        it('Should find winning combination 2 5 8', function() {
+            cells[2] = Symbols.O;
+            cells[5] = Symbols.O;
+            cells[8] = Symbols.O;
+
+            const combination = game.searchWinningCombination(Symbols.O, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(2);
+            expect(combination[1]).to.equal(5);
+            expect(combination[2]).to.equal(8);
+        });
+
+        it('Should find winning combination 0 4 8', function() {
+            cells[0] = Symbols.X;
+            cells[4] = Symbols.X;
+            cells[8] = Symbols.X;
+
+            const combination = game.searchWinningCombination(Symbols.X, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(0);
+            expect(combination[1]).to.equal(4);
+            expect(combination[2]).to.equal(8);
+        });
+
+        it('Should find winning combination 2 4 6', function() {
+            cells[2] = Symbols.X;
+            cells[4] = Symbols.X;
+            cells[6] = Symbols.X;
+
+            const combination = game.searchWinningCombination(Symbols.X, cells);
+
+            expect(combination).to.have.lengthOf(3);
+            expect(combination[0]).to.equal(2);
+            expect(combination[1]).to.equal(4);
+            expect(combination[2]).to.equal(6);
+        });
+
+
+        it('Should not find winning combination when is draw', function() {
+            cells = [
+                Symbols.X, Symbols.O, Symbols.X, 
+                Symbols.X, Symbols.O, Symbols.X, 
+                Symbols.O, Symbols.X, Symbols.O, 
+            ];
+
+            const combinationX = game.searchWinningCombination(Symbols.X, cells);
+            expect(combinationX).to.have.lengthOf(0);
+            
+            const combinationO = game.searchWinningCombination(Symbols.O, cells);
+            expect(combinationO).to.have.lengthOf(0);
+
+        });
+
+        it('Should not find winning combination when the board is empty', function() {
+            const combinationX = game.searchWinningCombination(Symbols.X, cells);
+            expect(combinationX).to.have.lengthOf(0);
+            
+            const combinationO = game.searchWinningCombination(Symbols.O, cells);
+            expect(combinationO).to.have.lengthOf(0);
+        });
     });
 
     describe('#hasEmptyCells()', function() {

@@ -119,7 +119,7 @@ export default function createGame() {
         MOVE: ({ playerIndex, cellIndex }) => {
             move(playerIndex, cellIndex);
                 
-            const winningCombination = searchWinningCombination(state.players[playerIndex].symbol);
+            const winningCombination = searchWinningCombination(state.players[playerIndex].symbol, state.board.cells);
             
             const isEndOfRound = checkEndOfRound(winningCombination);
             
@@ -248,11 +248,13 @@ export default function createGame() {
         return true;
     }
 
-    function searchWinningCombination(symbol) {
+    // helper
+    function searchWinningCombination(symbol, boardCells) {
         let hasWinner = false;
+
         for(let i = 0; i < WINNING_COMBINATIONS.length && hasWinner === false; i++) {
 
-           hasWinner = WINNING_COMBINATIONS[i].every(index => state.board.cells[index] === symbol);
+           hasWinner = WINNING_COMBINATIONS[i].every(index => boardCells[index] === symbol);
     
            if(hasWinner) {
                return WINNING_COMBINATIONS[i];
@@ -295,6 +297,7 @@ export default function createGame() {
         checkEndOfRound,
         switchPlayer,
         move,
+        //helper functions
         searchWinningCombination,
         hasEmptyCells,
         debugBoard,
