@@ -1,50 +1,7 @@
 import {expect} from 'chai';
-import createGame, { createLogic, PlayerTypes, Symbols, GameStatus, RoundStatus } from '../src/createGame.js'
+import { createState, createLogic, PlayerTypes, Symbols, GameStatus, RoundStatus } from '../src/createGame.js'
 
-const createState = () => {
-    return {
-        statusGame: GameStatus.SETUP,
-        maxRounds: 3,
-        board: {
-            boardSize: 3, // 3x3
-            cells: [
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-            ],
-        },
-        currentRound: {
-            round: -1,
-            currentPlayer: -1,
-            statusRound: null,
-        },
-        scores: [
-            // {
-            //     winner: null, combination: [0, 1, 2],
-            // },
-            // {
-            //     winner: null, combination: [0, 1, 2],
-            // },
-            // {
-            //     winner: null, combination: [0, 1, 2],
-            // },
-        ],
-        players: [
-            { 
-                name: '',
-                type: null,
-                symbol: Symbols.X,
-            },
-            { 
-                name: '',
-                type: null,
-                symbol: Symbols.O,
-            }
-        ],
-    };
-}
-
-describe('game', function() {
+describe('logic', function() {
     let gameState;
     let game;
     let logic;
@@ -115,6 +72,10 @@ describe('game', function() {
             expect(gameState.players[1].name).to.equal('player 2');
             expect(gameState.players[1].type).to.equal(PlayerTypes.HUMAN);
             expect(gameState.players[1].symbol).to.equal(Symbols.O);
+        });
+
+        it('Should throw if no param is passed', function() {
+            expect(logic.setPlayers).to.throw();
         });
 
 

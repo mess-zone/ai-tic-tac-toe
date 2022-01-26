@@ -36,49 +36,118 @@ export const WINNING_COMBINATIONS = [
     [ 2, 4, 6 ],
 ];
 
-// export const state = {
-//     statusGame: GameStatus.SETUP,
-//     maxRounds: 3,
-//     board: {
-//         boardSize: 3, // 3x3
-//         cells: [
-//             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-//             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-//             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-//         ],
-//     },
-//     currentRound: {
-//         round: -1,
-//         currentPlayer: -1,
-//         statusRound: null,
-//     },
-//     scores: [
-//         // {
-//         //     winner: null, combination: [0, 1, 2],
-//         // },
-//         // {
-//         //     winner: null, combination: [0, 1, 2],
-//         // },
-//         // {
-//         //     winner: null, combination: [0, 1, 2],
-//         // },
-//     ],
-//     players: [
-//         { 
-//             name: '',
-//             type: null,
-//             symbol: Symbols.X,
-//         },
-//         { 
-//             name: '',
-//             type: null,
-//             symbol: Symbols.O,
-//         }
-//     ],
-// };
+export function createState(){
+    return {
+        statusGame: GameStatus.SETUP,
+        maxRounds: 3,
+        board: {
+            boardSize: 3, // 3x3
+            cells: [
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+            ],
+        },
+        currentRound: {
+            round: -1,
+            currentPlayer: -1,
+            statusRound: null,
+        },
+        scores: [
+            // {
+            //     winner: null, combination: [0, 1, 2],
+            // },
+            // {
+            //     winner: null, combination: [0, 1, 2],
+            // },
+            // {
+            //     winner: null, combination: [0, 1, 2],
+            // },
+        ],
+        players: [
+            { 
+                name: '',
+                type: null,
+                symbol: Symbols.X,
+            },
+            { 
+                name: '',
+                type: null,
+                symbol: Symbols.O,
+            }
+        ],
+    };
 
-export default function createGame() {
+};
 
+export function createCommands(logic, observerController) {
+
+    function SETUP({ player1, player2 }) { 
+        logic.setPlayers(player1, player2);
+        logic.resetGame();
+        
+        const shouldStartNextRound = logic.startNextRound();
+
+        if(shouldStartNextRound) {
+            observerController.notifyAll({
+                id: 'START_ROUND',
+                state: logic.state,
+            });
+        }
+    }
+
+    function MOVE({ playerIndex, cellIndex }) {
+        logic.move(playerIndex, cellIndex);
+        
+        const isEndOfRound = logic.checkEndOfRound();
+        
+        if(isEndOfRound) {
+            //update screen board
+            observerController.notifyAll({ 
+                id: 'END_ROUND', 
+                state: logic.state
+            });
+        }
+
+        const isSwitch = logic.switchPlayer();
+        if(isSwitch) {
+            //update screen board
+            observerController.notifyAll({ 
+                id: 'UPDATE_BOARD', 
+                state:logic.state
+            });
+        }
+
+    }
+
+    function START_NEXT_ROUND(command) {
+        const isEndOfGame = logic.checkEndOfGame();
+        if(isEndOfGame) {
+            observerController.notifyAll({
+                id: 'END_GAME',
+                state: logic.state,
+            });
+            return;
+        }
+            
+        const shouldStartNextRound = logic.startNextRound();
+
+        if(shouldStartNextRound) {
+            observerController.notifyAll({
+                id: 'START_ROUND',
+                state: logic.state,
+            });
+        }
+    }
+
+    return {
+        SETUP,
+        MOVE,
+        START_NEXT_ROUND,
+    }
+}
+
+export function createObserverController() {
     const observers = [];
 
     function subscribe(observerFunction) {
@@ -91,6 +160,27 @@ export default function createGame() {
         }
     }
 
+    return {
+        observers,
+        subscribe,
+        notifyAll
+    }
+}
+
+export default function createGameController(commands) {
+
+    // const observers = [];
+
+    // function subscribe(observerFunction) {
+    //     observers.push(observerFunction)
+    // }
+
+    // function notifyAll(command) {
+    //     for (const observerFunction of observers) {
+    //         observerFunction(command)
+    //     }
+    // }
+
     function executeCommand(command) {
         console.log('[game] executeCommand ', command);
 
@@ -99,64 +189,10 @@ export default function createGame() {
         commands[commandId](command);
     }
 
-    const commands = {
-        SETUP: ({ player1, player2 }) => { 
-            setPlayers(player1, player2);
-            resetGame();
-            
-            const shouldStartNextRound = startNextRound();
-    
-            if(shouldStartNextRound) {
-                notifyAll({
-                    id: 'START_ROUND',
-                    state,
-                });
-            }
-        },
-
-        MOVE: ({ playerIndex, cellIndex }) => {
-            move(playerIndex, cellIndex);
-            
-            const isEndOfRound = checkEndOfRound();
-            
-            if(isEndOfRound) {
-                //update screen board
-                notifyAll({ id: 'END_ROUND', state});
-            }
-    
-            const isSwitch = switchPlayer();
-            if(isSwitch) {
-                //update screen board
-                notifyAll({ id: 'UPDATE_BOARD', state});
-            }
-    
-        },
-
-        START_NEXT_ROUND: (command) => {
-            const isEndOfGame = checkEndOfGame();
-            if(isEndOfGame) {
-                notifyAll({
-                    id: 'END_GAME',
-                    state,
-                });
-                return;
-            }
-                
-            const shouldStartNextRound = startNextRound();
-    
-            if(shouldStartNextRound) {
-                notifyAll({
-                    id: 'START_ROUND',
-                    state,
-                });
-            }
-        },
-    }
-
     return {
-        subscribe,
-        notifyAll,
-        observers,
+        // subscribe,
+        // notifyAll,
+        // observers,
         executeCommand,
         commands,
     }
