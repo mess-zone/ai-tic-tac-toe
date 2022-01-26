@@ -133,6 +133,17 @@ export default function createGame() {
     }
 
     function startNextRoundCommand(command) {
+        if(state.currentRound.round === state.maxRounds - 1) {
+            const result = endGame();
+            if(result) {
+                notifyAll({
+                    id: 'END_GAME',
+                    state,
+                });
+            }
+            return;
+        }
+
         startNextRound();
     }
 
@@ -181,16 +192,18 @@ export default function createGame() {
         console.log('[game] End of game')
         state.statusGame = GameStatus.ENDED;
 
-        notifyAll({
-            id: 'END_GAME',
-            state,
-        });
+        // notifyAll({
+        //     id: 'END_GAME',
+        //     state,
+        // });
+
+        return true;
     }
 
     // tested
     function startNextRound() {
         if(state.statusGame === GameStatus.ENDED) return;
-        if(state.currentRound.round === state.maxRounds - 1) return endGame();
+        if(state.currentRound.round === state.maxRounds - 1) return;
         if(state.currentRound.statusRound === RoundStatus.PLAYING) return;
 
         state.board.cells = [
