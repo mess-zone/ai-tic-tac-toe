@@ -271,11 +271,11 @@ export default function createGame() {
     }
 
     // helper
-    function debugBoard() {
+    function debugBoard(boardCells) {
         console.log('[game]');
-        console.log(`${state.board.cells[0]} | ${state.board.cells[1]} | ${state.board.cells[2]}`);
-        console.log(`${state.board.cells[3]} | ${state.board.cells[4]} | ${state.board.cells[5]}`);
-        console.log(`${state.board.cells[6]} | ${state.board.cells[7]} | ${state.board.cells[8]}`);
+        console.log(`${boardCells[0]} | ${boardCells[1]} | ${boardCells[2]}`);
+        console.log(`${boardCells[3]} | ${boardCells[4]} | ${boardCells[5]}`);
+        console.log(`${boardCells[6]} | ${boardCells[7]} | ${boardCells[8]}`);
     }
 
     return {
