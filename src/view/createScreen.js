@@ -1,6 +1,6 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
-export default function createScreen(viewsController) {
+export default function createScreen(viewsController, commands) {
 
     let state = {};
 

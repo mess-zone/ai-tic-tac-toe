@@ -1,11 +1,13 @@
 import createScreen from "../src/view/createScreen.js";
 import createViewController from "../src/view/createViewController.js";
+import createViewCommands from '../src/view/createCommands.js';
 
 // view
 const nodes = {};
 const screenObserver = createObserverController();
 const viewsController = createViewController(window, nodes, screenObserver);
-const gameScreen = createScreen(viewsController);
+const viewCommands = createViewCommands(viewsController);
+const gameScreen = createScreen(viewsController, viewCommands);
 gameScreen.init();
 window.gameScreen = gameScreen;
 
