@@ -1,6 +1,6 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
-export default function createViewController(window, nodes) {
+export default function createViewController(window, nodes, observerController) {
 
     function createStartScreen() {
         nodes.startScreenEl = document.createElement('section');
@@ -85,6 +85,10 @@ export default function createViewController(window, nodes) {
         nodes.boardContainerEl = nodes.boardScreenEl.querySelector('#board-container');
         nodes.boardEl =  nodes.boardScreenEl.querySelector('#board');
         nodes.cellsEl =  nodes.boardEl.querySelectorAll('.board__cell');
+
+        nodes.cellsEl.forEach(cellEl => {
+            cellEl.addEventListener('click', handleCellClick);
+        });
 
         window.addEventListener('resize', handleResize);
 
@@ -321,6 +325,19 @@ export default function createViewController(window, nodes) {
         nodes.boardEl.style.height = side + 'px';
     }
 
+    function handleCellClick(e) {
+        // TODO refactor use data-current-player
+        const currentPlayerIndex = nodes.boardEl.classList.contains('turn--X') ? 0 : 1;
+        console.log('[screen] cell clicked', e.target.dataset?.i);
+
+        observerController.notifyAll({ 
+            id: 'MOVE', 
+            playerIndex: currentPlayerIndex,
+            cellIndex: e.target.dataset?.i 
+        });
+
+    }
+
     return {
         nodes,
         window,
@@ -344,5 +361,6 @@ export default function createViewController(window, nodes) {
         switchTurn,
 
         handleResize,
+        handleCellClick,
     }
 }

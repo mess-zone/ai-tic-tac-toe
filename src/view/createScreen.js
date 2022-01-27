@@ -23,33 +23,18 @@ export default function createScreen(viewsController, observerController) {
         // viewsController.nodes.boardEl =  viewsController.nodes.boardScreenEl.querySelector('#board');
         // viewsController.nodes.cellsEl =  viewsController.nodes.boardEl.querySelectorAll('.board__cell');
 
-        viewsController.nodes.cellsEl.forEach(cellEl => {
-            cellEl.addEventListener('click', handleCellClick);
-        });
+        // viewsController.nodes.cellsEl.forEach(cellEl => {
+        //     cellEl.addEventListener('click', handleCellClick);
+        // });
+        viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
+        viewsController.nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
         
 
         // viewsController.window.addEventListener('resize', viewsController.handleResize);
 
-        viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
 
         viewsController.nodes.roundScreenEl.addEventListener("animationend", () => viewsController.showBoardScreen(state) );
-
-        viewsController.nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
-
         viewsController.nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => viewsController.showStartScreen(state) );
-
-    }
-
-
-
-    function handleCellClick(e) {
-        console.log('[screen] cell clicked', e.target.dataset?.i, state);
-
-        observerController.notifyAll({ 
-            id: 'MOVE', 
-            playerIndex: state.currentRound.currentPlayer, 
-            cellIndex: e.target.dataset?.i 
-        });
 
     }
 
