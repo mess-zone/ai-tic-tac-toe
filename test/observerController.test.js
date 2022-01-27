@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import createObserverController from '../src/createObserverController.js';
+import createObserverController from '../src/helpers/createObserverController.js';
 
 describe('observerController', function() {
     describe('#subscribe()', function() {

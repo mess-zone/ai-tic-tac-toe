@@ -8,7 +8,7 @@ window.gameScreen = gameScreen;
 
 
 import createLogic, { createState } from '../src/createLogic.js';
-import createObserverController from '../src/createObserverController.js';
+import createObserverController from '../src/helpers/createObserverController.js';
 import createCommands from '../src/createCommands.js';
 import createGameController from '../src/createGameController.js';
 
