@@ -115,6 +115,9 @@ export default function createViewController(window, nodes, observerController) 
         </div>
         `;
         window.document.body.appendChild(nodes.endRoundScreenEl);
+
+        nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
+
     }
 
     function createEndGameScreen() {
@@ -361,6 +364,13 @@ export default function createViewController(window, nodes, observerController) 
         });
     }
 
+    function startNextRound() {
+        console.log('[screen] start next round')
+        observerController.notifyAll({
+            id: 'START_NEXT_ROUND'
+        });
+    }
+
     return {
         nodes,
         window,
@@ -386,5 +396,6 @@ export default function createViewController(window, nodes, observerController) 
         handleResize,
         handleCellClick,
         configurePlayers,
+        startNextRound,
     }
 }

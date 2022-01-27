@@ -27,7 +27,7 @@ export default function createScreen(viewsController, observerController) {
         //     cellEl.addEventListener('click', handleCellClick);
         // });
         // viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
-        viewsController.nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
+        // viewsController.nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
         
 
         // viewsController.window.addEventListener('resize', viewsController.handleResize);
@@ -171,12 +171,12 @@ export default function createScreen(viewsController, observerController) {
     }
 
     // ?
-    function startNextRound() {
-        console.log('[screen] start next round', state)
-        observerController.notifyAll({
-            id: 'START_NEXT_ROUND'
-        });
-    }
+    // function startNextRound() {
+    //     console.log('[screen] start next round', state)
+    //     observerController.notifyAll({
+    //         id: 'START_NEXT_ROUND'
+    //     });
+    // }
 
 
     return {
@@ -184,7 +184,5 @@ export default function createScreen(viewsController, observerController) {
         state,
 
         init,
-
-        startNextRound,
     }
 }
