@@ -26,7 +26,7 @@ export default function createScreen(viewsController, observerController) {
         // viewsController.nodes.cellsEl.forEach(cellEl => {
         //     cellEl.addEventListener('click', handleCellClick);
         // });
-        viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
+        // viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
         viewsController.nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
         
 
@@ -168,29 +168,6 @@ export default function createScreen(viewsController, observerController) {
         
         console.log('[screen] current state', state)
         console.log('[screen] current state.board', state.board)
-    }
-
-
-
-    function configurePlayers(e) {
-        e.preventDefault();
-        const player1 = {
-            name: viewsController.nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
-            type: viewsController.nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'HUMAN',
-        };
-
-        const player2 = {
-            name: viewsController.nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
-            type: viewsController.nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
-        };
-
-        console.log('[screen] configure players', player1, player2);
-
-        observerController.notifyAll({ 
-            id: 'SETUP', 
-            player1, 
-            player2,
-        });
     }
 
     // ?

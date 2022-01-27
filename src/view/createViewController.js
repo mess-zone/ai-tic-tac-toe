@@ -39,6 +39,8 @@ export default function createViewController(window, nodes, observerController) 
         </form>
         `;
         window.document.body.appendChild(nodes.startScreenEl);
+
+        nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
     }
 
     function createRoundScreen() {
@@ -338,6 +340,27 @@ export default function createViewController(window, nodes, observerController) 
 
     }
 
+    function configurePlayers(e) {
+        e.preventDefault();
+        const player1 = {
+            name: nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
+            type: nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'HUMAN',
+        };
+
+        const player2 = {
+            name: nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
+            type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
+        };
+
+        console.log('[screen] configure players', player1, player2);
+
+        observerController.notifyAll({ 
+            id: 'SETUP', 
+            player1, 
+            player2,
+        });
+    }
+
     return {
         nodes,
         window,
@@ -362,5 +385,6 @@ export default function createViewController(window, nodes, observerController) 
 
         handleResize,
         handleCellClick,
+        configurePlayers,
     }
 }
