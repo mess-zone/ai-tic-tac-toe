@@ -2,8 +2,7 @@ import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
 export default function createViewController(window, nodes) {
 
-    function createViews() {
-        // start-screen
+    function createStartScreen() {
         const startScreenSectionEl = document.createElement('section');
         startScreenSectionEl.id = 'start-screen';
         startScreenSectionEl.classList.add('screen', 'screen--start');
@@ -40,8 +39,9 @@ export default function createViewController(window, nodes) {
         </form>
         `;
         window.document.body.appendChild(startScreenSectionEl);
+    }
 
-        // round-screen
+    function createRoundScreen() {
         const roundScreenSectionEl = document.createElement('section');
         roundScreenSectionEl.id = 'round-screen';
         roundScreenSectionEl.classList.add('screen', 'screen--round');
@@ -51,9 +51,9 @@ export default function createViewController(window, nodes) {
         </div>
         `;
         window.document.body.appendChild(roundScreenSectionEl);
+    }
 
-
-        // board-screen
+    function createBoardScreen() {
         const boardScreenSectionEl = document.createElement('section');
         boardScreenSectionEl.id = 'board-screen';
         boardScreenSectionEl.classList.add('screen', 'screen--board');
@@ -79,9 +79,9 @@ export default function createViewController(window, nodes) {
         </div>
         `;
         window.document.body.appendChild(boardScreenSectionEl);
+    }
 
-
-        // end-round-screen
+    function createEndRoundScreen() {
         const endRoundScreenSectionEl = document.createElement('section');
         endRoundScreenSectionEl.id = 'end-round-screen';
         endRoundScreenSectionEl.classList.add('screen', 'screen--end-round');
@@ -100,9 +100,9 @@ export default function createViewController(window, nodes) {
         </div>
         `;
         window.document.body.appendChild(endRoundScreenSectionEl);
+    }
 
-
-        //end-game-screen
+    function createEndGameScreen() {
         const endGameScreenSectionEl = document.createElement('section');
         endGameScreenSectionEl.id = 'end-game-screen';
         endGameScreenSectionEl.classList.add('screen', 'screen--end-game');
@@ -114,7 +114,14 @@ export default function createViewController(window, nodes) {
         </div>
         `;
         window.document.body.appendChild(endGameScreenSectionEl);
+    }
 
+    function createAllViews() {
+        createStartScreen();
+        createRoundScreen();
+        createBoardScreen();
+        createEndRoundScreen();
+        createEndGameScreen();
     }
 
 
@@ -306,7 +313,13 @@ export default function createViewController(window, nodes) {
     return {
         nodes,
         window,
-        createViews,
+
+        createStartScreen,
+        createRoundScreen,
+        createBoardScreen,
+        createEndRoundScreen,
+        createEndGameScreen,
+        createAllViews,
 
         showStartScreen,
         showRoundScreen,

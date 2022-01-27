@@ -6,7 +6,7 @@ export default function createScreen(viewsController, observerController) {
 
     function init() {
 
-        viewsController.createViews();
+        viewsController.createAllViews();
 
         console.log('[screen] init')
         viewsController.nodes.startScreenEl = viewsController.window.document.getElementById('start-screen');
