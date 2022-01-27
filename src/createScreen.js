@@ -191,7 +191,11 @@ export default function createScreen(window) {
         } else if(command.id == 'START_ROUND') {
             state = {...command.state};
             console.log('[screen] starting round', state)
-            showRoundScreen(state);
+            const modelRoundScreen = {
+                currentRound: state.currentRound.round + 1,
+                maxRounds: state.maxRounds,
+            };
+            showRoundScreen(modelRoundScreen);
         } else if(command.id == 'UPDATE_BOARD') {
             state = {...command.state};
             console.log('[screen] UPDATE BOARD', state)
@@ -258,7 +262,7 @@ export default function createScreen(window) {
 
         nodes.endRoundScreenEl.classList.remove('screen--show');
         nodes.endGameScreenEl.classList.remove('screen--show');
-        nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound.round + 1}/${model.maxRounds}`;
+        nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound}/${model.maxRounds}`;
         nodes.roundScreenEl.classList.add('screen--show');
         nodes.roundScreenEl.classList.add('animating');
     }
