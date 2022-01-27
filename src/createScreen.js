@@ -160,11 +160,11 @@ export default function createScreen(window) {
 
         nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
 
-        nodes.roundScreenEl.addEventListener("animationend", () => showBoardScreen() );
+        nodes.roundScreenEl.addEventListener("animationend", () => showBoardScreen(state) );
 
         nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
 
-        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => showStartScreen() );
+        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => showStartScreen(state) );
 
     }
 
@@ -195,15 +195,15 @@ export default function createScreen(window) {
         } else if(command.id == 'UPDATE_BOARD') {
             state = {...command.state};
             console.log('[screen] UPDATE BOARD', state)
-            updateScore();
-            drawBoard();
-            switchTurn();
+            updateScore(state);
+            drawBoard(state);
+            switchTurn(state);
         } else if(command.id == 'END_ROUND') {
             state = {...command.state};
             console.log('[screen] END ROUND', state)
-            updateScore();
-            drawBoard();
-            switchTurn();
+            updateScore(state);
+            drawBoard(state);
+            switchTurn(state);
             showEndRoundScreen(state);
         } else if(command.id == 'END_GAME') {
             state = {...command.state};
@@ -268,9 +268,9 @@ export default function createScreen(window) {
         nodes.startScreenEl.classList.remove('screen--show');
         nodes.boardScreenEl.classList.add('screen--show');
         handleResize();
-        updateScore();
-        drawBoard();
-        switchTurn();
+        updateScore(model);
+        drawBoard(model);
+        switchTurn(model);
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
         nodes.endRoundScreenEl.classList.remove('screen--show');
@@ -315,9 +315,9 @@ export default function createScreen(window) {
         nodes.roundScreenEl.classList.remove('animating');
     }
 
-    // ?
+    // helper
     function resetBoard() {
-        console.log('[screen] resetBoard', state.board, state.scores)
+        console.log('[screen] resetBoard');
 
         for(let i = 0; i < nodes.cellsEl.length; i++) {
             nodes.cellsEl[i].classList.add('board__cell--empty');
@@ -327,43 +327,42 @@ export default function createScreen(window) {
         }
     }
 
-    function updateScore() {
+    function updateScore(model) {
         nodes.scoreEl.innerHTML = '';
 
         const roundCounterEl = document.createElement('h1');
-        roundCounterEl.innerHTML = `Round: ${state.currentRound.round + 1}/${state.maxRounds}`;
+        roundCounterEl.innerHTML = `Round: ${model.currentRound.round + 1}/${model.maxRounds}`;
         nodes.scoreEl.appendChild(roundCounterEl);
 
         const xScoreEl = document.createElement('h1');
-        xScoreEl.innerHTML = `${state.players[0].name} (${state.players[0].symbol}): ${state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 )}`;
+        xScoreEl.innerHTML = `${model.players[0].name} (${model.players[0].symbol}): ${model.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 )}`;
         nodes.scoreEl.appendChild(xScoreEl);
 
         const oScoreEl = document.createElement('h1');
-        oScoreEl.innerHTML = `${state.players[1].name} (${state.players[1].symbol}): ${state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 )}`;
+        oScoreEl.innerHTML = `${model.players[1].name} (${model.players[1].symbol}): ${model.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 )}`;
         nodes.scoreEl.appendChild(oScoreEl);
 
         const drawScoreEl = document.createElement('h1');
-        drawScoreEl.innerHTML = `Draws: ${state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
+        drawScoreEl.innerHTML = `Draws: ${model.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
         nodes.scoreEl.appendChild(drawScoreEl);
     }
     
-    function drawBoard() {
-        console.log('[screen] drawBoard', state.board, state.scores)
+    function drawBoard(model) {
+        console.log('[screen] drawBoard', model.board, model.scores)
 
-        for(let i = 0; i < state.board.cells.length; i++) {
-            if(state.board.cells[i] == Symbols.EMPTY) {
+        for(let i = 0; i < model.board.cells.length; i++) {
+            if(model.board.cells[i] == Symbols.EMPTY) {
                 nodes.cellsEl[i].classList.add('board__cell--empty');
             } else {
                 nodes.cellsEl[i].classList.remove('board__cell--empty');
-                nodes.cellsEl[i].classList.add(`board__cell--${state.board.cells[i]}`);
+                nodes.cellsEl[i].classList.add(`board__cell--${model.board.cells[i]}`);
             }   
             
             // nodes.cellsEl[i].classList.remove('board__cell--highlight');
         }
 
-        // TODO ERRO AO INICIAR NOVO ROUND
-        if(state.scores[state.currentRound.round]) {
-            const winningCombination = state.scores[state.currentRound.round].combination;
+        if(model.scores[model.currentRound.round]) {
+            const winningCombination = model.scores[model.currentRound.round].combination;
             winningCombination.forEach(cellIndex => {
                 nodes.cellsEl[cellIndex].classList.add('board__cell--highlight');
             });
@@ -371,27 +370,27 @@ export default function createScreen(window) {
         }
     }
 
-    function switchTurn() {
-        console.log('[screen] switchTurn ', state.currentRound)
-        const previousPlayerIndex = Math.abs((state.currentRound.currentPlayer - 1) % state.players.length);
-        // console.log('[screen] previous player', previousPlayerIndex, state.players[previousPlayerIndex]?.symbol)
-        nodes.boardEl.classList.remove('turn--' + state.players[previousPlayerIndex]?.symbol);
-        // state.currentRound.currentPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
-        nodes.boardEl.classList.add('turn--' + state.players[state.currentRound.currentPlayer].symbol);
+    function switchTurn(model) {
+        console.log('[screen] switchTurn ', model.currentRound)
+        const previousPlayerIndex = Math.abs((model.currentRound.currentPlayer - 1) % model.players.length);
+        // console.log('[screen] previous player', previousPlayerIndex, model.players[previousPlayerIndex]?.symbol)
+        nodes.boardEl.classList.remove('turn--' + model.players[previousPlayerIndex]?.symbol);
+        // model.currentRound.currentPlayer = (model.currentRound.currentPlayer + 1) % model.players.length;
+        nodes.boardEl.classList.add('turn--' + model.players[model.currentRound.currentPlayer].symbol);
 
-        if(state.currentRound.statusRound == RoundStatus.PLAYING) {
-            nodes.hintEl.innerHTML = `${state.players[state.currentRound.currentPlayer].name}: your turn!`;
+        if(model.currentRound.statusRound == RoundStatus.PLAYING) {
+            nodes.hintEl.innerHTML = `${model.players[model.currentRound.currentPlayer].name}: your turn!`;
         } else {
             nodes.hintEl.innerHTML = '';
         }
 
-        if(state.players[state.currentRound.currentPlayer].type === PlayerTypes.HUMAN) {
+        if(model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN) {
             nodes.boardEl.classList.add('board--human-turn');
         } else {
             nodes.boardEl.classList.remove('board--human-turn');
         }
         
-        if(state.currentRound.statusRound == RoundStatus.DRAW || state.currentRound.statusRound == RoundStatus.WIN) {
+        if(model.currentRound.statusRound == RoundStatus.DRAW || model.currentRound.statusRound == RoundStatus.WIN) {
             nodes.boardEl.classList.remove('board--human-turn');
         }
     }
