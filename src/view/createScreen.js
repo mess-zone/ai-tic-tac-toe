@@ -1,6 +1,6 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
-export default function createScreen(window, viewsController, observerController) {
+export default function createScreen(viewsController, observerController) {
 
     let state = {};
 
@@ -9,14 +9,14 @@ export default function createScreen(window, viewsController, observerController
         viewsController.createViews();
 
         console.log('[screen] init')
-        viewsController.nodes.startScreenEl = window.document.getElementById('start-screen');
-        viewsController.nodes.roundScreenEl = window.document.getElementById('round-screen');
-        viewsController.nodes.endRoundScreenEl = window.document.getElementById('end-round-screen');
-        viewsController.nodes.endGameScreenEl = window.document.getElementById('end-game-screen');
+        viewsController.nodes.startScreenEl = viewsController.window.document.getElementById('start-screen');
+        viewsController.nodes.roundScreenEl = viewsController.window.document.getElementById('round-screen');
+        viewsController.nodes.endRoundScreenEl = viewsController.window.document.getElementById('end-round-screen');
+        viewsController.nodes.endGameScreenEl = viewsController.window.document.getElementById('end-game-screen');
         
         viewsController.nodes.endGameScoreEl = viewsController.nodes.endGameScreenEl.querySelector('.score');
 
-        viewsController.nodes.boardScreenEl = window.document.getElementById('board-screen');
+        viewsController.nodes.boardScreenEl = viewsController.window.document.getElementById('board-screen');
         viewsController.nodes.scoreEl =  viewsController.nodes.boardScreenEl.querySelector('#score');
         viewsController.nodes.hintEl =  viewsController.nodes.boardScreenEl.querySelector('#hint');
         viewsController.nodes.boardContainerEl =  viewsController.nodes.boardScreenEl.querySelector('#board-container');
@@ -28,7 +28,7 @@ export default function createScreen(window, viewsController, observerController
         });
         
 
-        window.addEventListener('resize', viewsController.handleResize);
+        viewsController.window.addEventListener('resize', viewsController.handleResize);
 
         viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
 

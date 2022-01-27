@@ -5,7 +5,7 @@ import createViewController from "../src/view/createViewController.js";
 const nodes = {};
 const viewsController = createViewController(window, nodes);
 const screenObserver = createObserverController();
-const gameScreen = createScreen(window, viewsController, screenObserver);
+const gameScreen = createScreen(viewsController, screenObserver);
 gameScreen.init();
 window.gameScreen = gameScreen;
 
