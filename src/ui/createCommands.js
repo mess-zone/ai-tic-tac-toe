@@ -108,10 +108,39 @@ export default function createCommands(viewsController) {
         viewsController.showEndRoundScreen(endRoundScreenModel);
     }
 
+    function END_GAME(command) {
+        console.log('[ui] END GAME');
+        const state = {...command.state};
+
+        const endGameModel = {
+            round: {
+                // currentRound: state.currentRound.round + 1,
+                maxRounds: state.maxRounds,
+            },
+            X: {
+                name: state.players[0].name,
+                symbol: state.players[0].symbol,
+                points: state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
+            },
+            O: {
+                name: state.players[1].name,
+                symbol: state.players[1].symbol,
+                points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
+            },
+            draws: {
+                name: 'Draws',
+                symbol: '',
+                points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
+            },
+        };
+        viewsController.showEndGameScreen(endGameModel);
+    }
+
     return {
         SETUP,
         START_ROUND,
         UPDATE_BOARD,
         END_ROUND,
+        END_GAME,
     }
 }

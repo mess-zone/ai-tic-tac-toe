@@ -30,30 +30,7 @@ export default function createScreen(viewsController, commands) {
             commands.END_ROUND(command);
         } else if(command.id == 'END_GAME') {
             state = {...command.state};
-            console.log('[screen] END GAME', state);
-
-            const endGameModel = {
-                round: {
-                    // currentRound: state.currentRound.round + 1,
-                    maxRounds: state.maxRounds,
-                },
-                X: {
-                    name: state.players[0].name,
-                    symbol: state.players[0].symbol,
-                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
-                },
-                O: {
-                    name: state.players[1].name,
-                    symbol: state.players[1].symbol,
-                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
-                },
-                draws: {
-                    name: 'Draws',
-                    symbol: '',
-                    points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
-                },
-            };
-            viewsController.showEndGameScreen(endGameModel);
+            commands.END_GAME(command);
         }
         
         console.log('[screen] current state', state)
