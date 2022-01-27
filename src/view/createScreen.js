@@ -5,10 +5,10 @@ export default function createScreen(viewsController, observerController) {
     let state = {};
 
     function init() {
+        console.log('[screen] init')
 
         viewsController.createAllViews();
 
-        console.log('[screen] init')
         // viewsController.nodes.startScreenEl = viewsController.window.document.getElementById('start-screen');
         // viewsController.nodes.roundScreenEl = viewsController.window.document.getElementById('round-screen');
         // viewsController.nodes.endRoundScreenEl = viewsController.window.document.getElementById('end-round-screen');
@@ -28,7 +28,7 @@ export default function createScreen(viewsController, observerController) {
         });
         
 
-        viewsController.window.addEventListener('resize', viewsController.handleResize);
+        // viewsController.window.addEventListener('resize', viewsController.handleResize);
 
         viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
 

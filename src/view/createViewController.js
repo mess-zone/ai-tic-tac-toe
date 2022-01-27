@@ -85,6 +85,9 @@ export default function createViewController(window, nodes) {
         nodes.boardContainerEl = nodes.boardScreenEl.querySelector('#board-container');
         nodes.boardEl =  nodes.boardScreenEl.querySelector('#board');
         nodes.cellsEl =  nodes.boardEl.querySelectorAll('.board__cell');
+
+        window.addEventListener('resize', handleResize);
+
     }
 
     function createEndRoundScreen() {
