@@ -26,6 +26,8 @@ export default function createCommands(logic, observerController) {
                 id: 'END_ROUND', 
                 state: logic.state
             });
+
+            return;
         }
 
         const isSwitch = logic.switchPlayer();
