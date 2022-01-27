@@ -3,10 +3,10 @@ import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 export default function createViewController(window, nodes) {
 
     function createStartScreen() {
-        const startScreenSectionEl = document.createElement('section');
-        startScreenSectionEl.id = 'start-screen';
-        startScreenSectionEl.classList.add('screen', 'screen--start');
-        startScreenSectionEl.innerHTML = `
+        nodes.startScreenEl = document.createElement('section');
+        nodes.startScreenEl.id = 'start-screen';
+        nodes.startScreenEl.classList.add('screen', 'screen--start');
+        nodes.startScreenEl.innerHTML = `
         <form class="container">
             <h1>tic tac toe</h1>
     
@@ -38,26 +38,26 @@ export default function createViewController(window, nodes) {
             <button id="start-button">Start</button>
         </form>
         `;
-        window.document.body.appendChild(startScreenSectionEl);
+        window.document.body.appendChild(nodes.startScreenEl);
     }
 
     function createRoundScreen() {
-        const roundScreenSectionEl = document.createElement('section');
-        roundScreenSectionEl.id = 'round-screen';
-        roundScreenSectionEl.classList.add('screen', 'screen--round');
-        roundScreenSectionEl.innerHTML = `
+        nodes.roundScreenEl = document.createElement('section');
+        nodes.roundScreenEl.id = 'round-screen';
+        nodes.roundScreenEl.classList.add('screen', 'screen--round');
+        nodes.roundScreenEl.innerHTML = `
         <div class="container">
             <h1>Round 0/0</h1>
         </div>
         `;
-        window.document.body.appendChild(roundScreenSectionEl);
+        window.document.body.appendChild(nodes.roundScreenEl);
     }
 
     function createBoardScreen() {
-        const boardScreenSectionEl = document.createElement('section');
-        boardScreenSectionEl.id = 'board-screen';
-        boardScreenSectionEl.classList.add('screen', 'screen--board');
-        boardScreenSectionEl.innerHTML = `
+        nodes.boardScreenEl = document.createElement('section');
+        nodes.boardScreenEl.id = 'board-screen';
+        nodes.boardScreenEl.classList.add('screen', 'screen--board');
+        nodes.boardScreenEl.innerHTML = `
         <div class="container">
             <div class="hint" id="hint">
             </div>
@@ -78,14 +78,20 @@ export default function createViewController(window, nodes) {
             </div>
         </div>
         `;
-        window.document.body.appendChild(boardScreenSectionEl);
+        window.document.body.appendChild(nodes.boardScreenEl);
+
+        nodes.scoreEl = nodes.boardScreenEl.querySelector('#score');
+        nodes.hintEl = nodes.boardScreenEl.querySelector('#hint');
+        nodes.boardContainerEl = nodes.boardScreenEl.querySelector('#board-container');
+        nodes.boardEl =  nodes.boardScreenEl.querySelector('#board');
+        nodes.cellsEl =  nodes.boardEl.querySelectorAll('.board__cell');
     }
 
     function createEndRoundScreen() {
-        const endRoundScreenSectionEl = document.createElement('section');
-        endRoundScreenSectionEl.id = 'end-round-screen';
-        endRoundScreenSectionEl.classList.add('screen', 'screen--end-round');
-        endRoundScreenSectionEl.innerHTML = `
+        nodes.endRoundScreenEl = document.createElement('section');
+        nodes.endRoundScreenEl.id = 'end-round-screen';
+        nodes.endRoundScreenEl.classList.add('screen', 'screen--end-round');
+        nodes.endRoundScreenEl.innerHTML = `
         <div class="container">
             <div id="nextRound">
                 
@@ -99,21 +105,23 @@ export default function createViewController(window, nodes) {
             </div> 
         </div>
         `;
-        window.document.body.appendChild(endRoundScreenSectionEl);
+        window.document.body.appendChild(nodes.endRoundScreenEl);
     }
 
     function createEndGameScreen() {
-        const endGameScreenSectionEl = document.createElement('section');
-        endGameScreenSectionEl.id = 'end-game-screen';
-        endGameScreenSectionEl.classList.add('screen', 'screen--end-game');
-        endGameScreenSectionEl.innerHTML = `
+        nodes.endGameScreenEl = document.createElement('section');
+        nodes.endGameScreenEl.id = 'end-game-screen';
+        nodes.endGameScreenEl.classList.add('screen', 'screen--end-game');
+        nodes.endGameScreenEl.innerHTML = `
         <div class="container">
             <h1>End of game!</h1>
             <div class="score"></div>
             <button class="restart">Restart</button>
         </div>
         `;
-        window.document.body.appendChild(endGameScreenSectionEl);
+        window.document.body.appendChild(nodes.endGameScreenEl);
+
+        nodes.endGameScoreEl = nodes.endGameScreenEl.querySelector('.score');
     }
 
     function createAllViews() {

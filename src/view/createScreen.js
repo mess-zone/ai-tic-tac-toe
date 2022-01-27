@@ -9,19 +9,19 @@ export default function createScreen(viewsController, observerController) {
         viewsController.createAllViews();
 
         console.log('[screen] init')
-        viewsController.nodes.startScreenEl = viewsController.window.document.getElementById('start-screen');
-        viewsController.nodes.roundScreenEl = viewsController.window.document.getElementById('round-screen');
-        viewsController.nodes.endRoundScreenEl = viewsController.window.document.getElementById('end-round-screen');
-        viewsController.nodes.endGameScreenEl = viewsController.window.document.getElementById('end-game-screen');
+        // viewsController.nodes.startScreenEl = viewsController.window.document.getElementById('start-screen');
+        // viewsController.nodes.roundScreenEl = viewsController.window.document.getElementById('round-screen');
+        // viewsController.nodes.endRoundScreenEl = viewsController.window.document.getElementById('end-round-screen');
+        // viewsController.nodes.endGameScreenEl = viewsController.window.document.getElementById('end-game-screen');
         
-        viewsController.nodes.endGameScoreEl = viewsController.nodes.endGameScreenEl.querySelector('.score');
+        // viewsController.nodes.endGameScoreEl = viewsController.nodes.endGameScreenEl.querySelector('.score');
 
-        viewsController.nodes.boardScreenEl = viewsController.window.document.getElementById('board-screen');
-        viewsController.nodes.scoreEl =  viewsController.nodes.boardScreenEl.querySelector('#score');
-        viewsController.nodes.hintEl =  viewsController.nodes.boardScreenEl.querySelector('#hint');
-        viewsController.nodes.boardContainerEl =  viewsController.nodes.boardScreenEl.querySelector('#board-container');
-        viewsController.nodes.boardEl =  viewsController.nodes.boardScreenEl.querySelector('#board');
-        viewsController.nodes.cellsEl =  viewsController.nodes.boardEl.querySelectorAll('.board__cell');
+        // viewsController.nodes.boardScreenEl = viewsController.window.document.getElementById('board-screen');
+        // viewsController.nodes.scoreEl =  viewsController.nodes.boardScreenEl.querySelector('#score');
+        // viewsController.nodes.hintEl =  viewsController.nodes.boardScreenEl.querySelector('#hint');
+        // viewsController.nodes.boardContainerEl =  viewsController.nodes.boardScreenEl.querySelector('#board-container');
+        // viewsController.nodes.boardEl =  viewsController.nodes.boardScreenEl.querySelector('#board');
+        // viewsController.nodes.cellsEl =  viewsController.nodes.boardEl.querySelectorAll('.board__cell');
 
         viewsController.nodes.cellsEl.forEach(cellEl => {
             cellEl.addEventListener('click', handleCellClick);
