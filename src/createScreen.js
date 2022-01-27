@@ -199,13 +199,61 @@ export default function createScreen(window) {
         } else if(command.id == 'UPDATE_BOARD') {
             state = {...command.state};
             console.log('[screen] UPDATE BOARD', state)
-            updateScore(state);
+
+            const updateScoreModel = {
+                round: {
+                    currentRound: state.currentRound.round + 1,
+                    maxRounds: state.maxRounds,
+                },
+                X: {
+                    name: state.players[0].name,
+                    symbol: state.players[0].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
+                },
+                O: {
+                    name: state.players[1].name,
+                    symbol: state.players[1].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
+                },
+                draws: {
+                    name: 'Draw',
+                    symbol: '',
+                    points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
+                },
+            };
+
+            updateScore(updateScoreModel);
+
             drawBoard(state);
             switchTurn(state);
         } else if(command.id == 'END_ROUND') {
             state = {...command.state};
             console.log('[screen] END ROUND', state)
-            updateScore(state);
+
+            const updateScoreModel = {
+                round: {
+                    currentRound: state.currentRound.round + 1,
+                    maxRounds: state.maxRounds,
+                },
+                X: {
+                    name: state.players[0].name,
+                    symbol: state.players[0].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
+                },
+                O: {
+                    name: state.players[1].name,
+                    symbol: state.players[1].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
+                },
+                draws: {
+                    name: 'Draw',
+                    symbol: '',
+                    points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
+                },
+            };
+
+            updateScore(updateScoreModel);
+
             drawBoard(state);
             switchTurn(state);
             showEndRoundScreen(state);
@@ -272,7 +320,30 @@ export default function createScreen(window) {
         nodes.startScreenEl.classList.remove('screen--show');
         nodes.boardScreenEl.classList.add('screen--show');
         handleResize();
-        updateScore(model);
+
+        const updateScoreModel = {
+            round: {
+                currentRound: model.currentRound.round + 1,
+                maxRounds: model.maxRounds,
+            },
+            X: {
+                name: model.players[0].name,
+                symbol: model.players[0].symbol,
+                points: model.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
+            },
+            O: {
+                name: model.players[1].name,
+                symbol: model.players[1].symbol,
+                points: model.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
+            },
+            draws: {
+                name: 'Draw',
+                symbol: '',
+                points: model.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
+            },
+        };
+
+        updateScore(updateScoreModel);
         drawBoard(model);
         switchTurn(model);
         nodes.roundScreenEl.classList.remove('screen--show');
@@ -332,22 +403,23 @@ export default function createScreen(window) {
     }
 
     function updateScore(model) {
+
         nodes.scoreEl.innerHTML = '';
 
         const roundCounterEl = document.createElement('h1');
-        roundCounterEl.innerHTML = `Round: ${model.currentRound.round + 1}/${model.maxRounds}`;
+        roundCounterEl.innerHTML = `Round: ${model.round.currentRound}/${model.round.maxRounds}`;
         nodes.scoreEl.appendChild(roundCounterEl);
 
         const xScoreEl = document.createElement('h1');
-        xScoreEl.innerHTML = `${model.players[0].name} (${model.players[0].symbol}): ${model.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 )}`;
+        xScoreEl.innerHTML = `${model.X.name} (${model.X.symbol}): ${model.X.points}`;
         nodes.scoreEl.appendChild(xScoreEl);
 
         const oScoreEl = document.createElement('h1');
-        oScoreEl.innerHTML = `${model.players[1].name} (${model.players[1].symbol}): ${model.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 )}`;
+        oScoreEl.innerHTML = `${model.O.name} (${model.O.symbol}): ${model.O.points}`;
         nodes.scoreEl.appendChild(oScoreEl);
 
         const drawScoreEl = document.createElement('h1');
-        drawScoreEl.innerHTML = `Draws: ${model.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
+        drawScoreEl.innerHTML = `${model.draws.name}: ${model.draws.points}`;
         nodes.scoreEl.appendChild(drawScoreEl);
     }
     
