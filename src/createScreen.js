@@ -230,7 +230,13 @@ export default function createScreen(window) {
             };
             drawBoard(drawBoardModel);
 
-            switchTurn(state);
+            const switchTurnModel = {
+                isXTurn: state.players[state.currentRound.currentPlayer].symbol === Symbols.X,
+                isOTurn: state.players[state.currentRound.currentPlayer].symbol === Symbols.O,
+                isHumanTurn: state.players[state.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
+                hintText: state.currentRound.statusRound == RoundStatus.PLAYING ? `${state.players[state.currentRound.currentPlayer].name}: your turn!` : '',
+            };
+            switchTurn(switchTurnModel);
         } else if(command.id == 'END_ROUND') {
             state = {...command.state};
             console.log('[screen] END ROUND', state)
@@ -265,7 +271,13 @@ export default function createScreen(window) {
             };
             drawBoard(drawBoardModel);
 
-            switchTurn(state);
+            const switchTurnModel = {
+                isXTurn: state.players[state.currentRound.currentPlayer].symbol === Symbols.X,
+                isOTurn: state.players[state.currentRound.currentPlayer].symbol === Symbols.O,
+                isHumanTurn: state.players[state.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
+                hintText: state.currentRound.statusRound == RoundStatus.PLAYING ? `${state.players[state.currentRound.currentPlayer].name}: your turn!` : '',
+            };
+            switchTurn(switchTurnModel);
             showEndRoundScreen(state);
         } else if(command.id == 'END_GAME') {
             state = {...command.state};
@@ -361,7 +373,13 @@ export default function createScreen(window) {
         };
         drawBoard(drawBoardModel);
 
-        switchTurn(model);
+        const switchTurnModel = {
+            isXTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.X,
+            isOTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.O,
+            isHumanTurn: model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
+            hintText: model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '',
+        };
+        switchTurn(switchTurnModel);
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
         nodes.endRoundScreenEl.classList.remove('screen--show');
@@ -462,31 +480,18 @@ export default function createScreen(window) {
     }
 
     function switchTurn(model) {
-    
         console.log('[screen] switchTurn ');
-        // const previousPlayerIndex = Math.abs((model.currentRound.currentPlayer - 1) % model.players.length);
+
+        nodes.boardEl.classList.toggle('turn--X', model.isXTurn);
+        nodes.boardEl.classList.toggle('turn--O', model.isOTurn);
+
+        nodes.hintEl.innerHTML = model.hintText;
+
+        nodes.boardEl.classList.toggle('board--human-turn', model.isHumanTurn);
         
-        // nodes.boardEl.classList.remove('turn--' + model.players[previousPlayerIndex]?.symbol);
-        nodes.boardEl.classList.remove('turn--X', 'turn--O');
-        nodes.boardEl.classList.add('turn--' + model.players[model.currentRound.currentPlayer].symbol);
-
-        // if(model.currentRound.statusRound == RoundStatus.PLAYING) {
-        //     nodes.hintEl.innerHTML = `${model.players[model.currentRound.currentPlayer].name}: your turn!`;
-        // } else {
-        //     nodes.hintEl.innerHTML = '';
-        // }
-        nodes.hintEl.innerHTML = model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '';
-
-        nodes.boardEl.classList.toggle('board--human-turn', model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN);
-        // if(model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN) {
-        //     nodes.boardEl.classList.add('board--human-turn');
-        // } else {
+        // if(model.isRoundEnded) {
         //     nodes.boardEl.classList.remove('board--human-turn');
         // }
-        
-        if(model.currentRound.statusRound == RoundStatus.DRAW || model.currentRound.statusRound == RoundStatus.WIN) {
-            nodes.boardEl.classList.remove('board--human-turn');
-        }
     }
 
     // ?
