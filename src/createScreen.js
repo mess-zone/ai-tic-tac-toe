@@ -216,7 +216,7 @@ export default function createScreen(window) {
                     points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
                 },
                 draws: {
-                    name: 'Draw',
+                    name: 'Draws',
                     symbol: '',
                     points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
                 },
@@ -257,7 +257,7 @@ export default function createScreen(window) {
                     points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
                 },
                 draws: {
-                    name: 'Draw',
+                    name: 'Draws',
                     symbol: '',
                     points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
                 },
@@ -285,8 +285,30 @@ export default function createScreen(window) {
             showEndRoundScreen(endRoundScreenModel);
         } else if(command.id == 'END_GAME') {
             state = {...command.state};
-            console.log('[screen] END GAME', state)
-            showEndGameScreen(state);
+            console.log('[screen] END GAME', state);
+
+            const endGameModel = {
+                round: {
+                    // currentRound: state.currentRound.round + 1,
+                    maxRounds: state.maxRounds,
+                },
+                X: {
+                    name: state.players[0].name,
+                    symbol: state.players[0].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
+                },
+                O: {
+                    name: state.players[1].name,
+                    symbol: state.players[1].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
+                },
+                draws: {
+                    name: 'Draws',
+                    symbol: '',
+                    points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
+                },
+            };
+            showEndGameScreen(endGameModel);
         }
         
         console.log('[screen] current state', state)
@@ -363,7 +385,7 @@ export default function createScreen(window) {
                 points: model.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
             },
             draws: {
-                name: 'Draw',
+                name: 'Draws',
                 symbol: '',
                 points: model.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
             },
@@ -405,19 +427,19 @@ export default function createScreen(window) {
         nodes.endGameScoreEl.innerHTML = '';
 
         const roundCounterEl = document.createElement('h1');
-        roundCounterEl.innerHTML = `Rounds: ${model.maxRounds}`;
+        roundCounterEl.innerHTML = `Rounds: ${model.round.maxRounds}`;
         nodes.endGameScoreEl.appendChild(roundCounterEl);
 
         const xScoreEl = document.createElement('h1');
-        xScoreEl.innerHTML = `${model.players[0].name} (${model.players[0].symbol}): ${model.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 )}`;
+        xScoreEl.innerHTML = `${model.X.name} (${model.X.symbol}): ${model.X.points}`;
         nodes.endGameScoreEl.appendChild(xScoreEl);
 
         const oScoreEl = document.createElement('h1');
-        oScoreEl.innerHTML = `${model.players[1].name} (${model.players[1].symbol}): ${model.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 )}`;
+        oScoreEl.innerHTML = `${model.O.name} (${model.O.symbol}): ${model.O.points}`;
         nodes.endGameScoreEl.appendChild(oScoreEl);
 
         const drawScoreEl = document.createElement('h1');
-        drawScoreEl.innerHTML = `Draws: ${model.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 )}`;
+        drawScoreEl.innerHTML = `${model.draws.name}: ${model.draws.points}`;
         nodes.endGameScoreEl.appendChild(drawScoreEl);
 
         nodes.endGameScreenEl.classList.add('screen--show');
