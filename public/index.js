@@ -1,6 +1,6 @@
-import createScreen from "../src/view/createScreen.js";
-import createViewController from "../src/view/createViewController.js";
-import createViewCommands from '../src/view/createCommands.js';
+import createScreen from "../src/ui/createScreen.js";
+import createViewController from "../src/ui/createViewController.js";
+import createViewCommands from '../src/ui/createCommands.js';
 
 // view
 const nodes = {};
