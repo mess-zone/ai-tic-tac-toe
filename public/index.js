@@ -1,4 +1,4 @@
-import createScreen from "./../src/createScreen.js";
+import createScreen from "../src/view/createScreen.js";
 
 // view
 const gameScreen = createScreen(window);
