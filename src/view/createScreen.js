@@ -1,6 +1,6 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
-export default function createScreen(viewsController, observerController) {
+export default function createScreen(viewsController) {
 
     let state = {};
 
@@ -8,30 +8,6 @@ export default function createScreen(viewsController, observerController) {
         console.log('[screen] init')
 
         viewsController.createAllViews();
-
-        // viewsController.nodes.startScreenEl = viewsController.window.document.getElementById('start-screen');
-        // viewsController.nodes.roundScreenEl = viewsController.window.document.getElementById('round-screen');
-        // viewsController.nodes.endRoundScreenEl = viewsController.window.document.getElementById('end-round-screen');
-        // viewsController.nodes.endGameScreenEl = viewsController.window.document.getElementById('end-game-screen');
-        
-        // viewsController.nodes.endGameScoreEl = viewsController.nodes.endGameScreenEl.querySelector('.score');
-
-        // viewsController.nodes.boardScreenEl = viewsController.window.document.getElementById('board-screen');
-        // viewsController.nodes.scoreEl =  viewsController.nodes.boardScreenEl.querySelector('#score');
-        // viewsController.nodes.hintEl =  viewsController.nodes.boardScreenEl.querySelector('#hint');
-        // viewsController.nodes.boardContainerEl =  viewsController.nodes.boardScreenEl.querySelector('#board-container');
-        // viewsController.nodes.boardEl =  viewsController.nodes.boardScreenEl.querySelector('#board');
-        // viewsController.nodes.cellsEl =  viewsController.nodes.boardEl.querySelectorAll('.board__cell');
-
-        // viewsController.nodes.cellsEl.forEach(cellEl => {
-        //     cellEl.addEventListener('click', handleCellClick);
-        // });
-        // viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
-        // viewsController.nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
-        
-
-        // viewsController.window.addEventListener('resize', viewsController.handleResize);
-
 
         viewsController.nodes.roundScreenEl.addEventListener("animationend", () => viewsController.showBoardScreen(state) );
         viewsController.nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => viewsController.showStartScreen(state) );
@@ -169,15 +145,6 @@ export default function createScreen(viewsController, observerController) {
         console.log('[screen] current state', state)
         console.log('[screen] current state.board', state.board)
     }
-
-    // ?
-    // function startNextRound() {
-    //     console.log('[screen] start next round', state)
-    //     observerController.notifyAll({
-    //         id: 'START_NEXT_ROUND'
-    //     });
-    // }
-
 
     return {
         executeCommand,
