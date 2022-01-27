@@ -2,6 +2,7 @@ import { Symbols, PlayerTypes, RoundStatus } from "./createLogic.js";
 
 export default function createScreen(window) {
     const nodes = {};
+    let viewsController;
 
     let state = {};
 
@@ -133,6 +134,7 @@ export default function createScreen(window) {
     }
 
     function init() {
+        viewsController = createViewController(nodes);
 
         createViews();
 
@@ -156,24 +158,19 @@ export default function createScreen(window) {
         });
         
 
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', viewsController.handleResize);
 
         nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
 
-        nodes.roundScreenEl.addEventListener("animationend", () => showBoardScreen(state) );
+        nodes.roundScreenEl.addEventListener("animationend", () => viewsController.showBoardScreen(state) );
 
         nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
 
-        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => showStartScreen(state) );
+        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => viewsController.showStartScreen(state) );
 
     }
 
-    function handleResize(e) {
-        const side = nodes.boardContainerEl.offsetWidth <= nodes.boardContainerEl.offsetHeight ? nodes.boardContainerEl.offsetWidth : nodes.boardContainerEl.offsetHeight;
 
-        nodes.boardEl.style.width = side + 'px';
-        nodes.boardEl.style.height = side + 'px';
-    }
 
     function handleCellClick(e) {
         console.log('[screen] cell clicked', e.target.dataset?.i, state);
@@ -187,7 +184,7 @@ export default function createScreen(window) {
         console.log('[screen] executeCommand ', command);
 
         if(command.id == 'SETUP') {
-            showStartScreen();
+            viewsController.showStartScreen();
         } else if(command.id == 'START_ROUND') {
             state = {...command.state};
             console.log('[screen] starting round', state)
@@ -195,7 +192,7 @@ export default function createScreen(window) {
                 currentRound: state.currentRound.round + 1,
                 maxRounds: state.maxRounds,
             };
-            showRoundScreen(modelRoundScreen);
+            viewsController.showRoundScreen(modelRoundScreen);
         } else if(command.id == 'UPDATE_BOARD') {
             state = {...command.state};
             console.log('[screen] UPDATE BOARD', state)
@@ -222,13 +219,13 @@ export default function createScreen(window) {
                 },
             };
 
-            updateScore(updateScoreModel);
+            viewsController.updateScore(updateScoreModel);
 
             const drawBoardModel = {
                 boardCells: state.board.cells,
                 winnerCombination: state.scores[state.currentRound.round]?.combination,
             };
-            drawBoard(drawBoardModel);
+            viewsController.drawBoard(drawBoardModel);
 
             const switchTurnModel = {
                 isXTurn: state.players[state.currentRound.currentPlayer].symbol === Symbols.X,
@@ -236,7 +233,7 @@ export default function createScreen(window) {
                 isHumanTurn: state.players[state.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
                 hintText: state.currentRound.statusRound == RoundStatus.PLAYING ? `${state.players[state.currentRound.currentPlayer].name}: your turn!` : '',
             };
-            switchTurn(switchTurnModel);
+            viewsController.switchTurn(switchTurnModel);
         } else if(command.id == 'END_ROUND') {
             state = {...command.state};
             console.log('[screen] END ROUND', state)
@@ -263,13 +260,13 @@ export default function createScreen(window) {
                 },
             };
 
-            updateScore(updateScoreModel);
+            viewsController.updateScore(updateScoreModel);
 
             const drawBoardModel = {
                 boardCells: state.board.cells,
                 winnerCombination: state.scores[state.currentRound.round]?.combination,
             };
-            drawBoard(drawBoardModel);
+            viewsController.drawBoard(drawBoardModel);
 
             const switchTurnModel = {
                 isXTurn: state.players[state.currentRound.currentPlayer].symbol === Symbols.X,
@@ -277,12 +274,12 @@ export default function createScreen(window) {
                 isHumanTurn: state.players[state.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
                 hintText: state.currentRound.statusRound == RoundStatus.PLAYING ? `${state.players[state.currentRound.currentPlayer].name}: your turn!` : '',
             };
-            switchTurn(switchTurnModel);
+            viewsController.switchTurn(switchTurnModel);
 
             const endRoundScreenModel = {
                 text: state.currentRound.statusRound == RoundStatus.WIN ? `${state.players[state.currentRound.currentPlayer].name} won!` : 'Draw!',
             };
-            showEndRoundScreen(endRoundScreenModel);
+            viewsController.showEndRoundScreen(endRoundScreenModel);
         } else if(command.id == 'END_GAME') {
             state = {...command.state};
             console.log('[screen] END GAME', state);
@@ -308,7 +305,7 @@ export default function createScreen(window) {
                     points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
                 },
             };
-            showEndGameScreen(endGameModel);
+            viewsController.showEndGameScreen(endGameModel);
         }
         
         console.log('[screen] current state', state)
@@ -334,12 +331,29 @@ export default function createScreen(window) {
         notifyAll({ id: 'SETUP', player1, player2 });
     }
 
+    // ?
+    function startNextRound() {
+        console.log('[screen] start next round', state)
+        notifyAll({id: 'START_NEXT_ROUND'});
+    }
 
 
+    return {
+        subscribe,
+        notifyAll,
+        observers,
+        executeCommand,
+        nodes,
+        state,
 
+        init,
+        createViews,
 
-    ////
+        startNextRound,
+    }
+}
 
+export function createViewController(nodes) {
 
     function showStartScreen(model) {
         console.log('[screen] SHOW START SCREEN')
@@ -422,7 +436,6 @@ export default function createScreen(window) {
 
     }
 
-
     function showEndGameScreen(model) {
         nodes.endGameScoreEl.innerHTML = '';
 
@@ -447,6 +460,7 @@ export default function createScreen(window) {
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
     }
+
 
     // helper
     function resetBoard() {
@@ -480,7 +494,7 @@ export default function createScreen(window) {
         drawScoreEl.innerHTML = `${model.draws.name}: ${model.draws.points}`;
         nodes.scoreEl.appendChild(drawScoreEl);
     }
-    
+
     function drawBoard(model) {
         console.log('[screen] drawBoard');
 
@@ -502,7 +516,7 @@ export default function createScreen(window) {
             // console.log('[screen] winning combination', model.winnerCombination)
         }
     }
-
+    
     function switchTurn(model) {
         console.log('[screen] switchTurn ');
 
@@ -518,25 +532,15 @@ export default function createScreen(window) {
         // }
     }
 
-    // ?
-    function startNextRound() {
-        console.log('[screen] start next round', state)
-        notifyAll({id: 'START_NEXT_ROUND'});
+    function handleResize(e) {
+        const side = nodes.boardContainerEl.offsetWidth <= nodes.boardContainerEl.offsetHeight ? nodes.boardContainerEl.offsetWidth : nodes.boardContainerEl.offsetHeight;
+
+        nodes.boardEl.style.width = side + 'px';
+        nodes.boardEl.style.height = side + 'px';
     }
 
-
     return {
-        subscribe,
-        notifyAll,
-        observers,
-        executeCommand,
         nodes,
-        state,
-
-
-        init,
-        createViews,
-        
         showStartScreen,
         showRoundScreen,
         showBoardScreen,
@@ -547,6 +551,9 @@ export default function createScreen(window) {
         updateScore,
         drawBoard,
         switchTurn,
-        startNextRound,
+
+        handleResize,
+
+
     }
 }
