@@ -224,7 +224,12 @@ export default function createScreen(window) {
 
             updateScore(updateScoreModel);
 
-            drawBoard(state);
+            const drawBoardModel = {
+                boardCells: state.board.cells,
+                winnerCombination: state.scores[state.currentRound.round]?.combination,
+            };
+            drawBoard(drawBoardModel);
+
             switchTurn(state);
         } else if(command.id == 'END_ROUND') {
             state = {...command.state};
@@ -254,7 +259,12 @@ export default function createScreen(window) {
 
             updateScore(updateScoreModel);
 
-            drawBoard(state);
+            const drawBoardModel = {
+                boardCells: state.board.cells,
+                winnerCombination: state.scores[state.currentRound.round]?.combination,
+            };
+            drawBoard(drawBoardModel);
+
             switchTurn(state);
             showEndRoundScreen(state);
         } else if(command.id == 'END_GAME') {
@@ -344,7 +354,13 @@ export default function createScreen(window) {
         };
 
         updateScore(updateScoreModel);
-        drawBoard(model);
+
+        const drawBoardModel = {
+            boardCells: model.board.cells,
+            winnerCombination: model.scores[model.currentRound.round]?.combination,
+        };
+        drawBoard(drawBoardModel);
+
         switchTurn(model);
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
@@ -424,25 +440,24 @@ export default function createScreen(window) {
     }
     
     function drawBoard(model) {
-        console.log('[screen] drawBoard', model.board, model.scores)
+        console.log('[screen] drawBoard');
 
-        for(let i = 0; i < model.board.cells.length; i++) {
-            if(model.board.cells[i] == Symbols.EMPTY) {
+        for(let i = 0; i < model.boardCells.length; i++) {
+            if(model.boardCells[i] == Symbols.EMPTY) {
                 nodes.cellsEl[i].classList.add('board__cell--empty');
             } else {
                 nodes.cellsEl[i].classList.remove('board__cell--empty');
-                nodes.cellsEl[i].classList.add(`board__cell--${model.board.cells[i]}`);
+                nodes.cellsEl[i].classList.add(`board__cell--${model.boardCells[i]}`);
             }   
             
             // nodes.cellsEl[i].classList.remove('board__cell--highlight');
         }
 
-        if(model.scores[model.currentRound.round]) {
-            const winningCombination = model.scores[model.currentRound.round].combination;
-            winningCombination.forEach(cellIndex => {
+        if(model.winnerCombination) {
+            model.winnerCombination.forEach(cellIndex => {
                 nodes.cellsEl[cellIndex].classList.add('board__cell--highlight');
             });
-            // console.log('[screen] winning combination', winningCombination)
+            // console.log('[screen] winning combination', model.winnerCombination)
         }
     }
 
