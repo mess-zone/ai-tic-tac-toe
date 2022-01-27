@@ -11,24 +11,60 @@ describe('commands', function() {
     function createLogicSpy() {
         const state = { test: 'valid_state_object' };
         const params = {
-            mustThrow: false,
+            config: {
+                mustThrow: false,
+            },
+            args: {
+                setPlayers: {
+                    p1: undefined,
+                    p2: undefined,
+                },
+                move: { 
+                    playerIndex: undefined, 
+                    cellIndex: undefined,
+                }
+            },
+            calls: {
+                setPlayers: 0,
+                resetGame: 0,
+                startNextRound: 0,
+                move: 0,
+                checkEndOfRound: 0,
+                switchPlayer: 0,
+            }
         };
 
         const setPlayers = (player1, player2) => {
-            params.p1 = player1;
-            params.p2 = player2;
+            params.calls.setPlayers++;
+            params.args.setPlayers.p1 = player1;
+            params.args.setPlayers.p2 = player2;
 
-            if(params.mustThrow) {
+            if(params.config.mustThrow) {
                 throw 'Invalid Params';
             }
         }
 
         const resetGame = () => {
-            params.resetGame = true;
+            params.calls.resetGame++;
         }
 
         const startNextRound = () => {
-            params.startNextRound = true;
+            params.calls.startNextRound++;
+            return true;
+        }
+
+        const move = (playerIndex, cellIndex) => {
+            params.calls.move++;
+            params.args.move = { playerIndex, cellIndex };
+        }
+
+        const checkEndOfRound = () => {
+            params.calls.checkEndOfRound++;
+            return false;
+        }
+
+        const switchPlayer = () => {
+            params.calls.switchPlayer++;
             return true;
         }
 
@@ -37,15 +73,22 @@ describe('commands', function() {
             params,
             setPlayers,
             resetGame,
-            startNextRound
+            startNextRound,
+            move,
+            checkEndOfRound,
+            switchPlayer,
         }
     };
 
     function createObserverControllerSpy() {
-        const params = {};
+        const params = {
+            history: {
+                notifyAll: [],
+            },
+        };
 
         function notifyAll(command) {
-            params.notify = command;
+            params.history.notifyAll.push(command);
         }
 
         return {
@@ -69,16 +112,17 @@ describe('commands', function() {
             };
             sut.SETUP(command);
          
-            expect(logicSpy.params.p1).to.deep.equal(command.player1);
-            expect(logicSpy.params.p2).to.deep.equal(command.player2);
-            expect(logicSpy.params.resetGame).to.deep.equal(true);
-            expect(logicSpy.params.startNextRound).to.deep.equal(true);
-            expect(observerSpy.params.notify.id).to.equal('START_ROUND');
+            expect(logicSpy.params.args.setPlayers.p1).to.deep.equal(command.player1);
+            expect(logicSpy.params.args.setPlayers.p2).to.deep.equal(command.player2);
+            expect(logicSpy.params.calls.resetGame).to.equal(1);
+            expect(logicSpy.params.calls.startNextRound).to.equal(1);
+            expect(observerSpy.params.history.notifyAll.length).to.equal(1);
+            expect(observerSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
         });
 
         it('Should throw an error if receive invalid params', function() {
             logicSpy = createLogicSpy();
-            logicSpy.params.mustThrow = true;
+            logicSpy.params.config.mustThrow = true;
 
             observerSpy = createObserverControllerSpy();
 
@@ -91,7 +135,23 @@ describe('commands', function() {
         });
     })
 
-    describe('others...', function() {
-        it('others commands tests');
+    describe('MOVE', function() {
+        it('Should call checkEndOfRound, switchPlayer and notifyAll UPDATE_BOARD', function() {
+            logicSpy = createLogicSpy();
+            observerSpy = createObserverControllerSpy();
+
+            const sut = createCommands(logicSpy, observerSpy);
+            const command = { 
+                id: 'MOVE',
+                playerIndex: 0,
+                cellIndex: 0
+            };
+            sut.MOVE(command);
+            expect(logicSpy.params.args.move.playerIndex).to.equal(command.playerIndex);
+            expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
+            expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
+            expect(logicSpy.params.calls.switchPlayer).to.equal(1);
+            // expect(observerSpy.params.notify.id).to.equal('START_ROUND');
+        });
     });
 });
