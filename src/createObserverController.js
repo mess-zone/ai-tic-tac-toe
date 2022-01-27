@@ -3,15 +3,9 @@ export default function createObserverController() {
     const observers = [];
 
     function subscribe(observerFunction) {
-        if(observerFunction) {
-            if(typeof observerFunction === 'function') {
-                observers.push(observerFunction);
-            } else {
-                throw 'Invalid param';
-            }
-        } else {
-            throw 'Invalid param';
-        }
+        if(!observerFunction || typeof observerFunction !== 'function') throw 'Invalid param';
+
+        observers.push(observerFunction);
     }
 
     function notifyAll(command) {
