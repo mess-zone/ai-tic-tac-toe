@@ -1,7 +1,8 @@
 import createScreen from "../src/view/createScreen.js";
 
 // view
-const gameScreen = createScreen(window);
+const screenObserver = createObserverController();
+const gameScreen = createScreen(window, screenObserver);
 gameScreen.init();
 window.gameScreen = gameScreen;
 
@@ -26,5 +27,5 @@ console.log(gameState);
 
 
 
-gameScreen.subscribe(gameController.executeCommand);
+screenObserver.subscribe(gameController.executeCommand);
 gameScreen.executeCommand({id: "SETUP"});

@@ -1,24 +1,11 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 import createViewController from "./createViewController.js";
 
-export default function createScreen(window) {
+export default function createScreen(window, observerController) {
     const nodes = {};
     let viewsController;
 
     let state = {};
-
-    const observers = [];
-
-    function subscribe(observerFunction) {
-        observers.push(observerFunction)
-    }
-
-    function notifyAll(command) {
-        for (const observerFunction of observers) {
-            observerFunction(command)
-        }
-    }
-
 
     function init() {
         viewsController = createViewController(window, nodes);
@@ -62,8 +49,11 @@ export default function createScreen(window) {
     function handleCellClick(e) {
         console.log('[screen] cell clicked', e.target.dataset?.i, state);
 
-        //notifica game
-        notifyAll({ id: 'MOVE', playerIndex: state.currentRound.currentPlayer, cellIndex: e.target.dataset?.i });
+        observerController.notifyAll({ 
+            id: 'MOVE', 
+            playerIndex: state.currentRound.currentPlayer, 
+            cellIndex: e.target.dataset?.i 
+        });
 
     }
 
@@ -215,20 +205,23 @@ export default function createScreen(window) {
 
         console.log('[screen] configure players', player1, player2);
 
-        notifyAll({ id: 'SETUP', player1, player2 });
+        observerController.notifyAll({ 
+            id: 'SETUP', 
+            player1, 
+            player2,
+        });
     }
 
     // ?
     function startNextRound() {
         console.log('[screen] start next round', state)
-        notifyAll({id: 'START_NEXT_ROUND'});
+        observerController.notifyAll({
+            id: 'START_NEXT_ROUND'
+        });
     }
 
 
     return {
-        subscribe,
-        notifyAll,
-        observers,
         executeCommand,
         nodes,
         state,
