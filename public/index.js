@@ -1,19 +1,30 @@
-import createGame from "./../src/createGame.js";
 import createScreen from "./../src/createScreen.js";
 
+// view
 const gameScreen = createScreen(window);
 gameScreen.init();
 window.gameScreen = gameScreen;
 
 
 
+import createLogic, { createState } from '../src/createLogic.js';
+import createObserverController from '../src/createObserverController.js';
+import createCommands from '../src/createCommands.js';
+import createGameController from '../src/createGameController.js';
 
-const game = createGame();
-window.game = game;
+// domain
+const gameState = createState();
+const logic = createLogic(gameState);
 
-console.log(game.state)
+// infra
+const observerController = createObserverController();
+observerController.subscribe(gameScreen.executeCommand);
+const commands = createCommands(logic, observerController);
+const gameController = createGameController(commands);
+window.game = gameController;
+console.log(gameState);
 
-game.subscribe(gameScreen.executeCommand);
-gameScreen.subscribe(game.executeCommand);
 
+
+gameScreen.subscribe(gameController.executeCommand);
 gameScreen.executeCommand({id: "SETUP"});
