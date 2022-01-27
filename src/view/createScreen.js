@@ -1,46 +1,42 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
-import createViewController from "./createViewController.js";
 
-export default function createScreen(window, observerController) {
-    const nodes = {};
-    let viewsController;
+export default function createScreen(window, viewsController, observerController) {
 
     let state = {};
 
     function init() {
-        viewsController = createViewController(window, nodes);
 
         viewsController.createViews();
 
         console.log('[screen] init')
-        nodes.startScreenEl = window.document.getElementById('start-screen');
-        nodes.roundScreenEl = window.document.getElementById('round-screen');
-        nodes.endRoundScreenEl = window.document.getElementById('end-round-screen');
-        nodes.endGameScreenEl = window.document.getElementById('end-game-screen');
+        viewsController.nodes.startScreenEl = window.document.getElementById('start-screen');
+        viewsController.nodes.roundScreenEl = window.document.getElementById('round-screen');
+        viewsController.nodes.endRoundScreenEl = window.document.getElementById('end-round-screen');
+        viewsController.nodes.endGameScreenEl = window.document.getElementById('end-game-screen');
         
-        nodes.endGameScoreEl = nodes.endGameScreenEl.querySelector('.score');
+        viewsController.nodes.endGameScoreEl = viewsController.nodes.endGameScreenEl.querySelector('.score');
 
-        nodes.boardScreenEl = window.document.getElementById('board-screen');
-        nodes.scoreEl =  nodes.boardScreenEl.querySelector('#score');
-        nodes.hintEl =  nodes.boardScreenEl.querySelector('#hint');
-        nodes.boardContainerEl =  nodes.boardScreenEl.querySelector('#board-container');
-        nodes.boardEl =  nodes.boardScreenEl.querySelector('#board');
-        nodes.cellsEl =  nodes.boardEl.querySelectorAll('.board__cell');
+        viewsController.nodes.boardScreenEl = window.document.getElementById('board-screen');
+        viewsController.nodes.scoreEl =  viewsController.nodes.boardScreenEl.querySelector('#score');
+        viewsController.nodes.hintEl =  viewsController.nodes.boardScreenEl.querySelector('#hint');
+        viewsController.nodes.boardContainerEl =  viewsController.nodes.boardScreenEl.querySelector('#board-container');
+        viewsController.nodes.boardEl =  viewsController.nodes.boardScreenEl.querySelector('#board');
+        viewsController.nodes.cellsEl =  viewsController.nodes.boardEl.querySelectorAll('.board__cell');
 
-        nodes.cellsEl.forEach(cellEl => {
+        viewsController.nodes.cellsEl.forEach(cellEl => {
             cellEl.addEventListener('click', handleCellClick);
         });
         
 
         window.addEventListener('resize', viewsController.handleResize);
 
-        nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
+        viewsController.nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
 
-        nodes.roundScreenEl.addEventListener("animationend", () => viewsController.showBoardScreen(state) );
+        viewsController.nodes.roundScreenEl.addEventListener("animationend", () => viewsController.showBoardScreen(state) );
 
-        nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
+        viewsController.nodes.endRoundScreenEl.addEventListener("animationend", startNextRound);
 
-        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => viewsController.showStartScreen(state) );
+        viewsController.nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => viewsController.showStartScreen(state) );
 
     }
 
@@ -194,13 +190,13 @@ export default function createScreen(window, observerController) {
     function configurePlayers(e) {
         e.preventDefault();
         const player1 = {
-            name: nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
-            type: nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'HUMAN',
+            name: viewsController.nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
+            type: viewsController.nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'HUMAN',
         };
 
         const player2 = {
-            name: nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
-            type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
+            name: viewsController.nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
+            type: viewsController.nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
         };
 
         console.log('[screen] configure players', player1, player2);
@@ -223,7 +219,6 @@ export default function createScreen(window, observerController) {
 
     return {
         executeCommand,
-        nodes,
         state,
 
         init,
