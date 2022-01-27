@@ -462,24 +462,27 @@ export default function createScreen(window) {
     }
 
     function switchTurn(model) {
-        console.log('[screen] switchTurn ', model.currentRound)
-        const previousPlayerIndex = Math.abs((model.currentRound.currentPlayer - 1) % model.players.length);
-        // console.log('[screen] previous player', previousPlayerIndex, model.players[previousPlayerIndex]?.symbol)
-        nodes.boardEl.classList.remove('turn--' + model.players[previousPlayerIndex]?.symbol);
-        // model.currentRound.currentPlayer = (model.currentRound.currentPlayer + 1) % model.players.length;
+    
+        console.log('[screen] switchTurn ');
+        // const previousPlayerIndex = Math.abs((model.currentRound.currentPlayer - 1) % model.players.length);
+        
+        // nodes.boardEl.classList.remove('turn--' + model.players[previousPlayerIndex]?.symbol);
+        nodes.boardEl.classList.remove('turn--X', 'turn--O');
         nodes.boardEl.classList.add('turn--' + model.players[model.currentRound.currentPlayer].symbol);
 
-        if(model.currentRound.statusRound == RoundStatus.PLAYING) {
-            nodes.hintEl.innerHTML = `${model.players[model.currentRound.currentPlayer].name}: your turn!`;
-        } else {
-            nodes.hintEl.innerHTML = '';
-        }
+        // if(model.currentRound.statusRound == RoundStatus.PLAYING) {
+        //     nodes.hintEl.innerHTML = `${model.players[model.currentRound.currentPlayer].name}: your turn!`;
+        // } else {
+        //     nodes.hintEl.innerHTML = '';
+        // }
+        nodes.hintEl.innerHTML = model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '';
 
-        if(model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN) {
-            nodes.boardEl.classList.add('board--human-turn');
-        } else {
-            nodes.boardEl.classList.remove('board--human-turn');
-        }
+        nodes.boardEl.classList.toggle('board--human-turn', model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN);
+        // if(model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN) {
+        //     nodes.boardEl.classList.add('board--human-turn');
+        // } else {
+        //     nodes.boardEl.classList.remove('board--human-turn');
+        // }
         
         if(model.currentRound.statusRound == RoundStatus.DRAW || model.currentRound.statusRound == RoundStatus.WIN) {
             nodes.boardEl.classList.remove('board--human-turn');
