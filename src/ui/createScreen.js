@@ -18,7 +18,7 @@ export default function createScreen(viewsController, commands) {
         console.log('[screen] executeCommand ', command);
 
         if(command.id == 'SETUP') {
-            viewsController.showStartScreen();
+            commands.SETUP(command);
         } else if(command.id == 'START_ROUND') {
             state = {...command.state};
             console.log('[screen] starting round', state)
