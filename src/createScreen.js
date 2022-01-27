@@ -278,7 +278,11 @@ export default function createScreen(window) {
                 hintText: state.currentRound.statusRound == RoundStatus.PLAYING ? `${state.players[state.currentRound.currentPlayer].name}: your turn!` : '',
             };
             switchTurn(switchTurnModel);
-            showEndRoundScreen(state);
+
+            const endRoundScreenModel = {
+                text: state.currentRound.statusRound == RoundStatus.WIN ? `${state.players[state.currentRound.currentPlayer].name} won!` : 'Draw!',
+            };
+            showEndRoundScreen(endRoundScreenModel);
         } else if(command.id == 'END_GAME') {
             state = {...command.state};
             console.log('[screen] END GAME', state)
@@ -387,12 +391,10 @@ export default function createScreen(window) {
     }
 
     function showEndRoundScreen(model) {
-        console.log('[screen] showEndRound', model)
-        if(model.currentRound.statusRound == RoundStatus.DRAW) {
-            nodes.endRoundScreenEl.querySelector('h1').innerText = `Draw!`;
-        } else if(model.currentRound.statusRound == RoundStatus.WIN) {
-            nodes.endRoundScreenEl.querySelector('h1').innerText = `${model.players[model.currentRound.currentPlayer].name} won!`;
-        }
+        console.log('[screen] showEndRound');
+      
+        nodes.endRoundScreenEl.querySelector('h1').innerText = model.text;
+      
         nodes.endRoundScreenEl.classList.add('screen--show');
         nodes.endRoundScreenEl.classList.add('animating');
 
