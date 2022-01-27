@@ -1,4 +1,3 @@
-
 export default function createCommands(logic, observerController) {
 
     function SETUP({ player1, player2 }) { 
@@ -66,56 +65,4 @@ export default function createCommands(logic, observerController) {
         MOVE,
         START_NEXT_ROUND,
     }
-}
-
-export function createObserverController() {
-    const observers = [];
-
-    function subscribe(observerFunction) {
-        observers.push(observerFunction)
-    }
-
-    function notifyAll(command) {
-        for (const observerFunction of observers) {
-            observerFunction(command)
-        }
-    }
-
-    return {
-        observers,
-        subscribe,
-        notifyAll
-    }
-}
-
-export function createGameController(commands) {
-
-    // const observers = [];
-
-    // function subscribe(observerFunction) {
-    //     observers.push(observerFunction)
-    // }
-
-    // function notifyAll(command) {
-    //     for (const observerFunction of observers) {
-    //         observerFunction(command)
-    //     }
-    // }
-
-    function executeCommand(command) {
-        console.log('[game] executeCommand ', command);
-
-        const commandId = command.id;
-
-        commands[commandId](command);
-    }
-
-    return {
-        // subscribe,
-        // notifyAll,
-        // observers,
-        executeCommand,
-        commands,
-    }
-
 }

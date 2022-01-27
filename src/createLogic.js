@@ -1,4 +1,3 @@
-
 export const GameStatus = {
     SETUP: 'SETUP',
     RUNNING: 'RUNNING',
