@@ -17,7 +17,111 @@ export default function createScreen(window) {
         }
     }
 
+    function createViews() {
+        // start-screen
+        window.document.body.innerHTML += `
+        <section id="start-screen" class="screen screen--start">
+            <form class="container">
+                <h1>tic tac toe</h1>
+        
+                <div>
+                    <h2>player 1 (X)</h2>
+                    <label>name:
+                        <input id="player1-name" type="text" placeholder="player 1" />
+                    </label>
+                    <label>
+                        <input type="radio" name="player1-type"  value="HUMAN" checked> human
+                    </label>
+                    <label>
+                        <input type="radio" name="player1-type"  value="COMPUTER" disabled> computer
+                    </label>
+                </div>
+                <div>
+                    <h2>player 2 (O)</h2>
+                    <label>name:
+                        <input id="player2-name" type="text" placeholder="player 2" />
+                    </label>
+                    <label>
+                        <input type="radio" name="player2-type"  value="HUMAN" checked> human
+                    </label>
+                    <label>
+                        <input type="radio" name="player2-type"  value="COMPUTER" disabled> computer
+                    </label>
+                </div>
+        
+                <button id="start-button">Start</button>
+            </form>
+        </section>
+        `;
+
+        // round-screen
+        window.document.body.innerHTML += `
+        <div id="round-screen" class="screen screen--round">
+            <div class="container">
+                <h1>Round 0/0</h1>
+            </div>
+        </div>
+        `;
+
+        // board-screen
+        window.document.body.innerHTML += `
+        <section id="board-screen" class="screen screen--board">
+            <div class="container">
+                <div class="hint" id="hint">
+                </div>
+                <div id="board-container">
+                    <div class="board" id="board">
+                        <div class="board__cell" data-i="0"></div>
+                        <div class="board__cell" data-i="1"></div>
+                        <div class="board__cell" data-i="2"></div>
+                        <div class="board__cell" data-i="3"></div>
+                        <div class="board__cell" data-i="4"></div>
+                        <div class="board__cell" data-i="5"></div>
+                        <div class="board__cell" data-i="6"></div>
+                        <div class="board__cell" data-i="7"></div>
+                        <div class="board__cell" data-i="8"></div>
+                    </div>
+                </div>
+                <div class="score" id="score">
+                </div>
+            </div>
+        </section>
+        `;
+
+        // end-round-screen
+        window.document.body.innerHTML += `
+        <section id="end-round-screen" class="screen screen--end-round">
+            <div class="container">
+                <div id="nextRound">
+                    
+                    <h1 class="winnerMessage">player A won!</h1>
+                    <svg class="loading-icon" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 25C50 38.8071 38.8071 50 25 50C11.1929 50 0 38.8071 0 25C0 11.1929 11.1929 0 25 0C38.8071 0 50 11.1929 50 25Z" fill="#9911bb"/>
+                        <path class="path" fill="transparent" stroke="black" stroke-width="50" fill-rule="evenodd" clip-rule="evenodd" d="M25 49C38.2548 49 49 38.2548 49 25C49 11.7452 38.2548 1 25 1C11.7452 1 1 11.7452 1 25C1 38.2548 11.7452 49 25 49ZM25 50C38.8071 50 50 38.8071 50 25C50 11.1929 38.8071 0 25 0C11.1929 0 0 11.1929 0 25C0 38.8071 11.1929 50 25 50Z" />
+                    </svg>
+                    <p>Next Round...</p>
+                        
+                </div> 
+            </div>
+        </section>
+        `;
+
+        //end-game-screen
+        window.document.body.innerHTML += `
+        <section id="end-game-screen" class="screen screen--end-game">
+            <div class="container">
+                <h1>End of game!</h1>
+                <div class="score"></div>
+                <button class="restart">Restart</button>
+            </div>
+        </section>
+        `;
+    }
+
     function init() {
+
+        createViews();
+
         console.log('[screen] init')
         nodes.startScreenEl = window.document.getElementById('start-screen');
         nodes.roundScreenEl = window.document.getElementById('round-screen');
@@ -281,5 +385,6 @@ export default function createScreen(window) {
         state,
         init,
         showStartScreen,
+        createViews,
     }
 }
