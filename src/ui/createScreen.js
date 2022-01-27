@@ -21,12 +21,7 @@ export default function createScreen(viewsController, commands) {
             commands.SETUP(command);
         } else if(command.id == 'START_ROUND') {
             state = {...command.state};
-            console.log('[screen] starting round', state)
-            const modelRoundScreen = {
-                currentRound: state.currentRound.round + 1,
-                maxRounds: state.maxRounds,
-            };
-            viewsController.showRoundScreen(modelRoundScreen);
+            commands.START_ROUND(command);
         } else if(command.id == 'UPDATE_BOARD') {
             state = {...command.state};
             console.log('[screen] UPDATE BOARD', state)
