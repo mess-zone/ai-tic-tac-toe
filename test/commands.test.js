@@ -19,6 +19,12 @@ describe('commands', function() {
                 switchPlayer: {
                     isSwitch: true,
                 },
+                checkEndOfGame: {
+                    isEnd: false,
+                },
+                startNextRound: {
+                    isStart: true,
+                },
             },
             args: {
                 setPlayers: {
@@ -37,6 +43,7 @@ describe('commands', function() {
                 move: 0,
                 checkEndOfRound: 0,
                 switchPlayer: 0,
+                checkEndOfGame: 0,
             }
         };
 
@@ -56,7 +63,7 @@ describe('commands', function() {
 
         const startNextRound = () => {
             params.calls.startNextRound++;
-            return true;
+            return params.config.startNextRound.isStart;
         }
 
         const move = (playerIndex, cellIndex) => {
@@ -74,6 +81,11 @@ describe('commands', function() {
             return params.config.switchPlayer.isSwitch;
         }
 
+        const checkEndOfGame = () => {
+            params.calls.checkEndOfGame++;
+            return params.config.checkEndOfGame.isEnd;
+        }
+
         return {
             state,
             params,
@@ -83,6 +95,7 @@ describe('commands', function() {
             move,
             checkEndOfRound,
             switchPlayer,
+            checkEndOfGame,
         }
     };
 
@@ -195,6 +208,56 @@ describe('commands', function() {
             expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
             expect(logicSpy.params.calls.switchPlayer).to.equal(1);
+            expect(observerSpy.params.history.notifyAll.length).to.equal(0);
+        });
+    });
+
+    describe('START_NEXT_ROUND', function() {
+        
+        it('Should call checkEndOfGame, startNextRound and notifyAll START_ROUND', function() {
+            logicSpy = createLogicSpy();
+            observerSpy = createObserverControllerSpy();
+
+            const sut = createCommands(logicSpy, observerSpy);
+            const command = { 
+                id: 'START_NEXT_ROUND',
+            };
+            sut.START_NEXT_ROUND(command);
+
+            expect(logicSpy.params.calls.checkEndOfGame).to.equal(1);
+            expect(logicSpy.params.calls.startNextRound).to.equal(1);
+            expect(observerSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
+        });
+        
+        it('Should call checkEndOfGame, startNextRound and notifyAll END_GAME', function() {
+            logicSpy = createLogicSpy();
+            logicSpy.params.config.checkEndOfGame.isEnd = true;
+            observerSpy = createObserverControllerSpy();
+
+            const sut = createCommands(logicSpy, observerSpy);
+            const command = { 
+                id: 'START_NEXT_ROUND',
+            };
+            sut.START_NEXT_ROUND(command);
+
+            expect(logicSpy.params.calls.checkEndOfGame).to.equal(1);
+            expect(logicSpy.params.calls.startNextRound).to.equal(0);
+            expect(observerSpy.params.history.notifyAll[0].id).to.equal('END_GAME');
+        });
+        
+        it('Should call checkEndOfGame, startNextRound', function() {
+            logicSpy = createLogicSpy();
+            logicSpy.params.config.startNextRound.isStart = false;
+            observerSpy = createObserverControllerSpy();
+
+            const sut = createCommands(logicSpy, observerSpy);
+            const command = { 
+                id: 'START_NEXT_ROUND',
+            };
+            sut.START_NEXT_ROUND(command);
+
+            expect(logicSpy.params.calls.checkEndOfGame).to.equal(1);
+            expect(logicSpy.params.calls.startNextRound).to.equal(1);
             expect(observerSpy.params.history.notifyAll.length).to.equal(0);
         });
     });
