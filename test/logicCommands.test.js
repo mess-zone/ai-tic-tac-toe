@@ -2,124 +2,125 @@ import {expect} from 'chai';
 import { PlayerTypes } from '../src/helpers/constants.js';
 import createLogicCommands from '../src/createLogicCommands.js';
 
+function createLogicSpy() {
+    const state = { test: 'valid_state_object' };
+
+    const params = {
+        config: {
+            mustThrow: false,
+            checkEndOfRound: {
+                isEnd: false,
+            },
+            switchPlayerTurn: {
+                isSwitch: true,
+            },
+            checkEndOfGame: {
+                isEnd: false,
+            },
+            startNextRound: {
+                isStart: true,
+            },
+        },
+        args: {
+            setPlayers: {
+                p1: undefined,
+                p2: undefined,
+            },
+            move: { 
+                playerIndex: undefined, 
+                cellIndex: undefined,
+            }
+        },
+        calls: {
+            setPlayers: 0,
+            resetGame: 0,
+            startNextRound: 0,
+            move: 0,
+            checkEndOfRound: 0,
+            switchPlayerTurn: 0,
+            checkEndOfGame: 0,
+        }
+    };
+
+    const setPlayers = (player1, player2) => {
+        params.calls.setPlayers++;
+        params.args.setPlayers.p1 = player1;
+        params.args.setPlayers.p2 = player2;
+
+        if(params.config.mustThrow) {
+            throw 'Invalid Params';
+        }
+    }
+
+    const resetGame = () => {
+        params.calls.resetGame++;
+    }
+
+    const startNextRound = () => {
+        params.calls.startNextRound++;
+        return params.config.startNextRound.isStart;
+    }
+
+    const move = (playerIndex, cellIndex) => {
+        params.calls.move++;
+        params.args.move = { playerIndex, cellIndex };
+    }
+
+    const checkEndOfRound = () => {
+        params.calls.checkEndOfRound++;
+        return params.config.checkEndOfRound.isEnd;
+    }
+
+    const switchPlayerTurn = () => {
+        params.calls.switchPlayerTurn++;
+        return params.config.switchPlayerTurn.isSwitch;
+    }
+
+    const checkEndOfGame = () => {
+        params.calls.checkEndOfGame++;
+        return params.config.checkEndOfGame.isEnd;
+    }
+
+    const getState = () => {
+        return state;
+    };
+
+    return {
+        params,
+        getState,
+        setPlayers,
+        resetGame,
+        startNextRound,
+        move,
+        checkEndOfRound,
+        switchPlayerTurn,
+        checkEndOfGame,
+    }
+}
+
+function createObservableSpy() {
+    const params = {
+        history: {
+            notifyAll: [],
+        },
+    };
+
+    function notifyAll(command) {
+        params.history.notifyAll.push(command);
+    }
+
+    return {
+        params,
+        notifyAll,
+    }
+
+}
+
 describe('LogicCommands', function() {
 
     let logicSpy;
     let observableSpy;
 
-    function createLogicSpy() {
-        const state = { test: 'valid_state_object' };
-
-        const params = {
-            config: {
-                mustThrow: false,
-                checkEndOfRound: {
-                    isEnd: false,
-                },
-                switchPlayerTurn: {
-                    isSwitch: true,
-                },
-                checkEndOfGame: {
-                    isEnd: false,
-                },
-                startNextRound: {
-                    isStart: true,
-                },
-            },
-            args: {
-                setPlayers: {
-                    p1: undefined,
-                    p2: undefined,
-                },
-                move: { 
-                    playerIndex: undefined, 
-                    cellIndex: undefined,
-                }
-            },
-            calls: {
-                setPlayers: 0,
-                resetGame: 0,
-                startNextRound: 0,
-                move: 0,
-                checkEndOfRound: 0,
-                switchPlayerTurn: 0,
-                checkEndOfGame: 0,
-            }
-        };
-
-        const setPlayers = (player1, player2) => {
-            params.calls.setPlayers++;
-            params.args.setPlayers.p1 = player1;
-            params.args.setPlayers.p2 = player2;
-
-            if(params.config.mustThrow) {
-                throw 'Invalid Params';
-            }
-        }
-
-        const resetGame = () => {
-            params.calls.resetGame++;
-        }
-
-        const startNextRound = () => {
-            params.calls.startNextRound++;
-            return params.config.startNextRound.isStart;
-        }
-
-        const move = (playerIndex, cellIndex) => {
-            params.calls.move++;
-            params.args.move = { playerIndex, cellIndex };
-        }
-
-        const checkEndOfRound = () => {
-            params.calls.checkEndOfRound++;
-            return params.config.checkEndOfRound.isEnd;
-        }
-
-        const switchPlayerTurn = () => {
-            params.calls.switchPlayerTurn++;
-            return params.config.switchPlayerTurn.isSwitch;
-        }
-
-        const checkEndOfGame = () => {
-            params.calls.checkEndOfGame++;
-            return params.config.checkEndOfGame.isEnd;
-        }
-
-        const getState = () => {
-            return state;
-        };
-
-        return {
-            params,
-            getState,
-            setPlayers,
-            resetGame,
-            startNextRound,
-            move,
-            checkEndOfRound,
-            switchPlayerTurn,
-            checkEndOfGame,
-        }
-    };
-
-    function createObservableSpy() {
-        const params = {
-            history: {
-                notifyAll: [],
-            },
-        };
-
-        function notifyAll(command) {
-            params.history.notifyAll.push(command);
-        }
-
-        return {
-            params,
-            notifyAll,
-        }
-
-    }
 
     describe('SETUP', function() {
 
