@@ -83,4 +83,26 @@ describe('ViewComands', function() {
             });
         });
     });
+
+    describe('UPDATE_BOARD', function() {
+        it('Should call updateBoardInfo', function() {
+            viewsSpy = createViewsSpy();
+            const sut = createViewCommands(viewsSpy);
+
+            const command = {
+                id: 'START_ROUND',
+                state: {
+                    currentRound: {
+                        round: 0,
+                    },
+                    maxRounds: 3,
+                },
+            };
+            sut.UPDATE_BOARD(command);
+
+            const {state} = command;
+            expect(viewsSpy.params.calls.updateBoardInfo).to.equal(1);
+            expect(viewsSpy.params.args.updateBoardInfo.model).to.deep.equal(state);
+        });
+    });
 });
