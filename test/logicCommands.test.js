@@ -9,6 +9,7 @@ describe('LogicCommands', function() {
 
     function createLogicSpy() {
         const state = { test: 'valid_state_object' };
+
         const params = {
             config: {
                 mustThrow: false,
@@ -85,9 +86,13 @@ describe('LogicCommands', function() {
             return params.config.checkEndOfGame.isEnd;
         }
 
+        const getState = () => {
+            return state;
+        };
+
         return {
-            state,
             params,
+            getState,
             setPlayers,
             resetGame,
             startNextRound,

@@ -9,7 +9,7 @@ export default function createLogicCommands(logic, observable) {
         if(shouldStartNextRound) {
             observable.notifyAll({
                 id: 'START_ROUND',
-                state: logic.state,
+                state: logic.getState(),
             });
         }
     }
@@ -23,7 +23,7 @@ export default function createLogicCommands(logic, observable) {
             //update screen board
             observable.notifyAll({ 
                 id: 'END_ROUND', 
-                state: logic.state
+                state: logic.getState()
             });
 
             return;
@@ -34,7 +34,7 @@ export default function createLogicCommands(logic, observable) {
             //update screen board
             observable.notifyAll({ 
                 id: 'UPDATE_BOARD', 
-                state:logic.state
+                state:logic.getState()
             });
         }
 
@@ -45,7 +45,7 @@ export default function createLogicCommands(logic, observable) {
         if(isEndOfGame) {
             observable.notifyAll({
                 id: 'END_GAME',
-                state: logic.state,
+                state: logic.getState(),
             });
             return;
         }
@@ -55,7 +55,7 @@ export default function createLogicCommands(logic, observable) {
         if(shouldStartNextRound) {
             observable.notifyAll({
                 id: 'START_ROUND',
-                state: logic.state,
+                state: logic.getState(),
             });
         }
     }

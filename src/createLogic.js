@@ -80,8 +80,7 @@ export function createState(){
 };
 
 
-export default function createLogic(initialState) {
-    const state = initialState;
+export default function createLogic(state) {
     
     function switchPlayer() {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return false;
@@ -193,8 +192,12 @@ export default function createLogic(initialState) {
         console.log(`${boardCells[6]} | ${boardCells[7]} | ${boardCells[8]}`);
     }
 
+    function getState() {
+        return state;
+    }
+
     return {
-        state,
+        getState,
         setPlayers,
         resetGame,
         checkEndOfGame,
