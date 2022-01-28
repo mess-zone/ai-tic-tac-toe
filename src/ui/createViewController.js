@@ -1,6 +1,8 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
-export default function createViewController(window, nodes, observerController) {
+export default function createViewController(window, observerController) {
+
+    const nodes = {};
 
     function createStartScreen() {
         nodes.startScreenEl = document.createElement('section');

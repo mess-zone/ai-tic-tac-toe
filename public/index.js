@@ -1,4 +1,4 @@
-import createObserverController from '../src/helpers/createObserverController.js';
+import createObservable from '../src/helpers/createObservable.js';
 import createCommandExecutor from '../src/helpers/createCommandExecutor.js';
 
 import createViewController from "../src/ui/createViewController.js";
@@ -11,26 +11,25 @@ import createCommands from '../src/createCommands.js';
 const gameState = createState();
 const logic = createLogic(gameState);
 
+const gameObservable = createObservable();
+const commands = createCommands(logic, gameObservable);
 // controllers
-const observerController = createObserverController();
-const commands = createCommands(logic, observerController);
 const gameController = createCommandExecutor(commands);
-window.game = gameController;
-console.log(gameState);
+window.gameController = gameController;
 
 
-// presenters
-const nodes = {};
-const screenObserver = createObserverController();
-const views = createViewController(window, nodes, screenObserver);
+const screenObservable = createObservable();
+// views
+const views = createViewController(window, screenObservable);
 const viewCommands = createViewCommands(views);
+// presenters
 const gamePresenter = createCommandExecutor(viewCommands);
 window.gamePresenter = gamePresenter;
 
 
 // observers subscribe
-observerController.subscribe(gamePresenter.executeCommand);
-screenObserver.subscribe(gameController.executeCommand);
+gameObservable.subscribe(gamePresenter.executeCommand);
+screenObservable.subscribe(gameController.executeCommand);
 
 //init game
 views.createAllViews();

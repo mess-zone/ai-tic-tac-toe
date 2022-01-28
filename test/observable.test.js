@@ -1,10 +1,10 @@
 import {expect} from 'chai';
-import createObserverController from '../src/helpers/createObserverController.js';
+import createObservable from '../src/helpers/createObservable.js';
 
-describe('observerController', function() {
+describe('observable', function() {
     describe('#subscribe()', function() {
         it('Should subscribe a valid callback function', function() {
-            const sut = createObserverController();
+            const sut = createObservable();
             const validCallback = function() {};
 
             sut.subscribe(validCallback);
@@ -15,19 +15,19 @@ describe('observerController', function() {
         });
 
         it('Should throw if receive no param', function() {
-            const sut = createObserverController();
+            const sut = createObservable();
             expect(() => { sut.subscribe() }).to.throw();
         });
 
         it('Should throw if receive invalid param', function() {
-            const sut = createObserverController();
+            const sut = createObservable();
             expect(() => { sut.subscribe('invalid_param') }).to.throw();
         });
     });
 
     describe('#notifyAll', function() {
         it('Should notify all subscribers when receive a valid command', function() {
-            const sut = createObserverController();
+            const sut = createObservable();
 
             let counter = 0;
             const validCallback = function() {
@@ -45,7 +45,7 @@ describe('observerController', function() {
         });
 
         it('Should notify all subscribers even if receive no param', function() {
-            const sut = createObserverController();
+            const sut = createObservable();
 
             let counter = 0;
             const validCallback = function() {

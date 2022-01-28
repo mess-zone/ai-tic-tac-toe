@@ -1,6 +1,5 @@
 
-// TODO renomear para Subject?
-export default function createObserverController() {
+export default function createObservable() {
     const observers = [];
 
     function subscribe(observerFunction) {
