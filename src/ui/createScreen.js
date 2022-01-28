@@ -9,7 +9,7 @@ export default function createScreen(viewsController, commands) {
 
         viewsController.createAllViews();
 
-        viewsController.nodes.roundScreenEl.addEventListener("animationend", () => viewsController.showBoardScreen(state) );
+        // viewsController.nodes.roundScreenEl.addEventListener("animationend", () => viewsController.showBoardScreen(state) );
         // viewsController.nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => viewsController.showStartScreen(state) );
 
     }

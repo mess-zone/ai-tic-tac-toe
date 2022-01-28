@@ -53,6 +53,8 @@ export default function createViewController(window, nodes, observerController) 
         </div>
         `;
         window.document.body.appendChild(nodes.roundScreenEl);
+        nodes.roundScreenEl.addEventListener("animationend", () => showBoardScreen() );
+
     }
 
     function createBoardScreen() {
@@ -159,20 +161,24 @@ export default function createViewController(window, nodes, observerController) 
 
     function showRoundScreen(model) {
 
+        // const modelRoundScreen = {
+        //     currentRound: state.currentRound.round + 1,
+        //     maxRounds: state.maxRounds,
+        // };
+
         resetBoard();
 
         nodes.endRoundScreenEl.classList.remove('screen--show');
         nodes.endGameScreenEl.classList.remove('screen--show');
-        nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound}/${model.maxRounds}`;
+        nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound.round + 1}/${model.maxRounds}`;
         nodes.roundScreenEl.classList.add('screen--show');
         nodes.roundScreenEl.classList.add('animating');
+
+        setBoardInfo(model);
     }
 
-    function showBoardScreen(model) {
-        console.log('[screen] show board screen')
-        nodes.startScreenEl.classList.remove('screen--show');
-        nodes.boardScreenEl.classList.add('screen--show');
-        handleResize();
+    function setBoardInfo(model) {
+        console.log('[screen] set board info', model);
 
         const updateScoreModel = {
             round: {
@@ -211,6 +217,14 @@ export default function createViewController(window, nodes, observerController) 
             hintText: model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '',
         };
         switchTurn(switchTurnModel);
+    }
+
+    function showBoardScreen(model) {
+        console.log('[screen] show board screen')
+        nodes.startScreenEl.classList.remove('screen--show');
+        nodes.boardScreenEl.classList.add('screen--show');
+        handleResize();
+
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
         nodes.endRoundScreenEl.classList.remove('screen--show');
