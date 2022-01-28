@@ -18,10 +18,10 @@ export default function createViews(window, observable) {
                     <input id="player1-name" type="text" placeholder="player 1" />
                 </label>
                 <label>
-                    <input type="radio" name="player1-type"  value="HUMAN" checked> human
+                    <input type="radio" name="player1-type"  value="${PlayerTypes.HUMAN}" checked> ${PlayerTypes.HUMAN}
                 </label>
                 <label>
-                    <input type="radio" name="player1-type"  value="COMPUTER" disabled> computer
+                    <input type="radio" name="player1-type"  value="${PlayerTypes.COMPUTER}" disabled> ${PlayerTypes.COMPUTER}
                 </label>
             </div>
             <div>
@@ -30,10 +30,10 @@ export default function createViews(window, observable) {
                     <input id="player2-name" type="text" placeholder="player 2" />
                 </label>
                 <label>
-                    <input type="radio" name="player2-type"  value="HUMAN" checked> human
+                    <input type="radio" name="player2-type"  value="${PlayerTypes.HUMAN}" checked> ${PlayerTypes.HUMAN}
                 </label>
                 <label>
-                    <input type="radio" name="player2-type"  value="COMPUTER" disabled> computer
+                    <input type="radio" name="player2-type"  value="${PlayerTypes.COMPUTER}" disabled> ${PlayerTypes.COMPUTER}
                 </label>
             </div>
     
@@ -368,12 +368,12 @@ export default function createViews(window, observable) {
         e.preventDefault();
         const player1 = {
             name: nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
-            type: nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'HUMAN',
+            type: nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || PlayerTypes.HUMAN,
         };
 
         const player2 = {
             name: nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
-            type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
+            type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || PlayerTypes.HUMAN,
         };
 
         setPlayers(player1, player2);
