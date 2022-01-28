@@ -1,5 +1,6 @@
 import {expect} from 'chai';
 import createViewCommands from '../src/createViewCommands.js';
+import { RoundStatus } from "../src/helpers/constants.js";
 
 function createViewsSpy() {
     const params = {
@@ -9,12 +10,16 @@ function createViewsSpy() {
             },
             updateBoardInfo: {
                 model: {},
+            },
+            showEndRoundScreen: {
+                model: {},
             }
         },
         calls: {
             showStartScreen: 0,
             updateBoardInfo: 0,
             showRoundScreen: 0,
+            showEndRoundScreen: 0,
         }
     };
 
@@ -32,11 +37,18 @@ function createViewsSpy() {
         params.calls.showRoundScreen++;
     }
 
+    function showEndRoundScreen(model) {
+        params.args.showEndRoundScreen.model = model;
+        params.calls.showEndRoundScreen++;
+    }
+
+
     return {
         params,
         showStartScreen,
         updateBoardInfo,
         showRoundScreen,
+        showEndRoundScreen,
     };
 }
 
@@ -90,7 +102,7 @@ describe('ViewComands', function() {
             const sut = createViewCommands(viewsSpy);
 
             const command = {
-                id: 'START_ROUND',
+                id: 'UPDATE_BOARD',
                 state: {
                     currentRound: {
                         round: 0,
@@ -103,6 +115,39 @@ describe('ViewComands', function() {
             const {state} = command;
             expect(viewsSpy.params.calls.updateBoardInfo).to.equal(1);
             expect(viewsSpy.params.args.updateBoardInfo.model).to.deep.equal(state);
+        });
+    });
+
+    describe('END_ROUND', function() {
+        it('Should call updateBoardInfo and showEndRoundScreen', function() {
+            viewsSpy = createViewsSpy();
+            const sut = createViewCommands(viewsSpy);
+
+            const command = {
+                id: 'END_ROUND',
+                state: {
+                    currentRound: {
+                        round: 0,
+                        statusRound:  RoundStatus.WIN,
+                        currentPlayer: 0,
+                    },
+                    maxRounds: 3,
+                    players: [
+                        {
+                            name: 'player 1',
+                        }
+                    ]
+                },
+            };
+            sut.END_ROUND(command);
+
+            const {state} = command;
+            expect(viewsSpy.params.calls.updateBoardInfo).to.equal(1);
+            expect(viewsSpy.params.args.updateBoardInfo.model).to.deep.equal(state);
+            expect(viewsSpy.params.calls.showEndRoundScreen).to.equal(1);
+            expect(viewsSpy.params.args.showEndRoundScreen.model).to.deep.equal({
+                text: state.currentRound.statusRound == RoundStatus.WIN ? `${state.players[state.currentRound.currentPlayer].name} won!` : 'Draw!',
+            });
         });
     });
 });
