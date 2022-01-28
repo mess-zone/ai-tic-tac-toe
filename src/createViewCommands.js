@@ -1,4 +1,4 @@
-import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
+import { Symbols, PlayerTypes, RoundStatus } from "./createLogic.js";
 
 export default function createCommands(viewsController) {
 

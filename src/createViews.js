@@ -1,6 +1,6 @@
-import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
+import { Symbols, PlayerTypes, RoundStatus } from "./createLogic.js";
 
-export default function createViews(window, observerController) {
+export default function createViews(window, observable) {
 
     const nodes = {};
 
@@ -339,7 +339,7 @@ export default function createViews(window, observerController) {
     function move(playerIndex, cellIndex) {
         console.log('[screen] move');
 
-        observerController.notifyAll({ 
+        observable.notifyAll({ 
             id: 'MOVE', 
             playerIndex,
             cellIndex,
@@ -348,7 +348,7 @@ export default function createViews(window, observerController) {
 
     function setPlayers(player1, player2) {
         console.log('[screen] set players', player1, player2);
-        observerController.notifyAll({ 
+        observable.notifyAll({ 
             id: 'SETUP', 
             player1, 
             player2,
@@ -357,7 +357,7 @@ export default function createViews(window, observerController) {
 
     function startNextRound() {
         console.log('[screen] start next round')
-        observerController.notifyAll({
+        observable.notifyAll({
             id: 'START_NEXT_ROUND'
         });
     }

@@ -1,4 +1,4 @@
-export default function createCommands(logic, observerController) {
+export default function createLogicCommands(logic, observable) {
 
     function SETUP({ player1, player2 }) { 
         logic.setPlayers(player1, player2);
@@ -7,7 +7,7 @@ export default function createCommands(logic, observerController) {
         const shouldStartNextRound = logic.startNextRound();
 
         if(shouldStartNextRound) {
-            observerController.notifyAll({
+            observable.notifyAll({
                 id: 'START_ROUND',
                 state: logic.state,
             });
@@ -21,7 +21,7 @@ export default function createCommands(logic, observerController) {
         
         if(isEndOfRound) {
             //update screen board
-            observerController.notifyAll({ 
+            observable.notifyAll({ 
                 id: 'END_ROUND', 
                 state: logic.state
             });
@@ -32,7 +32,7 @@ export default function createCommands(logic, observerController) {
         const isSwitch = logic.switchPlayer();
         if(isSwitch) {
             //update screen board
-            observerController.notifyAll({ 
+            observable.notifyAll({ 
                 id: 'UPDATE_BOARD', 
                 state:logic.state
             });
@@ -43,7 +43,7 @@ export default function createCommands(logic, observerController) {
     function START_NEXT_ROUND(command) {
         const isEndOfGame = logic.checkEndOfGame();
         if(isEndOfGame) {
-            observerController.notifyAll({
+            observable.notifyAll({
                 id: 'END_GAME',
                 state: logic.state,
             });
@@ -53,7 +53,7 @@ export default function createCommands(logic, observerController) {
         const shouldStartNextRound = logic.startNextRound();
 
         if(shouldStartNextRound) {
-            observerController.notifyAll({
+            observable.notifyAll({
                 id: 'START_ROUND',
                 state: logic.state,
             });

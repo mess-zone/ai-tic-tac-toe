@@ -1,11 +1,11 @@
 import {expect} from 'chai';
 import { createState, PlayerTypes, Symbols, GameStatus, RoundStatus } from '../src/createLogic.js';
-import createCommands from '../src/createCommands.js';
+import createLogicCommands from '../src/createLogicCommands.js';
 
-describe('commands', function() {
+describe('LogicCommands', function() {
 
     let logicSpy;
-    let observerSpy;
+    let observableSpy;
 
     function createLogicSpy() {
         const state = { test: 'valid_state_object' };
@@ -98,7 +98,7 @@ describe('commands', function() {
         }
     };
 
-    function createObserverControllerSpy() {
+    function createObservableSpy() {
         const params = {
             history: {
                 notifyAll: [],
@@ -120,9 +120,9 @@ describe('commands', function() {
 
         it('Should call setPlayers, resetGame, startNextRound and notifyAll when receive valid params', function() {
             logicSpy = createLogicSpy();
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'SETUP',
                 player1: { name: 'player 1', type: PlayerTypes.HUMAN }, 
@@ -134,17 +134,17 @@ describe('commands', function() {
             expect(logicSpy.params.args.setPlayers.p2).to.deep.equal(command.player2);
             expect(logicSpy.params.calls.resetGame).to.equal(1);
             expect(logicSpy.params.calls.startNextRound).to.equal(1);
-            expect(observerSpy.params.history.notifyAll.length).to.equal(1);
-            expect(observerSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
+            expect(observableSpy.params.history.notifyAll.length).to.equal(1);
+            expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
         });
 
         it('Should throw an error if receive invalid params', function() {
             logicSpy = createLogicSpy();
             logicSpy.params.config.mustThrow = true;
 
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'SETUP', 
             };
@@ -156,9 +156,9 @@ describe('commands', function() {
     describe('MOVE', function() {
         it('Should call checkEndOfRound, switchPlayer and notifyAll UPDATE_BOARD', function() {
             logicSpy = createLogicSpy();
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'MOVE',
                 playerIndex: 0,
@@ -169,15 +169,15 @@ describe('commands', function() {
             expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
             expect(logicSpy.params.calls.switchPlayer).to.equal(1);
-            expect(observerSpy.params.history.notifyAll[0].id).to.equal('UPDATE_BOARD');
+            expect(observableSpy.params.history.notifyAll[0].id).to.equal('UPDATE_BOARD');
         });
 
         it('Should call checkEndOfRound and notifyAll END_ROUND', function() {
             logicSpy = createLogicSpy();
             logicSpy.params.config.checkEndOfRound.isEnd = true;
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'MOVE',
                 playerIndex: 0,
@@ -188,15 +188,15 @@ describe('commands', function() {
             expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
             expect(logicSpy.params.calls.switchPlayer).to.equal(0);
-            expect(observerSpy.params.history.notifyAll[0].id).to.equal('END_ROUND');
+            expect(observableSpy.params.history.notifyAll[0].id).to.equal('END_ROUND');
         });
 
         it('Should call checkEndOfRound, switchPlayer', function() {
             logicSpy = createLogicSpy();
             logicSpy.params.config.switchPlayer.isSwitch = false;
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'MOVE',
                 playerIndex: 0,
@@ -207,7 +207,7 @@ describe('commands', function() {
             expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
             expect(logicSpy.params.calls.switchPlayer).to.equal(1);
-            expect(observerSpy.params.history.notifyAll.length).to.equal(0);
+            expect(observableSpy.params.history.notifyAll.length).to.equal(0);
         });
     });
 
@@ -215,9 +215,9 @@ describe('commands', function() {
         
         it('Should call checkEndOfGame, startNextRound and notifyAll START_ROUND', function() {
             logicSpy = createLogicSpy();
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'START_NEXT_ROUND',
             };
@@ -225,15 +225,15 @@ describe('commands', function() {
 
             expect(logicSpy.params.calls.checkEndOfGame).to.equal(1);
             expect(logicSpy.params.calls.startNextRound).to.equal(1);
-            expect(observerSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
+            expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
         });
         
         it('Should call checkEndOfGame, startNextRound and notifyAll END_GAME', function() {
             logicSpy = createLogicSpy();
             logicSpy.params.config.checkEndOfGame.isEnd = true;
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'START_NEXT_ROUND',
             };
@@ -241,15 +241,15 @@ describe('commands', function() {
 
             expect(logicSpy.params.calls.checkEndOfGame).to.equal(1);
             expect(logicSpy.params.calls.startNextRound).to.equal(0);
-            expect(observerSpy.params.history.notifyAll[0].id).to.equal('END_GAME');
+            expect(observableSpy.params.history.notifyAll[0].id).to.equal('END_GAME');
         });
         
         it('Should call checkEndOfGame, startNextRound', function() {
             logicSpy = createLogicSpy();
             logicSpy.params.config.startNextRound.isStart = false;
-            observerSpy = createObserverControllerSpy();
+            observableSpy = createObservableSpy();
 
-            const sut = createCommands(logicSpy, observerSpy);
+            const sut = createLogicCommands(logicSpy, observableSpy);
             const command = { 
                 id: 'START_NEXT_ROUND',
             };
@@ -257,7 +257,7 @@ describe('commands', function() {
 
             expect(logicSpy.params.calls.checkEndOfGame).to.equal(1);
             expect(logicSpy.params.calls.startNextRound).to.equal(1);
-            expect(observerSpy.params.history.notifyAll.length).to.equal(0);
+            expect(observableSpy.params.history.notifyAll.length).to.equal(0);
         });
     });
 });
