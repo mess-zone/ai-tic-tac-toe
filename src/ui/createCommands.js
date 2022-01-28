@@ -1,15 +1,16 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
 export default function createCommands(viewsController) {
-    
-    function SETUP() {
+    let state = {};
+
+    function SETUP(command) {
         console.log('[ui] SETUP');
         viewsController.showStartScreen();
     }
     
     function START_ROUND(command) {
         console.log('[ui] START_ROUND');
-        const state = {...command.state};
+        state = {...command.state};
         const modelRoundScreen = {
             currentRound: state.currentRound.round + 1,
             maxRounds: state.maxRounds,
@@ -19,7 +20,7 @@ export default function createCommands(viewsController) {
 
     function UPDATE_BOARD(command) {
         console.log('[iu] UPDATE BOARD');
-        const state = {...command.state};
+        state = {...command.state};
 
         const updateScoreModel = {
             round: {
@@ -62,7 +63,7 @@ export default function createCommands(viewsController) {
 
     function END_ROUND(command) {
         console.log('[ui] END ROUND');
-        const state = {...command.state};
+        state = {...command.state};
 
         const updateScoreModel = {
             round: {
@@ -110,7 +111,7 @@ export default function createCommands(viewsController) {
 
     function END_GAME(command) {
         console.log('[ui] END GAME');
-        const state = {...command.state};
+        state = {...command.state};
 
         const endGameModel = {
             round: {

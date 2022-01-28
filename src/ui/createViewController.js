@@ -134,6 +134,7 @@ export default function createViewController(window, nodes, observerController) 
         window.document.body.appendChild(nodes.endGameScreenEl);
 
         nodes.endGameScoreEl = nodes.endGameScreenEl.querySelector('.score');
+        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => showStartScreen() );
     }
 
     function createAllViews() {
