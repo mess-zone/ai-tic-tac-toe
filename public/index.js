@@ -1,18 +1,6 @@
-import createScreen from "../src/ui/createScreen.js";
+import createPresenter from "../src/ui/createPresenter.js";
 import createViewController from "../src/ui/createViewController.js";
 import createViewCommands from '../src/ui/createCommands.js';
-
-// view
-const nodes = {};
-const screenObserver = createObserverController();
-const viewsController = createViewController(window, nodes, screenObserver);
-const viewCommands = createViewCommands(viewsController);
-const gameScreen = createScreen(viewsController, viewCommands);
-gameScreen.init();
-window.gameScreen = gameScreen;
-
-
-
 import createLogic, { createState } from '../src/createLogic.js';
 import createObserverController from '../src/helpers/createObserverController.js';
 import createCommands from '../src/createCommands.js';
@@ -24,13 +12,25 @@ const logic = createLogic(gameState);
 
 // infra
 const observerController = createObserverController();
-observerController.subscribe(gameScreen.executeCommand);
 const commands = createCommands(logic, observerController);
 const gameController = createGameController(commands);
 window.game = gameController;
 console.log(gameState);
 
 
+// view
+const nodes = {};
+const screenObserver = createObserverController();
+const viewsController = createViewController(window, nodes, screenObserver);
+const viewCommands = createViewCommands(viewsController);
+const gameScreen = createPresenter(viewsController, viewCommands);
+gameScreen.init();
+window.gameScreen = gameScreen;
 
+
+// observers subscribe
+observerController.subscribe(gameScreen.executeCommand);
 screenObserver.subscribe(gameController.executeCommand);
+
+//init game
 gameScreen.executeCommand({id: "SETUP"});
