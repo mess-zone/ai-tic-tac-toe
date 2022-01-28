@@ -40,7 +40,7 @@ export default function createViewController(window, nodes, observerController) 
         `;
         window.document.body.appendChild(nodes.startScreenEl);
 
-        nodes.startScreenEl.querySelector('form').addEventListener('submit', configurePlayers);
+        nodes.startScreenEl.querySelector('form').addEventListener('submit', handleFormSetupSubmit);
     }
 
     function createRoundScreen() {
@@ -261,7 +261,6 @@ export default function createViewController(window, nodes, observerController) 
     }
 
 
-    // helpers
 
     function updateScore(model) {
 
@@ -334,13 +333,6 @@ export default function createViewController(window, nodes, observerController) 
         // }
     }
 
-    function handleResize(e) {
-        const side = nodes.boardContainerEl.offsetWidth <= nodes.boardContainerEl.offsetHeight ? nodes.boardContainerEl.offsetWidth : nodes.boardContainerEl.offsetHeight;
-
-        nodes.boardEl.style.width = side + 'px';
-        nodes.boardEl.style.height = side + 'px';
-    }
-
     function move(playerIndex, cellIndex) {
         console.log('[screen] move');
 
@@ -351,28 +343,8 @@ export default function createViewController(window, nodes, observerController) 
         });
     }
 
-    function handleCellClick(e) {
-        // TODO refactor use data-current-player
-        const currentPlayerIndex = nodes.boardEl.classList.contains('turn--X') ? 0 : 1;
-        const cellIndex = e.target.dataset?.i;
-
-        move(currentPlayerIndex, cellIndex);
-    }
-
-    function configurePlayers(e) {
-        e.preventDefault();
-        const player1 = {
-            name: nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
-            type: nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'HUMAN',
-        };
-
-        const player2 = {
-            name: nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
-            type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
-        };
-
-        console.log('[screen] configure players', player1, player2);
-
+    function setPlayers(player1, player2) {
+        console.log('[screen] set players', player1, player2);
         observerController.notifyAll({ 
             id: 'SETUP', 
             player1, 
@@ -386,6 +358,39 @@ export default function createViewController(window, nodes, observerController) 
             id: 'START_NEXT_ROUND'
         });
     }
+
+    // helpers
+
+    function handleFormSetupSubmit(e) {
+        e.preventDefault();
+        const player1 = {
+            name: nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
+            type: nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || 'HUMAN',
+        };
+
+        const player2 = {
+            name: nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
+            type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || 'HUMAN',
+        };
+
+        setPlayers(player1, player2);
+    }
+
+    function handleCellClick(e) {
+        // TODO refactor use data-current-player
+        const currentPlayerIndex = nodes.boardEl.classList.contains('turn--X') ? 0 : 1;
+        const cellIndex = e.target.dataset?.i;
+
+        move(currentPlayerIndex, cellIndex);
+    }
+
+    function handleResize(e) {
+        const side = nodes.boardContainerEl.offsetWidth <= nodes.boardContainerEl.offsetHeight ? nodes.boardContainerEl.offsetWidth : nodes.boardContainerEl.offsetHeight;
+
+        nodes.boardEl.style.width = side + 'px';
+        nodes.boardEl.style.height = side + 'px';
+    }
+
 
     return {
         nodes,
@@ -404,16 +409,17 @@ export default function createViewController(window, nodes, observerController) 
         showEndRoundScreen,
         showEndGameScreen,
 
+        setPlayers,
         resetBoard,
         setBoardInfo,
-        updateScore,
         drawBoard,
-        switchTurn,
+        updateScore,
         move,
-
-        handleResize,
-        handleCellClick,
-        configurePlayers,
+        switchTurn,
         startNextRound,
+
+        handleFormSetupSubmit,
+        handleCellClick,
+        handleResize,
     }
 }
