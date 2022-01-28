@@ -4,17 +4,17 @@ import createCommandExecutor from '../src/helpers/createCommandExecutor.js';
 describe('commandExecutor', function() {
     describe('#executeCommand()', function() {
         it('Should throw if receive no argument', function() {
-            const commandsSpy = {};
+            const logicCommandsSpy = {};
 
-            const sut = createCommandExecutor(commandsSpy);
+            const sut = createCommandExecutor(logicCommandsSpy);
 
             expect(() => { sut.executeCommand() }).to.throw('Invalid command');
         });
 
         it('Should throw if receive a command with no id', function() {
-            const commandsSpy = {};
+            const logicCommandsSpy = {};
 
-            const sut = createCommandExecutor(commandsSpy);
+            const sut = createCommandExecutor(logicCommandsSpy);
 
             const invalidCommand = {}; 
 
@@ -22,9 +22,9 @@ describe('commandExecutor', function() {
         });
 
         it('Should throw if receive a command with invalid command id', function() {
-            const commandsSpy = {};
+            const logicCommandsSpy = {};
 
-            const sut = createCommandExecutor(commandsSpy);
+            const sut = createCommandExecutor(logicCommandsSpy);
 
             const inexistentCommand = {
                 id: 'invalid_id'
@@ -36,13 +36,13 @@ describe('commandExecutor', function() {
 
         it('Should execute a command if it exists', function() {
             let counter = 0;
-            const commandsSpy = {
+            const logicCommandsSpy = {
                 valid_id: function() {
                     counter++;
                 }
             };
 
-            const sut = createCommandExecutor(commandsSpy);
+            const sut = createCommandExecutor(logicCommandsSpy);
 
             const validCommand = {
                 id: 'valid_id'

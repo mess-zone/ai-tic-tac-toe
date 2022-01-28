@@ -14,7 +14,6 @@ const gameObservable = createObservable();
 const logicCommands = createLogicCommands(logic, gameObservable);
 // controller
 const gameController = createCommandExecutor(logicCommands);
-// window.gameController = gameController;
 
 
 const screenObservable = createObservable();
@@ -23,7 +22,6 @@ const views = createViews(window, screenObservable);
 const viewCommands = createViewCommands(views);
 // presenter
 const gamePresenter = createCommandExecutor(viewCommands);
-// window.gamePresenter = gamePresenter;
 
 
 // observers subscribe
