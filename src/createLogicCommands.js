@@ -29,7 +29,7 @@ export default function createLogicCommands(logic, observable) {
             return;
         }
 
-        const isSwitch = logic.switchPlayer();
+        const isSwitch = logic.switchPlayerTurn();
         if(isSwitch) {
             //update screen board
             observable.notifyAll({ 

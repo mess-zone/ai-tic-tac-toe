@@ -49,7 +49,7 @@ export default function createLogic() {
 
     const state = createState();
     
-    function switchPlayer() {
+    function switchPlayerTurn() {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return false;
 
         // switch player
@@ -170,7 +170,7 @@ export default function createLogic() {
         checkEndOfGame,
         startNextRound,
         checkEndOfRound,
-        switchPlayer,
+        switchPlayerTurn,
         move,
     
         //helper functions

@@ -402,7 +402,7 @@ describe('logic', function() {
         });
     });
 
-    describe("#switchPlayer()", function() {
+    describe("#switchPlayerTurn()", function() {
         beforeEach(function() {
             
             logic = createLogic();
@@ -414,17 +414,17 @@ describe('logic', function() {
 
         it('switch player\'s turn', function() {
             expect(logic.getState().currentRound.currentPlayer).to.equal(0);
-            const result1 = logic.switchPlayer();
+            const result1 = logic.switchPlayerTurn();
             expect(result1).to.equal(true);
             expect(logic.getState().currentRound.currentPlayer).to.equal(1);
-            const result2 = logic.switchPlayer();
+            const result2 = logic.switchPlayerTurn();
             expect(result2).to.equal(true);
             expect(logic.getState().currentRound.currentPlayer).to.equal(0);
         })
         it('Does not switch player when round status is not PLAYING', function() {
             expect(logic.getState().currentRound.currentPlayer).to.equal(0);
             logic.getState().currentRound.statusRound = RoundStatus.WIN; 
-            const result = logic.switchPlayer();
+            const result = logic.switchPlayerTurn();
             expect(result).to.not.equal(true);
             expect(logic.getState().currentRound.currentPlayer).to.equal(0);
         });

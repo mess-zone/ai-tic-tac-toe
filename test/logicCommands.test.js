@@ -16,7 +16,7 @@ describe('LogicCommands', function() {
                 checkEndOfRound: {
                     isEnd: false,
                 },
-                switchPlayer: {
+                switchPlayerTurn: {
                     isSwitch: true,
                 },
                 checkEndOfGame: {
@@ -42,7 +42,7 @@ describe('LogicCommands', function() {
                 startNextRound: 0,
                 move: 0,
                 checkEndOfRound: 0,
-                switchPlayer: 0,
+                switchPlayerTurn: 0,
                 checkEndOfGame: 0,
             }
         };
@@ -76,9 +76,9 @@ describe('LogicCommands', function() {
             return params.config.checkEndOfRound.isEnd;
         }
 
-        const switchPlayer = () => {
-            params.calls.switchPlayer++;
-            return params.config.switchPlayer.isSwitch;
+        const switchPlayerTurn = () => {
+            params.calls.switchPlayerTurn++;
+            return params.config.switchPlayerTurn.isSwitch;
         }
 
         const checkEndOfGame = () => {
@@ -98,7 +98,7 @@ describe('LogicCommands', function() {
             startNextRound,
             move,
             checkEndOfRound,
-            switchPlayer,
+            switchPlayerTurn,
             checkEndOfGame,
         }
     };
@@ -159,7 +159,7 @@ describe('LogicCommands', function() {
     })
 
     describe('MOVE', function() {
-        it('Should call checkEndOfRound, switchPlayer and notifyAll UPDATE_BOARD', function() {
+        it('Should call checkEndOfRound, switchPlayerTurn and notifyAll UPDATE_BOARD', function() {
             logicSpy = createLogicSpy();
             observableSpy = createObservableSpy();
 
@@ -173,7 +173,7 @@ describe('LogicCommands', function() {
             expect(logicSpy.params.args.move.playerIndex).to.equal(command.playerIndex);
             expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
-            expect(logicSpy.params.calls.switchPlayer).to.equal(1);
+            expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
             expect(observableSpy.params.history.notifyAll[0].id).to.equal('UPDATE_BOARD');
         });
 
@@ -192,13 +192,13 @@ describe('LogicCommands', function() {
             expect(logicSpy.params.args.move.playerIndex).to.equal(command.playerIndex);
             expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
-            expect(logicSpy.params.calls.switchPlayer).to.equal(0);
+            expect(logicSpy.params.calls.switchPlayerTurn).to.equal(0);
             expect(observableSpy.params.history.notifyAll[0].id).to.equal('END_ROUND');
         });
 
-        it('Should call checkEndOfRound, switchPlayer', function() {
+        it('Should call checkEndOfRound, switchPlayerTurn', function() {
             logicSpy = createLogicSpy();
-            logicSpy.params.config.switchPlayer.isSwitch = false;
+            logicSpy.params.config.switchPlayerTurn.isSwitch = false;
             observableSpy = createObservableSpy();
 
             const sut = createLogicCommands(logicSpy, observableSpy);
@@ -211,7 +211,7 @@ describe('LogicCommands', function() {
             expect(logicSpy.params.args.move.playerIndex).to.equal(command.playerIndex);
             expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
-            expect(logicSpy.params.calls.switchPlayer).to.equal(1);
+            expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
             expect(observableSpy.params.history.notifyAll.length).to.equal(0);
         });
     });
