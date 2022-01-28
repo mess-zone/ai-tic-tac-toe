@@ -396,8 +396,8 @@ export default function createViews(window, observable) {
 
 
     return {
-        nodes,
-        window,
+        // nodes,
+        // window,
 
         createStartScreen,
         createRoundScreen,
