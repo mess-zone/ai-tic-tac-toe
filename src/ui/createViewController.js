@@ -341,17 +341,22 @@ export default function createViewController(window, nodes, observerController) 
         nodes.boardEl.style.height = side + 'px';
     }
 
-    function handleCellClick(e) {
-        // TODO refactor use data-current-player
-        const currentPlayerIndex = nodes.boardEl.classList.contains('turn--X') ? 0 : 1;
-        console.log('[screen] cell clicked', e.target.dataset?.i);
+    function move(playerIndex, cellIndex) {
+        console.log('[screen] move');
 
         observerController.notifyAll({ 
             id: 'MOVE', 
-            playerIndex: currentPlayerIndex,
-            cellIndex: e.target.dataset?.i 
+            playerIndex,
+            cellIndex,
         });
+    }
 
+    function handleCellClick(e) {
+        // TODO refactor use data-current-player
+        const currentPlayerIndex = nodes.boardEl.classList.contains('turn--X') ? 0 : 1;
+        const cellIndex = e.target.dataset?.i;
+
+        move(currentPlayerIndex, cellIndex);
     }
 
     function configurePlayers(e) {
@@ -404,6 +409,7 @@ export default function createViewController(window, nodes, observerController) 
         updateScore,
         drawBoard,
         switchTurn,
+        move,
 
         handleResize,
         handleCellClick,
