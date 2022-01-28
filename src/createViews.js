@@ -175,7 +175,7 @@ export default function createViews(window, observable) {
     }
 
     function setBoardInfo(model) {
-        console.log('[screen] set board info', model);
+        console.log('[screen] set board info');
 
         const updateScoreModel = {
             round: {
@@ -347,7 +347,7 @@ export default function createViews(window, observable) {
     }
 
     function setPlayers(player1, player2) {
-        console.log('[screen] set players', player1, player2);
+        console.log('[screen] set players');
         observable.notifyAll({ 
             id: 'SETUP', 
             player1, 

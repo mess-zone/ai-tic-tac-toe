@@ -98,7 +98,7 @@ export default function createLogic(state) {
         state.players[1].name = player2.name || 'player 2';
         state.players[1].type = player2.type || PlayerTypes.HUMAN;
 
-        console.log('[game]', state.players);
+        console.log('[game] set players');
     }
 
     function resetGame() {
@@ -133,7 +133,7 @@ export default function createLogic(state) {
         state.currentRound.round += 1;
         state.currentRound.currentPlayer = 0;
         state.currentRound.statusRound = RoundStatus.PLAYING;
-        console.log('[game] startNextRound', state);
+        console.log('[game] startNextRound');
 
         return true;
     }
