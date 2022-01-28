@@ -9,9 +9,9 @@ describe('observable', function() {
 
             sut.subscribe(validCallback);
 
-            expect(sut.observers.length).to.equal(1);
-            expect(sut.observers[0]).to.equal(validCallback);
-            expect(typeof sut.observers[0]).to.equal('function');
+            expect(sut.getObservers().length).to.equal(1);
+            expect(sut.getObservers()[0]).to.equal(validCallback);
+            expect(typeof sut.getObservers()[0]).to.equal('function');
         });
 
         it('Should throw if receive no param', function() {

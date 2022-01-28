@@ -14,8 +14,12 @@ export default function createObservable() {
         }
     }
 
+    function getObservers() {
+        return observers;
+    }
+
     return {
-        observers,
+        getObservers,
         subscribe,
         notifyAll
     }
