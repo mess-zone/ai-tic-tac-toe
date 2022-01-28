@@ -29,5 +29,5 @@ gameObservable.subscribe(gamePresenter.executeCommand);
 screenObservable.subscribe(gameController.executeCommand);
 
 //init game
-views.createAllViews();
+views.buildAll();
 gamePresenter.executeCommand({id: "SETUP"});

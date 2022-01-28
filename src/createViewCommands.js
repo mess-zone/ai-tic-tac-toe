@@ -11,7 +11,7 @@ export default function createCommands(views) {
         console.log('[ui] START_ROUND');
         const state = {...command.state};
 
-        views.setBoardInfo(state);
+        views.updateBoardInfo(state);
 
         const modelRoundScreen = {
             currentRound: state.currentRound.round + 1,
@@ -24,14 +24,14 @@ export default function createCommands(views) {
         console.log('[iu] UPDATE BOARD');
         const state = {...command.state};
 
-        views.setBoardInfo(state);
+        views.updateBoardInfo(state);
     }
 
     function END_ROUND(command) {
         console.log('[ui] END ROUND');
         const state = {...command.state};
 
-        views.setBoardInfo(state);
+        views.updateBoardInfo(state);
 
         const endRoundScreenModel = {
             text: state.currentRound.statusRound == RoundStatus.WIN ? `${state.players[state.currentRound.currentPlayer].name} won!` : 'Draw!',

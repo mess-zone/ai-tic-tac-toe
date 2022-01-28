@@ -4,7 +4,7 @@ export default function createViews(window, observable) {
 
     const nodes = {};
 
-    function createStartScreen() {
+    function buildStartScreen() {
         nodes.startScreenEl = document.createElement('section');
         nodes.startScreenEl.id = 'start-screen';
         nodes.startScreenEl.classList.add('screen', 'screen--start');
@@ -45,7 +45,7 @@ export default function createViews(window, observable) {
         nodes.startScreenEl.querySelector('form').addEventListener('submit', handleFormSetupSubmit);
     }
 
-    function createRoundScreen() {
+    function buildRoundScreen() {
         nodes.roundScreenEl = document.createElement('section');
         nodes.roundScreenEl.id = 'round-screen';
         nodes.roundScreenEl.classList.add('screen', 'screen--round');
@@ -59,7 +59,7 @@ export default function createViews(window, observable) {
 
     }
 
-    function createBoardScreen() {
+    function buildBoardScreen() {
         nodes.boardScreenEl = document.createElement('section');
         nodes.boardScreenEl.id = 'board-screen';
         nodes.boardScreenEl.classList.add('screen', 'screen--board');
@@ -100,7 +100,7 @@ export default function createViews(window, observable) {
 
     }
 
-    function createEndRoundScreen() {
+    function buildEndRoundScreen() {
         nodes.endRoundScreenEl = document.createElement('section');
         nodes.endRoundScreenEl.id = 'end-round-screen';
         nodes.endRoundScreenEl.classList.add('screen', 'screen--end-round');
@@ -124,7 +124,7 @@ export default function createViews(window, observable) {
 
     }
 
-    function createEndGameScreen() {
+    function buildEndGameScreen() {
         nodes.endGameScreenEl = document.createElement('section');
         nodes.endGameScreenEl.id = 'end-game-screen';
         nodes.endGameScreenEl.classList.add('screen', 'screen--end-game');
@@ -141,13 +141,13 @@ export default function createViews(window, observable) {
         nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => showStartScreen() );
     }
 
-    function createAllViews() {
+    function buildAll() {
         console.log('[screen] create all views')
-        createStartScreen();
-        createRoundScreen();
-        createBoardScreen();
-        createEndRoundScreen();
-        createEndGameScreen();
+        buildStartScreen();
+        buildRoundScreen();
+        buildBoardScreen();
+        buildEndRoundScreen();
+        buildEndGameScreen();
     }
 
 
@@ -171,49 +171,7 @@ export default function createViews(window, observable) {
         nodes.roundScreenEl.classList.add('screen--show');
         nodes.roundScreenEl.classList.add('animating');
 
-        // setBoardInfo(model);
-    }
-
-    function setBoardInfo(model) {
-        console.log('[screen] set board info');
-
-        const updateScoreModel = {
-            round: {
-                currentRound: model.currentRound.round + 1,
-                maxRounds: model.maxRounds,
-            },
-            X: {
-                name: model.players[0].name,
-                symbol: model.players[0].symbol,
-                points: model.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
-            },
-            O: {
-                name: model.players[1].name,
-                symbol: model.players[1].symbol,
-                points: model.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
-            },
-            draws: {
-                name: 'Draws',
-                symbol: '',
-                points: model.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
-            },
-        };
-
-        updateScore(updateScoreModel);
-
-        const drawBoardModel = {
-            boardCells: model.board.cells,
-            winnerCombination: model.scores[model.currentRound.round]?.combination,
-        };
-        drawBoard(drawBoardModel);
-
-        const switchTurnModel = {
-            isXTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.X,
-            isOTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.O,
-            isHumanTurn: model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
-            hintText: model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '',
-        };
-        switchTurn(switchTurnModel);
+        // updateBoardInfo(model);
     }
 
     function showBoardScreen(model) {
@@ -264,6 +222,47 @@ export default function createViews(window, observable) {
     }
 
 
+    function updateBoardInfo(model) {
+        console.log('[screen] set board info');
+
+        const updateScoreModel = {
+            round: {
+                currentRound: model.currentRound.round + 1,
+                maxRounds: model.maxRounds,
+            },
+            X: {
+                name: model.players[0].name,
+                symbol: model.players[0].symbol,
+                points: model.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
+            },
+            O: {
+                name: model.players[1].name,
+                symbol: model.players[1].symbol,
+                points: model.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
+            },
+            draws: {
+                name: 'Draws',
+                symbol: '',
+                points: model.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
+            },
+        };
+
+        updateScore(updateScoreModel);
+
+        const updateBoardModel = {
+            boardCells: model.board.cells,
+            winnerCombination: model.scores[model.currentRound.round]?.combination,
+        };
+        updateBoard(updateBoardModel);
+
+        const updatePlayerTurnModel = {
+            isXTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.X,
+            isOTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.O,
+            isHumanTurn: model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
+            hintText: model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '',
+        };
+        updatePlayerTurn(updatePlayerTurnModel);
+    }
 
     function updateScore(model) {
 
@@ -297,10 +296,10 @@ export default function createViews(window, observable) {
         }
     }
 
-    function drawBoard(model) {
+    function updateBoard(model) {
         resetBoard();
 
-        console.log('[screen] drawBoard');
+        console.log('[screen] updateBoard');
 
         for(let i = 0; i < model.boardCells.length; i++) {
             if(model.boardCells[i] == Symbols.EMPTY) {
@@ -321,8 +320,8 @@ export default function createViews(window, observable) {
         }
     }
     
-    function switchTurn(model) {
-        console.log('[screen] switchTurn ');
+    function updatePlayerTurn(model) {
+        console.log('[screen] updatePlayerTurn ');
 
         nodes.boardEl.classList.toggle('turn--X', model.isXTurn);
         nodes.boardEl.classList.toggle('turn--O', model.isOTurn);
@@ -396,15 +395,12 @@ export default function createViews(window, observable) {
 
 
     return {
-        // nodes,
-        // window,
-
-        createStartScreen,
-        createRoundScreen,
-        createBoardScreen,
-        createEndRoundScreen,
-        createEndGameScreen,
-        createAllViews,
+        buildStartScreen,
+        buildRoundScreen,
+        buildBoardScreen,
+        buildEndRoundScreen,
+        buildEndGameScreen,
+        buildAll,
 
         showStartScreen,
         showRoundScreen,
@@ -414,11 +410,11 @@ export default function createViews(window, observable) {
 
         setPlayers,
         resetBoard,
-        setBoardInfo,
-        drawBoard,
+        updateBoardInfo,
+        updateBoard,
         updateScore,
         move,
-        switchTurn,
+        updatePlayerTurn,
         startNextRound,
 
         handleFormSetupSubmit,
