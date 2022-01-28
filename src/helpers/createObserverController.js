@@ -1,4 +1,5 @@
 
+// TODO renomear para Subject?
 export default function createObserverController() {
     const observers = [];
 
