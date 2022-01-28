@@ -2,14 +2,13 @@ import createObservable from '../src/helpers/createObservable.js';
 import createCommandExecutor from '../src/helpers/createCommandExecutor.js';
 
 import createViews from "../src/createViews.js";
-import createLogic, { createState } from '../src/createLogic.js';
+import createLogic from '../src/createLogic.js';
 
 import createViewCommands from '../src/createViewCommands.js';
 import createLogicCommands from '../src/createLogicCommands.js';
 
 // domain
-const gameState = createState();
-const logic = createLogic(gameState);
+const logic = createLogic();
 
 const gameObservable = createObservable();
 const logicCommands = createLogicCommands(logic, gameObservable);

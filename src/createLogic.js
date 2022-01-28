@@ -45,7 +45,9 @@ export function createState(){
 };
 
 
-export default function createLogic(state) {
+export default function createLogic() {
+
+    const state = createState();
     
     function switchPlayer() {
         if(state.currentRound.statusRound !== RoundStatus.PLAYING) return false;

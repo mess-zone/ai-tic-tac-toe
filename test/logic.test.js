@@ -1,77 +1,75 @@
 import {expect} from 'chai';
-import createLogic, { createState } from '../src/createLogic.js';
+import createLogic from '../src/createLogic.js';
 import { PlayerTypes, Symbols, GameStatus, RoundStatus } from '../src/helpers/constants.js';
 
 describe('logic', function() {
-    let gameState;
     let logic;
     
     
     describe('#setPlayers()', function() {
 
         beforeEach(function() {
-            gameState = createState();
-            logic = createLogic(gameState);
+            logic = createLogic();
         });
 
         it('Should create 2 users of type human', function() {
 
             logic.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
 
-            expect(gameState.players).to.have.lengthOf(2);
+            expect(logic.getState().players).to.have.lengthOf(2);
             
-            expect(gameState.players[0].name).to.equal('player 1');
-            expect(gameState.players[0].type).to.equal(PlayerTypes.HUMAN);
-            expect(gameState.players[0].symbol).to.equal(Symbols.X);
+            expect(logic.getState().players[0].name).to.equal('player 1');
+            expect(logic.getState().players[0].type).to.equal(PlayerTypes.HUMAN);
+            expect(logic.getState().players[0].symbol).to.equal(Symbols.X);
 
-            expect(gameState.players[1].name).to.equal('player 2');
-            expect(gameState.players[1].type).to.equal(PlayerTypes.HUMAN);
-            expect(gameState.players[1].symbol).to.equal(Symbols.O);
+            expect(logic.getState().players[1].name).to.equal('player 2');
+            expect(logic.getState().players[1].type).to.equal(PlayerTypes.HUMAN);
+            expect(logic.getState().players[1].symbol).to.equal(Symbols.O);
         });
 
         it('Should create a user of type human and a user of type computer', function() {
 
             logic.setPlayers({ name: 'human', type: PlayerTypes.HUMAN }, { name: 'computer', type: PlayerTypes.COMPUTER });
 
-            expect(gameState.players).to.have.lengthOf(2);
+            expect(logic.getState().players).to.have.lengthOf(2);
 
-            expect(gameState.players[0].name).to.equal('human');
-            expect(gameState.players[0].type).to.equal(PlayerTypes.HUMAN);
-            expect(gameState.players[0].symbol).to.equal(Symbols.X);
+            expect(logic.getState().players[0].name).to.equal('human');
+            expect(logic.getState().players[0].type).to.equal(PlayerTypes.HUMAN);
+            expect(logic.getState().players[0].symbol).to.equal(Symbols.X);
 
-            expect(gameState.players[1].name).to.equal('computer');
-            expect(gameState.players[1].type).to.equal(PlayerTypes.COMPUTER);
-            expect(gameState.players[1].symbol).to.equal(Symbols.O);
+            expect(logic.getState().players[1].name).to.equal('computer');
+            expect(logic.getState().players[1].type).to.equal(PlayerTypes.COMPUTER);
+            expect(logic.getState().players[1].symbol).to.equal(Symbols.O);
         });
 
         it('Should create users with default names', function() {
 
             logic.setPlayers({ type: PlayerTypes.HUMAN }, { type: PlayerTypes.HUMAN });
 
-            expect(gameState.players).to.have.lengthOf(2);
+            expect(logic.getState().players).to.have.lengthOf(2);
 
-            expect(gameState.players[0].name).to.equal('player 1');
-            expect(gameState.players[0].type).to.equal(PlayerTypes.HUMAN);
-            expect(gameState.players[0].symbol).to.equal(Symbols.X);
+            expect(logic.getState().players[0].name).to.equal('player 1');
+            expect(logic.getState().players[0].type).to.equal(PlayerTypes.HUMAN);
+            expect(logic.getState().players[0].symbol).to.equal(Symbols.X);
 
-            expect(gameState.players[1].name).to.equal('player 2');
-            expect(gameState.players[1].type).to.equal(PlayerTypes.HUMAN);
-            expect(gameState.players[1].symbol).to.equal(Symbols.O);
+            expect(logic.getState().players[1].name).to.equal('player 2');
+            expect(logic.getState().players[1].type).to.equal(PlayerTypes.HUMAN);
+            expect(logic.getState().players[1].symbol).to.equal(Symbols.O);
         });
 
         it('Should create users with default types', function() {
 
             logic.setPlayers({ }, { });
 
-            expect(gameState.players).to.have.lengthOf(2);
+            expect(logic.getState().players).to.have.lengthOf(2);
 
-            expect(gameState.players[0].name).to.equal('player 1');
-            expect(gameState.players[0].type).to.equal(PlayerTypes.HUMAN);
-            expect(gameState.players[0].symbol).to.equal(Symbols.X);
+            expect(logic.getState().players[0].name).to.equal('player 1');
+            expect(logic.getState().players[0].type).to.equal(PlayerTypes.HUMAN);
+            expect(logic.getState().players[0].symbol).to.equal(Symbols.X);
 
-            expect(gameState.players[1].name).to.equal('player 2');
-            expect(gameState.players[1].type).to.equal(PlayerTypes.HUMAN);
-            expect(gameState.players[1].symbol).to.equal(Symbols.O);
+            expect(logic.getState().players[1].name).to.equal('player 2');
+            expect(logic.getState().players[1].type).to.equal(PlayerTypes.HUMAN);
+            expect(logic.getState().players[1].symbol).to.equal(Symbols.O);
         });
 
         it('Should throw if no param is passed', function() {
@@ -84,27 +82,26 @@ describe('logic', function() {
     describe('#resetGame()', function() {
 
         beforeEach(function() {
-            gameState = createState();
-            logic = createLogic(gameState);
+            logic = createLogic();
         });
 
         it('Should reset the scores e rounds', function() {
             logic.resetGame();
 
-            expect(gameState.statusGame).to.equal(GameStatus.RUNNING);
-            expect(gameState.currentRound.round).to.equal(-1);
-            expect(gameState.currentRound.currentPlayer).to.equal(-1);
-            expect(gameState.currentRound.statusRound).to.equal(null);
-            expect(gameState.scores).to.have.lengthOf(0);
+            expect(logic.getState().statusGame).to.equal(GameStatus.RUNNING);
+            expect(logic.getState().currentRound.round).to.equal(-1);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(-1);
+            expect(logic.getState().currentRound.statusRound).to.equal(null);
+            expect(logic.getState().scores).to.have.lengthOf(0);
 
         });
         it('Should restart the scores e rounds after ended the game', function() {
-            gameState.statusGame = GameStatus.ENDED;
-            gameState.currentRound.round = 2;
-            gameState.currentRound.currentPlayer = 1;
-            gameState.currentRound.statusRound = RoundStatus.DRAW;
+            logic.getState().statusGame = GameStatus.ENDED;
+            logic.getState().currentRound.round = 2;
+            logic.getState().currentRound.currentPlayer = 1;
+            logic.getState().currentRound.statusRound = RoundStatus.DRAW;
     
-            gameState.scores = [
+            logic.getState().scores = [
                 {
                     winner: 0, combination: [0, 1, 2],
                 },
@@ -118,11 +115,11 @@ describe('logic', function() {
 
             logic.resetGame();
 
-            expect(gameState.statusGame).to.equal(GameStatus.RUNNING);
-            expect(gameState.currentRound.round).to.equal(-1);
-            expect(gameState.currentRound.currentPlayer).to.equal(-1);
-            expect(gameState.currentRound.statusRound).to.equal(null);
-            expect(gameState.scores).to.have.lengthOf(0);
+            expect(logic.getState().statusGame).to.equal(GameStatus.RUNNING);
+            expect(logic.getState().currentRound.round).to.equal(-1);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(-1);
+            expect(logic.getState().currentRound.statusRound).to.equal(null);
+            expect(logic.getState().scores).to.have.lengthOf(0);
 
         });
 
@@ -131,8 +128,7 @@ describe('logic', function() {
     describe('#checkEndOfGame()', function() {
 
         beforeEach(function() {
-            gameState = createState();
-            logic = createLogic(gameState);
+            logic = createLogic();
        
             logic.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
             logic.resetGame();
@@ -140,18 +136,18 @@ describe('logic', function() {
         });
 
         it('Should end the game if next round is out of the limit of maxRounds', function() {
-            gameState.currentRound.round = gameState.maxRounds - 1;
+            logic.getState().currentRound.round = logic.getState().maxRounds - 1;
             const result = logic.checkEndOfGame();
 
             expect(result).to.equal(true);
-            expect(gameState.statusGame).to.equal(GameStatus.ENDED);
+            expect(logic.getState().statusGame).to.equal(GameStatus.ENDED);
 
         });
         it('Should not end the game if next round is out of the limit of maxRounds', function() {
             const result = logic.checkEndOfGame();
 
             expect(result).to.equal(false);
-            expect(gameState.statusGame).to.equal(GameStatus.RUNNING);
+            expect(logic.getState().statusGame).to.equal(GameStatus.RUNNING);
 
         })
 
@@ -160,8 +156,7 @@ describe('logic', function() {
     describe('#startNextRound()', function() {
 
         beforeEach(function() {
-            gameState = createState();
-            logic = createLogic(gameState);
+            logic = createLogic();
        
             logic.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
             logic.resetGame();
@@ -171,67 +166,67 @@ describe('logic', function() {
             const result = logic.startNextRound();
 
             expect(result).to.equal(true);
-            expect(gameState.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
-            expect(gameState.currentRound.round).to.equal(0);
-            expect(gameState.currentRound.currentPlayer).to.equal(0);
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(logic.getState().board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
+            expect(logic.getState().currentRound.round).to.equal(0);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(0);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
 
         });
         it('Should start the 2º round', function() {
             const result1 = logic.startNextRound();
             expect(result1).to.equal(true);
-            gameState.currentRound.statusRound = RoundStatus.WIN;
+            logic.getState().currentRound.statusRound = RoundStatus.WIN;
             const result2 = logic.startNextRound();
             expect(result2).to.equal(true);
 
-            expect(gameState.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
-            expect(gameState.currentRound.round).to.equal(1);
-            expect(gameState.currentRound.currentPlayer).to.equal(0);
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(logic.getState().board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
+            expect(logic.getState().currentRound.round).to.equal(1);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(0);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
 
         });
         it('Should start the 3º round', function() {
             const result1 = logic.startNextRound();
             expect(result1).to.equal(true);
-            gameState.currentRound.statusRound = RoundStatus.WIN;
+            logic.getState().currentRound.statusRound = RoundStatus.WIN;
             const result2 = logic.startNextRound();
             expect(result2).to.equal(true);
-            gameState.currentRound.statusRound = RoundStatus.WIN;
+            logic.getState().currentRound.statusRound = RoundStatus.WIN;
             const result3 = logic.startNextRound();
             expect(result3).to.equal(true);
 
-            expect(gameState.board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
-            expect(gameState.currentRound.round).to.equal(2);
-            expect(gameState.currentRound.currentPlayer).to.equal(0);
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(logic.getState().board.cells.filter(cell => cell == Symbols.EMPTY)).to.have.lengthOf(9);
+            expect(logic.getState().currentRound.round).to.equal(2);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(0);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
 
         });
 
         it('Should not start the next round if is out of the limit of maxRounds', function() {
-            for(let i = 0; i < gameState.maxRounds; i++) {
+            for(let i = 0; i < logic.getState().maxRounds; i++) {
                 const result = logic.startNextRound();
                 expect(result).to.equal(true);
-                gameState.currentRound.statusRound = RoundStatus.WIN;
+                logic.getState().currentRound.statusRound = RoundStatus.WIN;
             }
 
             const result = logic.startNextRound();
             expect(result).to.not.equal(true);
-            expect(gameState.currentRound.round).to.equal(gameState.maxRounds - 1);
-            expect(gameState.statusGame).to.equal(GameStatus.RUNNING);
+            expect(logic.getState().currentRound.round).to.equal(logic.getState().maxRounds - 1);
+            expect(logic.getState().statusGame).to.equal(GameStatus.RUNNING);
 
         });
 
         it('Should not start the next round if the game is ENDED', function() {
             const result1 = logic.startNextRound();
             expect(result1).to.equal(true);
-            gameState.currentRound.round = gameState.maxRounds - 1;
+            logic.getState().currentRound.round = logic.getState().maxRounds - 1;
             logic.checkEndOfGame();
-            expect(gameState.statusGame).to.equal(GameStatus.ENDED)
+            expect(logic.getState().statusGame).to.equal(GameStatus.ENDED)
 
             const result2 = logic.startNextRound();
             expect(result2).to.not.equal(true);
-            expect(gameState.statusGame).to.equal(GameStatus.ENDED)
-            expect(gameState.currentRound.round).to.equal(2);
+            expect(logic.getState().statusGame).to.equal(GameStatus.ENDED)
+            expect(logic.getState().currentRound.round).to.equal(2);
 
         });
 
@@ -241,7 +236,7 @@ describe('logic', function() {
             
             const result2 = logic.startNextRound();
             expect(result2).to.not.equal(true);
-            expect(gameState.currentRound.round).to.equal(0);
+            expect(logic.getState().currentRound.round).to.equal(0);
 
         });
 
@@ -249,65 +244,64 @@ describe('logic', function() {
 
     describe('#move()', function() {
 
-        gameState = createState();
-        logic = createLogic(gameState);
+        logic = createLogic();
         logic.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
         logic.resetGame();
         logic.startNextRound();
 
         it('Should move player 1 to empty destination cell', function() {
-            gameState.currentRound.currentPlayer = 0
+            logic.getState().currentRound.currentPlayer = 0
             logic.move(0, 0);
 
-            expect(gameState.board.cells[0]).to.equal(Symbols.X);
+            expect(logic.getState().board.cells[0]).to.equal(Symbols.X);
         });
         it('Should move player 2 to empty destination cell', function() {
-            gameState.currentRound.currentPlayer = 1
-            console.log('CURRENT PLAYER: ', gameState.currentRound.currentPlayer)
+            logic.getState().currentRound.currentPlayer = 1
+            console.log('CURRENT PLAYER: ', logic.getState().currentRound.currentPlayer)
             logic.move(1, 2);
 
-            expect(gameState.board.cells[2]).to.equal(Symbols.O);
+            expect(logic.getState().board.cells[2]).to.equal(Symbols.O);
         });
         it('Should not move player if it destination cell is not empty', function() {
-            gameState.currentRound.currentPlayer = 0
+            logic.getState().currentRound.currentPlayer = 0
             logic.move(0, 2);
 
-            expect(gameState.board.cells[2]).to.equal(Symbols.O);
+            expect(logic.getState().board.cells[2]).to.equal(Symbols.O);
         });
         it('Should not move player if it destination cell does not exists', function() {
-            gameState.currentRound.currentPlayer = 0
+            logic.getState().currentRound.currentPlayer = 0
             logic.move(0, 9);
 
-            expect(gameState.board.cells[9]).to.equal(undefined);
+            expect(logic.getState().board.cells[9]).to.equal(undefined);
         });
         it('Should not move player if it is not his current turn', function() {
-            gameState.currentRound.currentPlayer = 0
+            logic.getState().currentRound.currentPlayer = 0
             logic.move(1, 1);
 
-            expect(gameState.board.cells[1]).to.equal(Symbols.EMPTY);
+            expect(logic.getState().board.cells[1]).to.equal(Symbols.EMPTY);
         });
         it('Should not move player if round status is not PLAYING', function() {
-            gameState.currentRound.currentPlayer = 0
-            gameState.currentRound.statusRound = RoundStatus.DRAW
+            logic.getState().currentRound.currentPlayer = 0
+            logic.getState().currentRound.statusRound = RoundStatus.DRAW
             logic.move(0, 1);
 
-            expect(gameState.board.cells[1]).to.equal(Symbols.EMPTY);
+            expect(logic.getState().board.cells[1]).to.equal(Symbols.EMPTY);
         });
 
         it('Should not move player if game status is not RUNNING', function() {
-            gameState.currentRound.currentPlayer = 0
-            gameState.statusGame = GameStatus.ENDED
+            logic.getState().currentRound.currentPlayer = 0
+            logic.getState().statusGame = GameStatus.ENDED
             logic.move(0, 1);
 
-            expect(gameState.board.cells[1]).to.equal(Symbols.EMPTY);
+            expect(logic.getState().board.cells[1]).to.equal(Symbols.EMPTY);
         });
 
     });
 
     describe('#checkEndOfRound()', function() {
         beforeEach(function() {
-            gameState = createState();
-            logic = createLogic(gameState);
+            
+            logic = createLogic();
 
             logic.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
             logic.resetGame();
@@ -316,102 +310,102 @@ describe('logic', function() {
         });
 
         it('Draw, player 1 turn', function() {
-            gameState.board.cells[0] = Symbols.X;
-            gameState.board.cells[1] = Symbols.O;
-            gameState.board.cells[2] = Symbols.X;
-            gameState.board.cells[3] = Symbols.X;
-            gameState.board.cells[4] = Symbols.O;
-            gameState.board.cells[5] = Symbols.X;
-            gameState.board.cells[6] = Symbols.O;
-            gameState.board.cells[7] = Symbols.X;
-            gameState.board.cells[8] = Symbols.O;
+            logic.getState().board.cells[0] = Symbols.X;
+            logic.getState().board.cells[1] = Symbols.O;
+            logic.getState().board.cells[2] = Symbols.X;
+            logic.getState().board.cells[3] = Symbols.X;
+            logic.getState().board.cells[4] = Symbols.O;
+            logic.getState().board.cells[5] = Symbols.X;
+            logic.getState().board.cells[6] = Symbols.O;
+            logic.getState().board.cells[7] = Symbols.X;
+            logic.getState().board.cells[8] = Symbols.O;
 
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            expect(logic.hasEmptyCells(gameState.board.cells)).to.equal(false);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(logic.hasEmptyCells(logic.getState().board.cells)).to.equal(false);
 
-            gameState.currentRound.currentPlayer = 0;
+            logic.getState().currentRound.currentPlayer = 0;
             const isEndOfRound = logic.checkEndOfRound();
 
             expect(isEndOfRound).to.equal(true);
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.DRAW);
-            expect(gameState.scores.length).to.equal(1);
-            expect(gameState.scores[0].winner).to.equal('Draw');
-            expect(gameState.scores[0].combination.length).to.equal(0);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.DRAW);
+            expect(logic.getState().scores.length).to.equal(1);
+            expect(logic.getState().scores[0].winner).to.equal('Draw');
+            expect(logic.getState().scores[0].combination.length).to.equal(0);
         });
         it('Draw, player 2 turn', function() {
-            gameState.board.cells[0] = Symbols.X;
-            gameState.board.cells[1] = Symbols.O;
-            gameState.board.cells[2] = Symbols.X;
-            gameState.board.cells[3] = Symbols.X;
-            gameState.board.cells[4] = Symbols.O;
-            gameState.board.cells[5] = Symbols.X;
-            gameState.board.cells[6] = Symbols.O;
-            gameState.board.cells[7] = Symbols.X;
-            gameState.board.cells[8] = Symbols.O;
+            logic.getState().board.cells[0] = Symbols.X;
+            logic.getState().board.cells[1] = Symbols.O;
+            logic.getState().board.cells[2] = Symbols.X;
+            logic.getState().board.cells[3] = Symbols.X;
+            logic.getState().board.cells[4] = Symbols.O;
+            logic.getState().board.cells[5] = Symbols.X;
+            logic.getState().board.cells[6] = Symbols.O;
+            logic.getState().board.cells[7] = Symbols.X;
+            logic.getState().board.cells[8] = Symbols.O;
 
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            expect(logic.hasEmptyCells(gameState.board.cells)).to.equal(false);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(logic.hasEmptyCells(logic.getState().board.cells)).to.equal(false);
             
-            gameState.currentRound.currentPlayer = 1;
+            logic.getState().currentRound.currentPlayer = 1;
             const isEndOfRound = logic.checkEndOfRound();
 
             expect(isEndOfRound).to.equal(true);
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.DRAW);
-            expect(gameState.scores.length).to.equal(1);
-            expect(gameState.scores[0].winner).to.equal('Draw');
-            expect(gameState.scores[0].combination.length).to.equal(0);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.DRAW);
+            expect(logic.getState().scores.length).to.equal(1);
+            expect(logic.getState().scores[0].winner).to.equal('Draw');
+            expect(logic.getState().scores[0].combination.length).to.equal(0);
         });
         it('Victory', function() {
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            gameState.board.cells[0] = Symbols.X;
-            gameState.board.cells[1] = Symbols.X;
-            gameState.board.cells[2] = Symbols.X;
-            gameState.board.cells[3] = Symbols.X;
-            gameState.board.cells[4] = Symbols.O;
-            gameState.board.cells[5] = Symbols.X;
-            gameState.board.cells[6] = Symbols.O;
-            gameState.board.cells[7] = Symbols.X;
-            gameState.board.cells[8] = Symbols.O;
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            logic.getState().board.cells[0] = Symbols.X;
+            logic.getState().board.cells[1] = Symbols.X;
+            logic.getState().board.cells[2] = Symbols.X;
+            logic.getState().board.cells[3] = Symbols.X;
+            logic.getState().board.cells[4] = Symbols.O;
+            logic.getState().board.cells[5] = Symbols.X;
+            logic.getState().board.cells[6] = Symbols.O;
+            logic.getState().board.cells[7] = Symbols.X;
+            logic.getState().board.cells[8] = Symbols.O;
 
-            gameState.currentRound.currentPlayer = 0;
+            logic.getState().currentRound.currentPlayer = 0;
             const isEndOfRound = logic.checkEndOfRound();
 
             expect(isEndOfRound).to.equal(true);
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.WIN);
-            expect(gameState.scores.length).to.equal(1);
-            expect(gameState.scores[0].winner).to.equal(Symbols.X);
-            expect(gameState.scores[0].combination.length).to.equal(3);
-            expect(gameState.scores[0].combination[0]).to.equal(0);
-            expect(gameState.scores[0].combination[1]).to.equal(1);
-            expect(gameState.scores[0].combination[2]).to.equal(2);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.WIN);
+            expect(logic.getState().scores.length).to.equal(1);
+            expect(logic.getState().scores[0].winner).to.equal(Symbols.X);
+            expect(logic.getState().scores[0].combination.length).to.equal(3);
+            expect(logic.getState().scores[0].combination[0]).to.equal(0);
+            expect(logic.getState().scores[0].combination[1]).to.equal(1);
+            expect(logic.getState().scores[0].combination[2]).to.equal(2);
         });
         it('Round stil in progress', function() {
-            gameState.board.cells[0] = Symbols.X;
-            gameState.board.cells[1] = Symbols.O;
-            gameState.board.cells[2] = Symbols.X;
-            gameState.board.cells[3] = Symbols.X;
-            gameState.board.cells[4] = Symbols.O;
-            gameState.board.cells[5] = Symbols.X;
-            gameState.board.cells[6] = Symbols.O;
-            gameState.board.cells[7] = Symbols.X;
-            gameState.board.cells[8] = Symbols.EMPTY;
+            logic.getState().board.cells[0] = Symbols.X;
+            logic.getState().board.cells[1] = Symbols.O;
+            logic.getState().board.cells[2] = Symbols.X;
+            logic.getState().board.cells[3] = Symbols.X;
+            logic.getState().board.cells[4] = Symbols.O;
+            logic.getState().board.cells[5] = Symbols.X;
+            logic.getState().board.cells[6] = Symbols.O;
+            logic.getState().board.cells[7] = Symbols.X;
+            logic.getState().board.cells[8] = Symbols.EMPTY;
 
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            expect(logic.hasEmptyCells(gameState.board.cells)).to.equal(true);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(logic.hasEmptyCells(logic.getState().board.cells)).to.equal(true);
 
-            gameState.currentRound.currentPlayer = 1;
+            logic.getState().currentRound.currentPlayer = 1;
             const isEndOfRound = logic.checkEndOfRound();
 
             expect(isEndOfRound).to.equal(false);
-            expect(gameState.currentRound.statusRound).to.equal(RoundStatus.PLAYING);
-            expect(gameState.scores.length).to.equal(0);
+            expect(logic.getState().currentRound.statusRound).to.equal(RoundStatus.PLAYING);
+            expect(logic.getState().scores.length).to.equal(0);
         });
     });
 
     describe("#switchPlayer()", function() {
         beforeEach(function() {
-            gameState = createState();
-            logic = createLogic(gameState);
+            
+            logic = createLogic();
        
             logic.setPlayers({ name: 'player 1', type: PlayerTypes.HUMAN }, { name: 'player 2', type: PlayerTypes.HUMAN });
             logic.resetGame();
@@ -419,20 +413,20 @@ describe('logic', function() {
         });
 
         it('switch player\'s turn', function() {
-            expect(gameState.currentRound.currentPlayer).to.equal(0);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(0);
             const result1 = logic.switchPlayer();
             expect(result1).to.equal(true);
-            expect(gameState.currentRound.currentPlayer).to.equal(1);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(1);
             const result2 = logic.switchPlayer();
             expect(result2).to.equal(true);
-            expect(gameState.currentRound.currentPlayer).to.equal(0);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(0);
         })
         it('Does not switch player when round status is not PLAYING', function() {
-            expect(gameState.currentRound.currentPlayer).to.equal(0);
-            gameState.currentRound.statusRound = RoundStatus.WIN; 
+            expect(logic.getState().currentRound.currentPlayer).to.equal(0);
+            logic.getState().currentRound.statusRound = RoundStatus.WIN; 
             const result = logic.switchPlayer();
             expect(result).to.not.equal(true);
-            expect(gameState.currentRound.currentPlayer).to.equal(0);
+            expect(logic.getState().currentRound.currentPlayer).to.equal(0);
         });
 
     });
