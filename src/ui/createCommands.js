@@ -11,11 +11,14 @@ export default function createCommands(viewsController) {
     function START_ROUND(command) {
         console.log('[ui] START_ROUND');
         state = {...command.state};
-        // const modelRoundScreen = {
-        //     currentRound: state.currentRound.round + 1,
-        //     maxRounds: state.maxRounds,
-        // };
-        viewsController.showRoundScreen(state);
+
+        viewsController.setBoardInfo(state);
+
+        const modelRoundScreen = {
+            currentRound: state.currentRound.round + 1,
+            maxRounds: state.maxRounds,
+        };
+        viewsController.showRoundScreen(modelRoundScreen);
     }
 
     function UPDATE_BOARD(command) {

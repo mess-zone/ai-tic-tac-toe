@@ -160,21 +160,15 @@ export default function createViewController(window, nodes, observerController) 
     }
 
     function showRoundScreen(model) {
-
-        // const modelRoundScreen = {
-        //     currentRound: state.currentRound.round + 1,
-        //     maxRounds: state.maxRounds,
-        // };
-
         resetBoard();
 
         nodes.endRoundScreenEl.classList.remove('screen--show');
         nodes.endGameScreenEl.classList.remove('screen--show');
-        nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound.round + 1}/${model.maxRounds}`;
+        nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound}/${model.maxRounds}`;
         nodes.roundScreenEl.classList.add('screen--show');
         nodes.roundScreenEl.classList.add('animating');
 
-        setBoardInfo(model);
+        // setBoardInfo(model);
     }
 
     function setBoardInfo(model) {
@@ -269,17 +263,6 @@ export default function createViewController(window, nodes, observerController) 
 
     // helpers
 
-    function resetBoard() {
-        console.log('[screen] resetBoard');
-
-        for(let i = 0; i < nodes.cellsEl.length; i++) {
-            nodes.cellsEl[i].classList.add('board__cell--empty');
-            nodes.cellsEl[i].classList.remove('board__cell--X');
-            nodes.cellsEl[i].classList.remove('board__cell--O');
-            nodes.cellsEl[i].classList.remove('board__cell--highlight');
-        }
-    }
-
     function updateScore(model) {
 
         nodes.scoreEl.innerHTML = '';
@@ -301,7 +284,20 @@ export default function createViewController(window, nodes, observerController) 
         nodes.scoreEl.appendChild(drawScoreEl);
     }
 
+    function resetBoard() {
+        console.log('[screen] resetBoard');
+
+        for(let i = 0; i < nodes.cellsEl.length; i++) {
+            nodes.cellsEl[i].classList.add('board__cell--empty');
+            nodes.cellsEl[i].classList.remove('board__cell--X');
+            nodes.cellsEl[i].classList.remove('board__cell--O');
+            nodes.cellsEl[i].classList.remove('board__cell--highlight');
+        }
+    }
+
     function drawBoard(model) {
+        resetBoard();
+
         console.log('[screen] drawBoard');
 
         for(let i = 0; i < model.boardCells.length; i++) {
@@ -404,6 +400,7 @@ export default function createViewController(window, nodes, observerController) 
         showEndGameScreen,
 
         resetBoard,
+        setBoardInfo,
         updateScore,
         drawBoard,
         switchTurn,
