@@ -1,4 +1,3 @@
-
 export default function createObservable() {
     const observers = [];
 
@@ -21,6 +20,6 @@ export default function createObservable() {
     return {
         getObservers,
         subscribe,
-        notifyAll
+        notifyAll,
     }
 }

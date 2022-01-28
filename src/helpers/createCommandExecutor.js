@@ -9,7 +9,6 @@ export default function createCommandExecutor(commands) {
 
     return {
         executeCommand,
-        // commands,
     }
 
 }

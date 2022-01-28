@@ -1,5 +1,6 @@
 import {expect} from 'chai';
-import createLogic, { createState, PlayerTypes, Symbols, GameStatus, RoundStatus } from '../src/createLogic.js';
+import createLogic, { createState } from '../src/createLogic.js';
+import { PlayerTypes, Symbols, GameStatus, RoundStatus } from '../src/helpers/constants.js';
 
 describe('logic', function() {
     let gameState;
