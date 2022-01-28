@@ -140,6 +140,7 @@ export default function createViewController(window, nodes, observerController) 
     }
 
     function createAllViews() {
+        console.log('[screen] create all views')
         createStartScreen();
         createRoundScreen();
         createBoardScreen();

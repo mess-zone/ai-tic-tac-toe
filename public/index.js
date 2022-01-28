@@ -23,8 +23,7 @@ const nodes = {};
 const screenObserver = createObserverController();
 const viewsController = createViewController(window, nodes, screenObserver);
 const viewCommands = createViewCommands(viewsController);
-const gameScreen = createPresenter(viewsController, viewCommands);
-gameScreen.init();
+const gameScreen = createPresenter(viewCommands);
 window.gameScreen = gameScreen;
 
 
@@ -33,4 +32,6 @@ observerController.subscribe(gameScreen.executeCommand);
 screenObserver.subscribe(gameController.executeCommand);
 
 //init game
+// gameScreen.init();
+viewsController.createAllViews();
 gameScreen.executeCommand({id: "SETUP"});
