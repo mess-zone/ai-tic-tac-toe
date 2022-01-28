@@ -1,12 +1,12 @@
 import {expect} from 'chai';
-import createGameController from '../src/createGameController.js';
+import createCommandExecutor from '../src/helpers/createCommandExecutor.js';
 
-describe('gameController', function() {
+describe('commandExecutor', function() {
     describe('#executeCommand()', function() {
         it('Should throw if receive no argument', function() {
             const commandsSpy = {};
 
-            const sut = createGameController(commandsSpy);
+            const sut = createCommandExecutor(commandsSpy);
 
             expect(() => { sut.executeCommand() }).to.throw('Invalid command');
         });
@@ -14,7 +14,7 @@ describe('gameController', function() {
         it('Should throw if receive a command with no id', function() {
             const commandsSpy = {};
 
-            const sut = createGameController(commandsSpy);
+            const sut = createCommandExecutor(commandsSpy);
 
             const invalidCommand = {}; 
 
@@ -24,7 +24,7 @@ describe('gameController', function() {
         it('Should throw if receive a command with invalid command id', function() {
             const commandsSpy = {};
 
-            const sut = createGameController(commandsSpy);
+            const sut = createCommandExecutor(commandsSpy);
 
             const inexistentCommand = {
                 id: 'invalid_id'
@@ -42,7 +42,7 @@ describe('gameController', function() {
                 }
             };
 
-            const sut = createGameController(commandsSpy);
+            const sut = createCommandExecutor(commandsSpy);
 
             const validCommand = {
                 id: 'valid_id'
