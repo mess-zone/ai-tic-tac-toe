@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import createViewCommands from '../src/createViewCommands.js';
-import { RoundStatus } from "../src/helpers/constants.js";
+import { Symbols, RoundStatus } from "../src/helpers/constants.js";
 
 function createViewsSpy() {
     const params = {
@@ -13,13 +13,17 @@ function createViewsSpy() {
             },
             showEndRoundScreen: {
                 model: {},
-            }
+            },
+            showEndGameScreen: {
+                model: {},
+            },
         },
         calls: {
             showStartScreen: 0,
             updateBoardInfo: 0,
             showRoundScreen: 0,
             showEndRoundScreen: 0,
+            showEndGameScreen: 0,
         }
     };
 
@@ -42,6 +46,11 @@ function createViewsSpy() {
         params.calls.showEndRoundScreen++;
     }
 
+    function showEndGameScreen(model) {
+        params.args.showEndGameScreen.model = model;
+        params.calls.showEndGameScreen++;
+    }
+
 
     return {
         params,
@@ -49,6 +58,7 @@ function createViewsSpy() {
         updateBoardInfo,
         showRoundScreen,
         showEndRoundScreen,
+        showEndGameScreen,
     };
 }
 
@@ -150,4 +160,70 @@ describe('ViewComands', function() {
             });
         });
     });
+
+    describe('END_GAME', function() {
+        it('Should call updateBoardInfo and showEndRoundScreen', function() {
+            viewsSpy = createViewsSpy();
+            const sut = createViewCommands(viewsSpy);
+
+            const command = {
+                id: 'END_GAME',
+                state: {
+                    currentRound: {
+                        round: 0,
+                        statusRound:  RoundStatus.WIN,
+                        currentPlayer: 0,
+                    },
+                    maxRounds: 3,
+                    players: [
+                        {
+                            name: 'player 1',
+                            symbol: Symbols.X,
+                        },
+                        {
+                            name: 'player 2',
+                            symbol: Symbols.O,
+                        }
+                    ],
+                    scores: [
+                        {
+                            winner: Symbols.X, combination: [0, 1, 2],
+                        },
+                        {
+                            winner: Symbols.O, combination: [0, 1, 2],
+                        },
+                        {
+                            winner: 'Draw', combination: [0, 1, 2],
+                        },
+                    ],
+                },
+            };
+            sut.END_GAME(command);
+
+            const {state} = command;
+            expect(viewsSpy.params.calls.showEndGameScreen).to.equal(1);
+            expect(viewsSpy.params.args.showEndGameScreen.model).to.deep.equal({
+                round: {
+                    // currentRound: state.currentRound.round + 1,
+                    maxRounds: state.maxRounds,
+                },
+                X: {
+                    name: state.players[0].name,
+                    symbol: state.players[0].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.X ? acc + 1 :  acc), 0 ),
+                },
+                O: {
+                    name: state.players[1].name,
+                    symbol: state.players[1].symbol,
+                    points: state.scores.reduce((acc, val) => (val.winner == Symbols.O ? acc + 1 :  acc), 0 ),
+                },
+                draws: {
+                    name: 'Draws',
+                    symbol: '',
+                    points: state.scores.reduce((acc, val) => (val.winner == 'Draw' ? acc + 1 :  acc), 0 ),
+                },
+            });
+        });
+    });
+
 });
