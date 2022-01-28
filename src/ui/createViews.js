@@ -1,6 +1,6 @@
 import { Symbols, PlayerTypes, RoundStatus } from "../createLogic.js";
 
-export default function createViewController(window, observerController) {
+export default function createViews(window, observerController) {
 
     const nodes = {};
 

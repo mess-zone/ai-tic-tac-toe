@@ -12,9 +12,9 @@ const gameState = createState();
 const logic = createLogic(gameState);
 
 const gameObservable = createObservable();
-const commands = createCommands(logic, gameObservable);
+const logicCommands = createCommands(logic, gameObservable);
 // controllers
-const gameController = createCommandExecutor(commands);
+const gameController = createCommandExecutor(logicCommands);
 window.gameController = gameController;
 
 
