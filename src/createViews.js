@@ -47,10 +47,9 @@ export default function createViews(window, observable) {
     function buildEndGameScreen() {
         const template = document.querySelector('[data-template-end-game-screen]')
         nodes.endGameScreenEl = template.content.cloneNode(true).children[0];
+        nodes.endGameScoreEl = nodes.endGameScreenEl.querySelector('[data-end-game-screen__score]');
+        nodes.endGameScreenEl.querySelector('[data-end-game-screen__restart]').addEventListener('click', () => showStartScreen() );
         window.document.body.appendChild(nodes.endGameScreenEl);
-
-        nodes.endGameScoreEl = nodes.endGameScreenEl.querySelector('.score');
-        nodes.endGameScreenEl.querySelector('.restart').addEventListener('click', () => showStartScreen() );
     }
 
     function buildAll() {
