@@ -123,7 +123,7 @@ body {
     grid-template-columns: 100vw;
 }
 
-#board-container {
+.board-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -236,21 +236,17 @@ body {
     align-items: center;
     font-size: 1rem;
     z-index: 1;
+    color: white;
 }
 
-.screen--end-round #nextRound {
-
-    color: white;
-    /* background-color: white; */
+.screen--end-round .flex-center {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
- 
-
 }
 
-.screen--end-round .winnerMessage {
+.screen--end-round .winner-message {
     font-size: 3rem;
     color: var(--highlight-color);
     text-shadow: 5px 1px 0px #ffffff;
