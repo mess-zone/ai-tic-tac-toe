@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "cypress:open": "cypress open",
     "test": "mocha"
   },
   "repository": {

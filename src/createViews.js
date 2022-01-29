@@ -167,6 +167,9 @@ export default function createViews(window, observable) {
 
         nodes.endRoundScreenEl.classList.remove('screen--show');
         nodes.endGameScreenEl.classList.remove('screen--show');
+
+        nodes.startScreenEl.classList.remove('screen--show');
+
         nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound}/${model.maxRounds}`;
         nodes.roundScreenEl.classList.add('screen--show');
         nodes.roundScreenEl.classList.add('animating');
