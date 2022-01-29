@@ -45,16 +45,8 @@ export default function createViews(window, observable) {
     }
 
     function buildEndGameScreen() {
-        nodes.endGameScreenEl = document.createElement('section');
-        nodes.endGameScreenEl.id = 'end-game-screen';
-        nodes.endGameScreenEl.classList.add('screen', 'screen--end-game');
-        nodes.endGameScreenEl.innerHTML = `
-        <div class="container">
-            <h1>End of game!</h1>
-            <div class="score"></div>
-            <button class="restart">Restart</button>
-        </div>
-        `;
+        const template = document.querySelector('[data-template-end-game-screen]')
+        nodes.endGameScreenEl = template.content.cloneNode(true).children[0];
         window.document.body.appendChild(nodes.endGameScreenEl);
 
         nodes.endGameScoreEl = nodes.endGameScreenEl.querySelector('.score');
