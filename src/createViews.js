@@ -6,25 +6,16 @@ export default function createViews(window, observable) {
 
     function buildStartScreen() {
         const template = document.querySelector('[data-template-start-screen]')
-        const fragment = template.content.cloneNode(true);
-        fragment.querySelector('form').addEventListener('submit', handleFormSetupSubmit);
-        window.document.body.appendChild(fragment);
-        nodes.startScreenEl = document.querySelector('#start-screen');
-        console.log(nodes.startScreenEl)
+        nodes.startScreenEl = template.content.cloneNode(true).children[0];
+        nodes.startScreenEl.querySelector('form').addEventListener('submit', handleFormSetupSubmit);
+        window.document.body.appendChild(nodes.startScreenEl);
     }
 
     function buildRoundScreen() {
-        nodes.roundScreenEl = document.createElement('section');
-        nodes.roundScreenEl.id = 'round-screen';
-        nodes.roundScreenEl.classList.add('screen', 'screen--round');
-        nodes.roundScreenEl.innerHTML = `
-        <div class="container">
-            <h1>Round 0/0</h1>
-        </div>
-        `;
-        window.document.body.appendChild(nodes.roundScreenEl);
+        const template = document.querySelector('[data-template-round-screen]')
+        nodes.roundScreenEl = template.content.cloneNode(true).children[0];
         nodes.roundScreenEl.addEventListener("animationend", () => showBoardScreen() );
-
+        window.document.body.appendChild(nodes.roundScreenEl);
     }
 
     function buildBoardScreen() {
