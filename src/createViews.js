@@ -19,30 +19,8 @@ export default function createViews(window, observable) {
     }
 
     function buildBoardScreen() {
-        nodes.boardScreenEl = document.createElement('section');
-        nodes.boardScreenEl.id = 'board-screen';
-        nodes.boardScreenEl.classList.add('screen', 'screen--board');
-        nodes.boardScreenEl.innerHTML = `
-        <div class="container">
-            <div class="hint" id="hint">
-            </div>
-            <div id="board-container">
-                <div class="board" id="board">
-                    <div class="board__cell" data-i="0"></div>
-                    <div class="board__cell" data-i="1"></div>
-                    <div class="board__cell" data-i="2"></div>
-                    <div class="board__cell" data-i="3"></div>
-                    <div class="board__cell" data-i="4"></div>
-                    <div class="board__cell" data-i="5"></div>
-                    <div class="board__cell" data-i="6"></div>
-                    <div class="board__cell" data-i="7"></div>
-                    <div class="board__cell" data-i="8"></div>
-                </div>
-            </div>
-            <div class="score" id="score">
-            </div>
-        </div>
-        `;
+        const template = document.querySelector('[data-template-board-screen]')
+        nodes.boardScreenEl = template.content.cloneNode(true).children[0];
         window.document.body.appendChild(nodes.boardScreenEl);
 
         nodes.scoreEl = nodes.boardScreenEl.querySelector('#score');
