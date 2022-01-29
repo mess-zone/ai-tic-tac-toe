@@ -36,17 +36,17 @@ describe('Start Game', () => {
                 symbol: 'O',
             }
 
-            cy.get('#start-screen__player1-name')
+            cy.get('[data-start-screen__player1-name]')
                 .type(player1.name)
                 .should('have.value', player1.name)
             
-            cy.get('#start-screen__player2-name')
+            cy.get('[data-start-screen__player2-name]')
                 .type(player2.name)
                 .should('have.value', player2.name)
     
-            cy.get('#start-button').click()
+            cy.get('[data-start-screen__form-setup] button').click()
 
-            cy.get('#board-screen .score')
+            cy.get('[data-board-screen__score]')
                 .children()
                 .first()
                 .next()
@@ -67,9 +67,9 @@ describe('Start Game', () => {
                 symbol: 'O',
             }
     
-            cy.get('#start-button').click()
+            cy.get('[data-start-screen__form-setup] button').click()
 
-            cy.get('#board-screen .score')
+            cy.get('[data-board-screen__score]')
                 .children()
                 .first()
                 .next()
@@ -136,11 +136,11 @@ describe('Start Game', () => {
             cy.visit('/')
 
 
-            cy.get('#start-screen__player1-name').type(player1.name)
+            cy.get('[data-start-screen__player1-name]').type(player1.name)
             
-            cy.get('#start-screen__player2-name').type(player2.name)
+            cy.get('[data-start-screen__player2-name]').type(player2.name)
     
-            cy.get('#start-button').click()
+            cy.get('[data-start-screen__form-setup] button').click()
         })
 
         it('Should show start round alert', () => {
@@ -189,11 +189,11 @@ describe('Start Game', () => {
                 .should('be.visible')
 
             // verificar se o nome do player atual está correto no hint 
-            cy.get('#board-screen .hint')
+            cy.get('[data-board-screen__hint]')
                 .should('contain.text', player1.name + ':')
     
             // verificar se scores estão corretos
-            cy.get('#board-screen .score')
+            cy.get('[data-board-screen__score]')
                 .children()
                 .first()
                 .should('contain.text', 'Round: 1/')
@@ -205,7 +205,7 @@ describe('Start Game', () => {
                 .should('have.text', 'Draws: 0')
     
             // verificar se a board está vazia e se é a vez do player 1
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--X')
     
@@ -251,18 +251,18 @@ describe('Start Game', () => {
             cy.visit('/')
 
 
-            cy.get('#start-screen__player1-name').type(player1.name)
+            cy.get('[data-start-screen__player1-name]').type(player1.name)
             
-            cy.get('#start-screen__player2-name').type(player2.name)
+            cy.get('[data-start-screen__player2-name]').type(player2.name)
     
-            cy.get('#start-button').click()
+            cy.get('[data-start-screen__form-setup] button').click()
         })
 
         it('An empty cell must be clickable if the current player is human', () => {
             cy.get('#board-screen')
                 .should('be.visible')
 
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
 
             cy.get('.board__cell--empty')
@@ -277,7 +277,7 @@ describe('Start Game', () => {
             cy.get('#board-screen')
                 .should('be.visible')
 
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
 
             cy.get('[data-board-screen__cell=0]')
@@ -331,7 +331,7 @@ describe('Start Game', () => {
             cy.get('#board-screen')
                 .should('be.visible')
 
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--X')
 
@@ -340,7 +340,7 @@ describe('Start Game', () => {
                 .click()
                 .should('have.class', 'board__cell--X')
 
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--O')
 
@@ -356,12 +356,12 @@ describe('Start Game', () => {
             cy.get('#board-screen')
                 .should('be.visible')
 
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--X')
 
             // verificar se o nome do player atual está correto no hint 
-            cy.get('#board-screen .hint')
+            cy.get('[data-board-screen__hint]')
                 .should('contain.text', player1.name + ':')
 
             cy.get('.board__cell--empty')
@@ -370,12 +370,12 @@ describe('Start Game', () => {
                 .should('not.have.class', 'board__cell--empty')
                 .should('have.class', 'board__cell--X')
 
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--O')
 
             // verificar se o nome do player atual está correto no hint 
-            cy.get('#board-screen .hint')
+            cy.get('[data-board-screen__hint]')
                 .should('contain.text', player2.name + ':')
 
             cy.get('.board__cell--empty')
@@ -384,12 +384,12 @@ describe('Start Game', () => {
                 .should('not.have.class', 'board__cell--empty')
                 .should('have.class', 'board__cell--O')
 
-            cy.get('#board')
+            cy.get('[data-board-screen__board]')
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--X')
 
             // verificar se o nome do player atual está correto no hint 
-            cy.get('#board-screen .hint')
+            cy.get('[data-board-screen__hint]')
                 .should('contain.text', player1.name + ':')
         
         })
