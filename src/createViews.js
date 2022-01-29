@@ -82,7 +82,7 @@ export default function createViews(window, observable) {
 
         nodes.startScreenEl.classList.remove('screen--show');
 
-        nodes.roundScreenEl.querySelector('h1').innerText = `Round ${model.currentRound}/${model.maxRounds}`;
+        nodes.roundScreenEl.querySelector('[data-round-screen__text]').innerText = `Round ${model.currentRound}/${model.maxRounds}`;
         nodes.roundScreenEl.classList.add('screen--show');
         nodes.roundScreenEl.classList.add('animating');
 

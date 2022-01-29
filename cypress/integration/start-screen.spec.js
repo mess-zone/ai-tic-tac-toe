@@ -258,7 +258,7 @@ describe('Start Game', () => {
             cy.get('#start-button').click()
         })
 
-        it('An empty cell must be clicable if the current player is human', () => {
+        it('An empty cell must be clickable if the current player is human', () => {
             cy.get('#board-screen')
                 .should('be.visible')
 
@@ -271,9 +271,9 @@ describe('Start Game', () => {
                 .should('not.have.class', 'board__cell--empty')
         })
 
-        it('An empty cell must not be clicable if the current player is computer')
+        it('An empty cell must not be clickable if the current player is computer')
 
-        it('Every empty cell must be clicable if the current player is human', () => {
+        it('Every empty cell must be clickable if the current player is human', () => {
             cy.get('#board-screen')
                 .should('be.visible')
 
@@ -350,7 +350,7 @@ describe('Start Game', () => {
                 .should('have.class', 'board__cell--O')
         })
 
-        it('A filled cell must never be clicable')
+        it('A filled cell must never be clickable')
 
         it('if the round is not over, players must take turns', ()  => {
             cy.get('#board-screen')
