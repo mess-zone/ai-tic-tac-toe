@@ -23,11 +23,11 @@ export default function createViews(window, observable) {
         nodes.boardScreenEl = template.content.cloneNode(true).children[0];
         window.document.body.appendChild(nodes.boardScreenEl);
 
-        nodes.scoreEl = nodes.boardScreenEl.querySelector('#score');
-        nodes.hintEl = nodes.boardScreenEl.querySelector('#hint');
-        nodes.boardContainerEl = nodes.boardScreenEl.querySelector('#board-container');
-        nodes.boardEl =  nodes.boardScreenEl.querySelector('#board');
-        nodes.cellsEl =  nodes.boardEl.querySelectorAll('.board__cell');
+        nodes.scoreEl = nodes.boardScreenEl.querySelector('[data-board-screen__score]');
+        nodes.hintEl = nodes.boardScreenEl.querySelector('[data-board-screen__hint]');
+        nodes.boardContainerEl = nodes.boardScreenEl.querySelector('[data-board-screen__board-container]');
+        nodes.boardEl =  nodes.boardScreenEl.querySelector('[data-board-screen__board]');
+        nodes.cellsEl =  nodes.boardEl.querySelectorAll('[data-board-screen__cell]');
 
         nodes.cellsEl.forEach(cellEl => {
             cellEl.addEventListener('click', handleCellClick);
@@ -296,7 +296,7 @@ export default function createViews(window, observable) {
     function handleCellClick(e) {
         // TODO refactor use data-current-player
         const currentPlayerIndex = nodes.boardEl.classList.contains('turn--X') ? 0 : 1;
-        const cellIndex = e.target.dataset?.i;
+        const cellIndex = e.target.dataset?.boardScreen__cell;
 
         move(currentPlayerIndex, cellIndex);
     }

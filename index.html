@@ -56,22 +56,22 @@
     <template data-template-board-screen>
         <section id="board-screen" class="screen screen--board">
             <div class="container">
-                <div class="hint" id="hint">
+                <div data-board-screen__hint class="hint" id="hint">
                 </div>
-                <div id="board-container">
-                    <div class="board" id="board">
-                        <div class="board__cell" data-i="0"></div>
-                        <div class="board__cell" data-i="1"></div>
-                        <div class="board__cell" data-i="2"></div>
-                        <div class="board__cell" data-i="3"></div>
-                        <div class="board__cell" data-i="4"></div>
-                        <div class="board__cell" data-i="5"></div>
-                        <div class="board__cell" data-i="6"></div>
-                        <div class="board__cell" data-i="7"></div>
-                        <div class="board__cell" data-i="8"></div>
+                <div data-board-screen__board-container id="board-container">
+                    <div data-board-screen__board class="board" id="board">
+                        <div data-board-screen__cell="0" class="board__cell"></div>
+                        <div data-board-screen__cell="1" class="board__cell"></div>
+                        <div data-board-screen__cell="2" class="board__cell"></div>
+                        <div data-board-screen__cell="3" class="board__cell"></div>
+                        <div data-board-screen__cell="4" class="board__cell"></div>
+                        <div data-board-screen__cell="5" class="board__cell"></div>
+                        <div data-board-screen__cell="6" class="board__cell"></div>
+                        <div data-board-screen__cell="7" class="board__cell"></div>
+                        <div data-board-screen__cell="8" class="board__cell"></div>
                     </div>
                 </div>
-                <div class="score" id="score">
+                <div data-board-screen__score class="score" id="score">
                 </div>
             </div>
         </section>
