@@ -12,7 +12,7 @@ export default function createViews(window, observable) {
         <form class="container">
             <h1>tic tac toe</h1>
     
-            <div>
+            <div class="player1-container">
                 <h2>player 1 (X)</h2>
                 <label>name:
                     <input id="player1-name" type="text" placeholder="player 1" />
@@ -24,7 +24,7 @@ export default function createViews(window, observable) {
                     <input type="radio" name="player1-type"  value="${PlayerTypes.COMPUTER}" disabled> ${PlayerTypes.COMPUTER}
                 </label>
             </div>
-            <div>
+            <div class="player2-container">
                 <h2>player 2 (O)</h2>
                 <label>name:
                     <input id="player2-name" type="text" placeholder="player 2" />
