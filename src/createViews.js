@@ -7,7 +7,7 @@ export default function createViews(window, observable) {
     function buildStartScreen() {
         const template = document.querySelector('[data-template-start-screen]')
         nodes.startScreenEl = template.content.cloneNode(true).children[0];
-        nodes.startScreenEl.querySelector('form').addEventListener('submit', handleFormSetupSubmit);
+        nodes.startScreenEl.querySelector('[data-start-screen__form-setup]').addEventListener('submit', handleFormSetupSubmit);
         window.document.body.appendChild(nodes.startScreenEl);
     }
 
