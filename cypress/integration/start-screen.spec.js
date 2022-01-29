@@ -7,20 +7,20 @@ describe('Start Game', () => {
 
     it('Should show start screen', () => {
         cy.get('#start-screen')
-        .and('have.class', 'screen--show')
+            .should('have.class', 'screen--show')
 
         cy.get('#round-screen')
-            .and('not.have.class', 'screen--show')
+            .should('not.have.class', 'screen--show')
             .and('not.have.class', 'animating')
 
         cy.get('#board-screen')
             .and('not.have.class', 'screen--show')
 
         cy.get('#end-round-screen')
-            .and('not.have.class', 'screen--show')
+            .should('not.have.class', 'screen--show')
 
         cy.get('#end-game-screen')
-            .and('not.have.class', 'screen--show')
+            .should('not.have.class', 'screen--show')
     })
 
     context('Set players', () => {
@@ -114,6 +114,9 @@ describe('Start Game', () => {
             cy.get('.player2-container :checked').should('be.checked').and('have.value', player2.type)
         })
 
+        it('Should create 1 human and 1 computer player')
+        it('Should create 2 computer players')
+
     });
 
     context('Start game (human x human)', () => {
@@ -142,20 +145,20 @@ describe('Start Game', () => {
 
         it('Should show start round alert', () => {
             cy.get('#start-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
     
             cy.get('#round-screen')
-                .and('have.class', 'screen--show')
+                .should('have.class', 'screen--show')
                 .and('have.class', 'animating')
     
             cy.get('#board-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
     
             cy.get('#end-round-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
     
             cy.get('#end-game-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
 
             
             cy.get('#round-screen').contains('Round 1/')
@@ -163,27 +166,27 @@ describe('Start Game', () => {
 
         it('Should show board screen', () => {
             cy.get('#start-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
     
             cy.get('#round-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
                 .and('not.have.class', 'animating')
     
             cy.get('#board-screen')
-                .and('have.class', 'screen--show')
+                .should('have.class', 'screen--show')
     
             cy.get('#end-round-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
     
             cy.get('#end-game-screen')
-                .and('not.have.class', 'screen--show')
+                .should('not.have.class', 'screen--show')
 
         })
 
         it('Should show board info', () => {
  
             cy.get('#board-screen')
-                .and('have.class', 'screen--show')
+                .should('be.visible')
 
             // verificar se o nome do player atual está correto no hint 
             cy.get('#board-screen .hint')
@@ -229,6 +232,78 @@ describe('Start Game', () => {
                 .should('have.attr', 'data-i', 8)
 
         })
+
+        it('An empty cell must be clicable if the current player is human', () => {
+            cy.get('#board-screen')
+                .should('be.visible')
+
+            cy.get('#board')
+                .should('have.class', 'board--human-turn')
+
+            cy.get('.board__cell--empty')
+                .first()
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+        })
+
+        it('An empty cell must not be clicable if the current player is computer')
+
+        it('If the current player is human, and the clicked cell is empty, the cell must change to the current player symbol', () => {
+            cy.get('#board-screen')
+                .should('be.visible')
+
+            cy.get('#board')
+                .should('have.class', 'board--human-turn')
+                .should('have.class', 'turn--X')
+
+            cy.get('.board__cell--empty')
+                .first()
+                .click()
+                .should('have.class', 'board__cell--X')
+
+            cy.get('#board')
+                .should('have.class', 'board--human-turn')
+                .should('have.class', 'turn--O')
+
+            cy.get('.board__cell--empty')
+                .first()
+                .click()
+                .should('have.class', 'board__cell--O')
+        })
+
+        it('A filled cell must never be clicable')
+
+        it('if the round is not over, players must take turns', ()  => {
+            cy.get('#board-screen')
+                .should('be.visible')
+
+            cy.get('#board')
+                .should('have.class', 'board--human-turn')
+                .should('have.class', 'turn--X')
+
+            cy.get('.board__cell--empty')
+                .first()
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+                .should('have.class', 'board__cell--X')
+
+            cy.get('#board')
+                .should('have.class', 'board--human-turn')
+                .should('have.class', 'turn--O')
+
+            cy.get('.board__cell--empty')
+                .first()
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+                .should('have.class', 'board__cell--O')
+
+            cy.get('#board')
+                .should('have.class', 'board--human-turn')
+                .should('have.class', 'turn--X')
+        
+        })
+        
+        it('Should adapt board responsiveness if user resizes window')
     })
 
 })
