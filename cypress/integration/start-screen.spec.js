@@ -36,11 +36,11 @@ describe('Start Game', () => {
                 symbol: 'O',
             }
 
-            cy.get('#player1-name')
+            cy.get('#start-screen__player1-name')
                 .type(player1.name)
                 .should('have.value', player1.name)
             
-            cy.get('#player2-name')
+            cy.get('#start-screen__player2-name')
                 .type(player2.name)
                 .should('have.value', player2.name)
     
@@ -90,12 +90,12 @@ describe('Start Game', () => {
                 symbol: 'O',
             }
             
-            cy.get('.player1-container input[type=radio][value=' + player1.type + ']').check()
+            cy.get('[data-start-screen__player1] input[type=radio][value=' + player1.type + ']').check()
             
-            cy.get('.player2-container input[type=radio][value=' + player2.type + ']').check()
+            cy.get('[data-start-screen__player2] input[type=radio][value=' + player2.type + ']').check()
 
-            cy.get('.player1-container :checked').should('be.checked').and('have.value', player1.type)
-            cy.get('.player2-container :checked').should('be.checked').and('have.value', player2.type)
+            cy.get('[data-start-screen__player1] :checked').should('be.checked').and('have.value', player1.type)
+            cy.get('[data-start-screen__player2] :checked').should('be.checked').and('have.value', player2.type)
         })
 
         it('Should create 2 players with default type', () => {
@@ -110,8 +110,8 @@ describe('Start Game', () => {
                 symbol: 'O',
             }
 
-            cy.get('.player1-container :checked').should('be.checked').and('have.value', player1.type)
-            cy.get('.player2-container :checked').should('be.checked').and('have.value', player2.type)
+            cy.get('[data-start-screen__player1] :checked').should('be.checked').and('have.value', player1.type)
+            cy.get('[data-start-screen__player2] :checked').should('be.checked').and('have.value', player2.type)
         })
 
         it('Should create 1 human and 1 computer player')
@@ -136,9 +136,9 @@ describe('Start Game', () => {
             cy.visit('/')
 
 
-            cy.get('#player1-name').type(player1.name)
+            cy.get('#start-screen__player1-name').type(player1.name)
             
-            cy.get('#player2-name').type(player2.name)
+            cy.get('#start-screen__player2-name').type(player2.name)
     
             cy.get('#start-button').click()
         })
@@ -251,9 +251,9 @@ describe('Start Game', () => {
             cy.visit('/')
 
 
-            cy.get('#player1-name').type(player1.name)
+            cy.get('#start-screen__player1-name').type(player1.name)
             
-            cy.get('#player2-name').type(player2.name)
+            cy.get('#start-screen__player2-name').type(player2.name)
     
             cy.get('#start-button').click()
         })

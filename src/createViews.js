@@ -281,13 +281,13 @@ export default function createViews(window, observable) {
     function handleFormSetupSubmit(e) {
         e.preventDefault();
         const player1 = {
-            name: nodes.startScreenEl.querySelector('#player1-name').value || 'player 1',
-            type: nodes.startScreenEl.querySelector('input[name="player1-type"]:checked')?.value || PlayerTypes.HUMAN,
+            name: nodes.startScreenEl.querySelector('#start-screen__player1-name').value || 'player 1',
+            type: nodes.startScreenEl.querySelector('input[name="start-screen__player1-type"]:checked')?.value || PlayerTypes.HUMAN,
         };
 
         const player2 = {
-            name: nodes.startScreenEl.querySelector('#player2-name').value || 'player 2',
-            type: nodes.startScreenEl.querySelector('input[name="player2-type"]:checked')?.value || PlayerTypes.HUMAN,
+            name: nodes.startScreenEl.querySelector('#start-screen__player2-name').value || 'player 2',
+            type: nodes.startScreenEl.querySelector('input[name="start-screen__player2-type"]:checked')?.value || PlayerTypes.HUMAN,
         };
 
         setPlayers(player1, player2);
