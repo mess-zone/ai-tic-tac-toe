@@ -104,7 +104,7 @@ export default function createViews(window, observable) {
     function showEndRoundScreen(model) {
         console.log('[screen] showEndRound');
       
-        nodes.endRoundScreenEl.querySelector('h1').innerText = model.text;
+        nodes.endRoundScreenEl.querySelector('[data-end-round-screen__text]').innerText = model.text;
       
         nodes.endRoundScreenEl.classList.add('screen--show');
         nodes.endRoundScreenEl.classList.add('animating');
