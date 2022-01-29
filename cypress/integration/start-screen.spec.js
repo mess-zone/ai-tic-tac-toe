@@ -233,6 +233,31 @@ describe('Start Game', () => {
 
         })
 
+    })
+
+    context('Board user interactions', () => {
+        const player1 = {
+            name: 'gilmar',
+            type: 'HUMAN',
+            symbol: 'X',
+        }
+        const player2 = {
+            name: 'jorge',
+            type: 'HUMAN',
+            symbol: 'O',
+        }
+
+        beforeEach(() => {
+            cy.visit('/')
+
+
+            cy.get('#player1-name').type(player1.name)
+            
+            cy.get('#player2-name').type(player2.name)
+    
+            cy.get('#start-button').click()
+        })
+
         it('An empty cell must be clicable if the current player is human', () => {
             cy.get('#board-screen')
                 .should('be.visible')
@@ -248,7 +273,61 @@ describe('Start Game', () => {
 
         it('An empty cell must not be clicable if the current player is computer')
 
-        it('If the current player is human, and the clicked cell is empty, the cell must change to the current player symbol', () => {
+        it('Every empty cell must be clicable if the current player is human', () => {
+            cy.get('#board-screen')
+                .should('be.visible')
+
+            cy.get('#board')
+                .should('have.class', 'board--human-turn')
+
+            cy.get('[data-i=0]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=1]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=2]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=3]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=4]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=6]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=5]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=8]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+            cy.get('[data-i=7]')
+                .should('have.class', 'board__cell--empty')
+                .click()
+                .should('not.have.class', 'board__cell--empty')
+
+        })
+
+        it('If the current player is human, an empty clicked cell must change to the current player symbol', () => {
             cy.get('#board-screen')
                 .should('be.visible')
 
@@ -281,6 +360,10 @@ describe('Start Game', () => {
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--X')
 
+            // verificar se o nome do player atual está correto no hint 
+            cy.get('#board-screen .hint')
+                .should('contain.text', player1.name + ':')
+
             cy.get('.board__cell--empty')
                 .first()
                 .click()
@@ -291,6 +374,10 @@ describe('Start Game', () => {
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--O')
 
+            // verificar se o nome do player atual está correto no hint 
+            cy.get('#board-screen .hint')
+                .should('contain.text', player2.name + ':')
+
             cy.get('.board__cell--empty')
                 .first()
                 .click()
@@ -300,6 +387,10 @@ describe('Start Game', () => {
             cy.get('#board')
                 .should('have.class', 'board--human-turn')
                 .should('have.class', 'turn--X')
+
+            // verificar se o nome do player atual está correto no hint 
+            cy.get('#board-screen .hint')
+                .should('contain.text', player1.name + ':')
         
         })
         
