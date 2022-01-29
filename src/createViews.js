@@ -5,44 +5,12 @@ export default function createViews(window, observable) {
     const nodes = {};
 
     function buildStartScreen() {
-        nodes.startScreenEl = document.createElement('section');
-        nodes.startScreenEl.id = 'start-screen';
-        nodes.startScreenEl.classList.add('screen', 'screen--start');
-        nodes.startScreenEl.innerHTML = `
-        <form class="container">
-            <h1>tic tac toe</h1>
-    
-            <div class="player1-container">
-                <h2>player 1 (X)</h2>
-                <label>name:
-                    <input id="player1-name" type="text" placeholder="player 1" />
-                </label>
-                <label>
-                    <input type="radio" name="player1-type"  value="${PlayerTypes.HUMAN}" checked> ${PlayerTypes.HUMAN}
-                </label>
-                <label>
-                    <input type="radio" name="player1-type"  value="${PlayerTypes.COMPUTER}" disabled> ${PlayerTypes.COMPUTER}
-                </label>
-            </div>
-            <div class="player2-container">
-                <h2>player 2 (O)</h2>
-                <label>name:
-                    <input id="player2-name" type="text" placeholder="player 2" />
-                </label>
-                <label>
-                    <input type="radio" name="player2-type"  value="${PlayerTypes.HUMAN}" checked> ${PlayerTypes.HUMAN}
-                </label>
-                <label>
-                    <input type="radio" name="player2-type"  value="${PlayerTypes.COMPUTER}" disabled> ${PlayerTypes.COMPUTER}
-                </label>
-            </div>
-    
-            <button id="start-button">Start</button>
-        </form>
-        `;
-        window.document.body.appendChild(nodes.startScreenEl);
-
-        nodes.startScreenEl.querySelector('form').addEventListener('submit', handleFormSetupSubmit);
+        const template = document.querySelector('[data-template-start-screen]')
+        const fragment = template.content.cloneNode(true);
+        fragment.querySelector('form').addEventListener('submit', handleFormSetupSubmit);
+        window.document.body.appendChild(fragment);
+        nodes.startScreenEl = document.querySelector('#start-screen');
+        console.log(nodes.startScreenEl)
     }
 
     function buildRoundScreen() {
