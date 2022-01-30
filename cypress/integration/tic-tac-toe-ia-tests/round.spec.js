@@ -66,7 +66,7 @@ describe('Round rules', () => {
     
     })
 
-    it('Should show end round screen if round ends with victory', () => {
+    it('Should show end round screen if round ends with victory of player 1', () => {
         const xMoves = [ 0, 1, 2 ]
         const oMoves = [ 3, 4 ]
 
@@ -121,6 +121,61 @@ describe('Round rules', () => {
             .should('contain', player1.name)
     })
 
+    it('Should show end round screen if round ends with victory of player 2', () => {
+        const xMoves = [ 0, 1, 6 ]
+        const oMoves = [ 3, 4, 5 ]
+
+        for(let i = 0; i < Math.max(xMoves.length, oMoves.length); i++) {
+            if(xMoves[i] !== undefined) {
+                cy.get(`[data-board-screen__cell=${xMoves[i]}]`).click()
+            }
+            if(oMoves[i] !== undefined){
+                cy.get(`[data-board-screen__cell=${oMoves[i]}]`).click()
+            }
+        }
+
+        cy.get('.board__cell--highlight')
+            .should('have.length', 3)
+            .first()
+            .should('have.attr', 'data-board-screen__cell', oMoves[0])
+            .next()
+            .should('have.attr', 'data-board-screen__cell', oMoves[1])
+            .next()
+            .should('have.attr', 'data-board-screen__cell', oMoves[2])
+
+        // verificar se scores estão corretos
+        cy.get('[data-board-screen__score]')
+            .children()
+            .first()
+            .should('contain.text', 'Round: 1/')
+            .next()
+            .should('have.text', `${player1.name} (${player1.symbol}): 0`)
+            .next()
+            .should('have.text', `${player2.name} (${player2.symbol}): 1`)
+            .next()
+            .should('have.text', 'Draws: 0')
+
+        cy.get('#start-screen')
+            .should('not.have.class', 'screen--show')
+
+        cy.get('#round-screen')
+            .should('not.have.class', 'screen--show')
+            .and('not.have.class', 'animating')
+
+        cy.get('#board-screen')
+            .should('have.class', 'screen--show')
+
+        cy.get('#end-round-screen')
+            .should('have.class', 'screen--show')
+            .should('have.class', 'animating')
+
+        cy.get('#end-game-screen')
+            .should('not.have.class', 'screen--show')
+
+        cy.get('[data-end-round-screen__text]')
+            .should('contain', player2.name)
+    })
+
     it('Should show end round screen if round ends with draw', () => {
         const xMoves = [ 0, 2, 4, 5, 7 ]
         const oMoves = [ 1, 3, 6, 8 ]
@@ -169,59 +224,5 @@ describe('Round rules', () => {
         cy.get('[data-end-round-screen__text]')
             .should('contain', 'Draw')
     })
-
-    // it('Should highlight winning combination', () => {
-    //     const xMoves = [ 0, 1, 2 ]
-    //     const oMoves = [ 3, 4 ]
-
-    //     for(let i = 0; i < Math.max(xMoves.length, oMoves.length); i++) {
-    //         if(xMoves[i] !== undefined) {
-    //             cy.get(`[data-board-screen__cell=${xMoves[i]}]`).click()
-    //         }
-    //         if(oMoves[i] !== undefined){
-    //             cy.get(`[data-board-screen__cell=${oMoves[i]}]`).click()
-    //         }
-    //     }
-
-    //     cy.get('.board__cell--highlight')
-    //         .should('have.length', 3)
-    //         .first()
-    //         .should('have.attr', 'data-board-screen__cell', xMoves[0])
-    //         .next()
-    //         .should('have.attr', 'data-board-screen__cell', xMoves[1])
-    //         .next()
-    //         .should('have.attr', 'data-board-screen__cell', xMoves[2])
-
-    // })
-
-    // it('Should update scores when the round ends', () => {
-    //     const xMoves = [ 0, 1, 2 ]
-    //     const oMoves = [ 3, 4 ]
-
-    //     for(let i = 0; i < Math.max(xMoves.length, oMoves.length); i++) {
-    //         if(xMoves[i] !== undefined) {
-    //             cy.get(`[data-board-screen__cell=${xMoves[i]}]`).click()
-    //         }
-    //         if(oMoves[i] !== undefined){
-    //             cy.get(`[data-board-screen__cell=${oMoves[i]}]`).click()
-    //         }
-    //     }
-
-    //     // verificar se scores estão corretos
-    //     cy.get('[data-board-screen__score]')
-    //         .children()
-    //         .first()
-    //         .should('contain.text', 'Round: 1/')
-    //         .next()
-    //         .should('have.text', `${player1.name} (${player1.symbol}): 1`)
-    //         .next()
-    //         .should('have.text', `${player2.name} (${player2.symbol}): 0`)
-    //         .next()
-    //         .should('have.text', 'Draws: 0')
-    // })
-
-    it('Should start next round if current round ends')
-    it('Should not start next round (show end game) if current round exceds maxRouds config, and show scores right')
-    it('Should restart game if user clicks restart')
 
 })
