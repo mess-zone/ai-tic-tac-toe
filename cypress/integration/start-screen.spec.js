@@ -141,28 +141,7 @@ describe('Start Game', () => {
             cy.get('[data-start-screen__form-setup] button').click()
         })
 
-        it('Should show start round alert', () => {
-            cy.get('#start-screen')
-                .should('not.have.class', 'screen--show')
-    
-            cy.get('#round-screen')
-                .should('have.class', 'screen--show')
-                .and('have.class', 'animating')
-    
-            cy.get('#board-screen')
-                .should('not.have.class', 'screen--show')
-    
-            cy.get('#end-round-screen')
-                .should('not.have.class', 'screen--show')
-                .should('not.have.class', 'animating')
-    
-            cy.get('#end-game-screen')
-                .should('not.have.class', 'screen--show')
-
-            
-            cy.get('#round-screen').contains('Round 1/')
-        })
-
+        // TODO move to board
         it('Should show board screen', () => {
             cy.get('#start-screen')
                 .should('not.have.class', 'screen--show')
@@ -183,6 +162,7 @@ describe('Start Game', () => {
 
         })
 
+        // TODO move to board
         it('Should show board info', () => {
  
             cy.get('#board-screen')
