@@ -115,6 +115,7 @@ describe('Board user interactions', () => {
 
     it('A filled cell must never be clickable')
 
+    // TODO move to game rules spec
     it('if the round is not over, players must take turns', ()  => {
 
         cy.get('[data-board-screen__board]')
@@ -155,6 +156,58 @@ describe('Board user interactions', () => {
     
     })
     
-    it('Should adapt board responsiveness if user resizes window')
+    it('Should adapt board responsiveness if user resizes window', () => {
+
+        /**
+         * 
+         se largura container menor igual que altura container
+            board side = largura container
+         senão
+            board side = altura container
+         * 
+         */
+
+        // se largura container menor igual que altura container
+        cy.viewport(720, 1280)
+
+        cy.get('[data-board-screen__board-container]').invoke('width').then((containerWidth) => {
+            cy.get('[data-board-screen__board-container]').invoke('height').then((containerHeight) => {
+                const boardSize = (containerWidth <= containerHeight) ? containerWidth : containerHeight;
+
+                cy.get('[data-board-screen__board]')
+                    .should('have.css', 'width', boardSize + 'px')
+                    .should('have.css', 'height', boardSize + 'px')
+            });
+
+        });
+
+        // se largura container igual que altura container
+        cy.viewport(490, 700)
+
+        cy.get('[data-board-screen__board-container]').invoke('width').then((containerWidth) => {
+            cy.get('[data-board-screen__board-container]').invoke('height').then((containerHeight) => {
+                const boardSize = (containerWidth <= containerHeight) ? containerWidth : containerHeight;
+
+                cy.get('[data-board-screen__board]')
+                    .should('have.css', 'width', boardSize + 'px')
+                    .should('have.css', 'height', boardSize + 'px')
+            });
+
+        });
+
+        // se largura container maior que altura container
+        cy.viewport(1280, 720)
+
+        cy.get('[data-board-screen__board-container]').invoke('width').then((containerWidth) => {
+            cy.get('[data-board-screen__board-container]').invoke('height').then((containerHeight) => {
+                const boardSize = (containerWidth <= containerHeight) ? containerWidth : containerHeight;
+
+                cy.get('[data-board-screen__board]')
+                    .should('have.css', 'width', boardSize + 'px')
+                    .should('have.css', 'height', boardSize + 'px')
+            });
+
+        });
+    })
 
 })
