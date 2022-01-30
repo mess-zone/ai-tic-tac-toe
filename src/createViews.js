@@ -133,6 +133,8 @@ export default function createViews(window, observable) {
         nodes.boardScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
+        nodes.endRoundScreenEl.classList.remove('screen--show');
+        nodes.endRoundScreenEl.classList.remove('animating');
     }
 
 
