@@ -66,7 +66,7 @@ describe('End game screen', () => {
 
     })
 
-    it('Should show end game screen if current round exceeds maxRouds config', () => {
+    it('Should show End Game Screen if current round exceeds maxRouds config', () => {
     
         // end game screen should be visible
         cy.get('#start-screen')
@@ -98,7 +98,7 @@ describe('End game screen', () => {
             .should('contain.text', 'Draws: 2')
     })
 
-    it('Should show start game screen if user clicks restart', () => {
+    it('Should show Start Game Screen if user clicks restart', () => {
         cy.get('#end-game-screen')
             .should('be.visible')
         

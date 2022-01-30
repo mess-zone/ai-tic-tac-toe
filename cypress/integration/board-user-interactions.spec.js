@@ -1,16 +1,17 @@
 /// <reference types="Cypress" />
 
+const player1 = {
+    name: 'gilmar',
+    type: 'HUMAN',
+    symbol: 'X',
+}
+const player2 = {
+    name: 'jorge',
+    type: 'HUMAN',
+    symbol: 'O',
+}
+
 describe('Board user interactions', () => {
-    const player1 = {
-        name: 'gilmar',
-        type: 'HUMAN',
-        symbol: 'X',
-    }
-    const player2 = {
-        name: 'jorge',
-        type: 'HUMAN',
-        symbol: 'O',
-    }
 
     beforeEach(() => {
         cy.visit('/')
