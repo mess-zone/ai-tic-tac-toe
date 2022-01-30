@@ -14,7 +14,7 @@ describe('Start Game', () => {
             .and('not.have.class', 'animating')
 
         cy.get('#board-screen')
-            .and('not.have.class', 'screen--show')
+            .should('not.have.class', 'screen--show')
 
         cy.get('#end-round-screen')
             .should('not.have.class', 'screen--show')
