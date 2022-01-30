@@ -160,6 +160,7 @@ describe('Board user interactions', () => {
 
         /**
          * 
+         * menor lado sempre
          se largura container menor igual que altura container
             board side = largura container
          senão
@@ -172,7 +173,7 @@ describe('Board user interactions', () => {
 
         cy.get('[data-board-screen__board-container]').invoke('width').then((containerWidth) => {
             cy.get('[data-board-screen__board-container]').invoke('height').then((containerHeight) => {
-                const boardSize = (containerWidth <= containerHeight) ? containerWidth : containerHeight;
+                const boardSize = Math.min(containerWidth, containerHeight);
 
                 cy.get('[data-board-screen__board]')
                     .should('have.css', 'width', boardSize + 'px')

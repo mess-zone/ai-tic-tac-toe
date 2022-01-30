@@ -301,7 +301,7 @@ export default function createViews(window, observable) {
     }
 
     function handleResize(e) {
-        const side = (nodes.boardContainerEl.offsetWidth <= nodes.boardContainerEl.offsetHeight) ? nodes.boardContainerEl.offsetWidth : nodes.boardContainerEl.offsetHeight;
+        const side = Math.min(nodes.boardContainerEl.offsetWidth, nodes.boardContainerEl.offsetHeight);
 
         nodes.boardEl.style.width = side + 'px';
         nodes.boardEl.style.height = side + 'px';
