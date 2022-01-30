@@ -11,7 +11,7 @@ const player2 = {
     symbol: 'O',
 }
 
-describe.only('Round rules', () => {
+describe('Round rules', () => {
 
     beforeEach(() => {
         cy.visit('/')
