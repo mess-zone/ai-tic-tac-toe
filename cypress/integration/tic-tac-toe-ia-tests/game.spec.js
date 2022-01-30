@@ -73,12 +73,29 @@ describe('Game rules', () => {
 
         cy.get('[data-start-screen__form-setup] button').click()
 
-        cy.get('#board-screen')
-            .should('be.visible')
+
     })
 
-    it('Should start next round if current round ends', () => {
-        const test = tests[0];
+    it.only('Should start next round if current round ends', () => {
+        const test = {
+            name: 'X wins: [ 0, 1, 2 ]',
+            xMoves: [ 0, 1, 2 ],
+            oMoves: [ 3, 4 ],
+            winner: player1.name
+        }
+
+        // Should show start round 1 alert
+        cy.get('#round-screen')
+            .should('have.class', 'screen--show')
+            .and('have.class', 'animating')
+
+        cy.get('#round-screen').contains('Round 1/')
+
+        cy.get('#board-screen')
+            .should('be.visible')
+
+
+
         for(let i = 0; i < Math.max(test.xMoves.length, test.oMoves.length); i++) {
             if(test.xMoves[i] !== undefined) {
                 cy.get(`[data-board-screen__cell=${test.xMoves[i]}]`).click()
@@ -94,7 +111,7 @@ describe('Game rules', () => {
             
         cy.wait(5000);
         
-        // Should show start round alert
+        // Should show start round 2 alert
         cy.get('#start-screen')
             .should('not.have.class', 'screen--show')
 
@@ -121,7 +138,40 @@ describe('Game rules', () => {
             .should('have.class', 'screen--show')
         
     })
-    it('Should not start next round (show end game) if current round exceds maxRouds config, and show scores right')
+
+    it('Should show end game screen if current round exceds maxRouds config, and show scores right', () => {
+        const rounds = [
+            {
+                name: 'X wins: [ 0, 1, 2 ]',
+                xMoves: [ 0, 1, 2 ],
+                oMoves: [ 3, 4 ],
+                winner: player1.name
+            },
+            {
+                name: 'X wins: [ 0, 1, 2 ]',
+                xMoves: [ 0, 1, 2 ],
+                oMoves: [ 3, 4 ],
+                winner: player1.name
+            }
+        ]
+
+        rounds.forEach((round, index) => {
+            for(let i = 0; i < Math.max(round.xMoves.length, round.oMoves.length); i++) {
+                if(round.xMoves[i] !== undefined) {
+                    cy.get(`[data-board-screen__cell=${round.xMoves[i]}]`).click()
+                }
+                if(round.oMoves[i] !== undefined){
+                    cy.get(`[data-board-screen__cell=${round.oMoves[i]}]`).click()
+                }
+            }
+    
+            cy.wait(5000);
+            
+            cy.get('#round-screen').contains(`Round ${index + 2}/`)
+        });
+
+
+    })
 
     it('Should restart game if user clicks restart')
 })
