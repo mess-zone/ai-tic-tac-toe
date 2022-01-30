@@ -48,6 +48,18 @@ describe('Round rules', () => {
             .next()
             .should('have.attr', 'data-board-screen__cell', xMoves[2])
 
+        // verificar se scores estão corretos
+        cy.get('[data-board-screen__score]')
+            .children()
+            .first()
+            .should('contain.text', 'Round: 1/')
+            .next()
+            .should('have.text', `${player1.name} (${player1.symbol}): 1`)
+            .next()
+            .should('have.text', `${player2.name} (${player2.symbol}): 0`)
+            .next()
+            .should('have.text', 'Draws: 0')
+
         cy.get('#start-screen')
             .should('not.have.class', 'screen--show')
 
@@ -84,6 +96,18 @@ describe('Round rules', () => {
 
         cy.get('.board__cell--highlight')
             .should('have.length', 0)
+
+        // verificar se scores estão corretos
+        cy.get('[data-board-screen__score]')
+            .children()
+            .first()
+            .should('contain.text', 'Round: 1/')
+            .next()
+            .should('have.text', `${player1.name} (${player1.symbol}): 0`)
+            .next()
+            .should('have.text', `${player2.name} (${player2.symbol}): 0`)
+            .next()
+            .should('have.text', 'Draws: 1')
 
         cy.get('#start-screen')
             .should('not.have.class', 'screen--show')
@@ -130,9 +154,34 @@ describe('Round rules', () => {
 
     // })
 
+    // it('Should update scores when the round ends', () => {
+    //     const xMoves = [ 0, 1, 2 ]
+    //     const oMoves = [ 3, 4 ]
+
+    //     for(let i = 0; i < Math.max(xMoves.length, oMoves.length); i++) {
+    //         if(xMoves[i] !== undefined) {
+    //             cy.get(`[data-board-screen__cell=${xMoves[i]}]`).click()
+    //         }
+    //         if(oMoves[i] !== undefined){
+    //             cy.get(`[data-board-screen__cell=${oMoves[i]}]`).click()
+    //         }
+    //     }
+
+    //     // verificar se scores estão corretos
+    //     cy.get('[data-board-screen__score]')
+    //         .children()
+    //         .first()
+    //         .should('contain.text', 'Round: 1/')
+    //         .next()
+    //         .should('have.text', `${player1.name} (${player1.symbol}): 1`)
+    //         .next()
+    //         .should('have.text', `${player2.name} (${player2.symbol}): 0`)
+    //         .next()
+    //         .should('have.text', 'Draws: 0')
+    // })
+
     it('Should start next round if current round ends')
-    it('Should update scores every time the round ends')
-    it('Should not start next round (show end game) if current round exceds maxRouds config, and show scores')
+    it('Should not start next round (show end game) if current round exceds maxRouds config, and show scores right')
     it('Should restart game if user clicks restart')
 
     // refactor create dinamic tests from winningCombinations constant
