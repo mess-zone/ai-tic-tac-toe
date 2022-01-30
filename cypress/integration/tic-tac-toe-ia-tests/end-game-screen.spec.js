@@ -28,7 +28,7 @@ const rounds = [
 
 describe('End game screen', () => {
 
-    beforeEach(() => {
+    before(() => {
         cy.visit('/')
 
 
@@ -98,6 +98,29 @@ describe('End game screen', () => {
             .should('contain.text', 'Draws: 2')
     })
 
-    it('Should restart game if user clicks restart')
+    it('Should show start game screen if user clicks restart', () => {
+        cy.get('#end-game-screen')
+            .should('be.visible')
+        
+        cy.get('[data-end-game-screen__restart]').click()
+
+
+        cy.get('#start-screen')
+            .should('have.class', 'screen--show')
+
+        cy.get('#round-screen')
+            .should('not.have.class', 'screen--show')
+            .and('not.have.class', 'animating')
+
+        cy.get('#board-screen')
+            .should('not.have.class', 'screen--show')
+
+        cy.get('#end-round-screen')
+            .should('not.have.class', 'screen--show')
+            .should('not.have.class', 'animating')
+
+        cy.get('#end-game-screen')
+            .should('not.have.class', 'screen--show')
+    })
 
 })
