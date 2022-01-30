@@ -116,17 +116,8 @@ describe('Board user interactions', () => {
     it('A filled cell must never be clickable')
     
     it('Should adapt board responsiveness if user resizes window', () => {
-
-        /**
-         * 
-         * menor lado sempre
-         se largura container menor igual que altura container
-            board side = largura container
-         senão
-            board side = altura container
-         * 
-         */
-
+        // board size should always be the minor side of container
+        
         // se largura container menor igual que altura container
         cy.viewport(720, 1280)
 
