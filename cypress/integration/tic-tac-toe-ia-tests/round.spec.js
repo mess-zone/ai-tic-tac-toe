@@ -26,6 +26,46 @@ describe('Round rules', () => {
             .should('be.visible')
     })
 
+    it('If the round is not over, players must take turns', ()  => {
+
+        cy.get('[data-board-screen__board]')
+            .should('have.class', 'board--human-turn')
+            .should('have.class', 'turn--X')
+
+        // verificar se o nome do player atual está correto no hint 
+        cy.get('[data-board-screen__hint]')
+            .should('contain.text', player1.name + ':')
+
+        cy.get('.board__cell--empty')
+            .first()
+            .click()
+            .should('not.have.class', 'board__cell--empty')
+            .should('have.class', 'board__cell--X')
+
+        cy.get('[data-board-screen__board]')
+            .should('have.class', 'board--human-turn')
+            .should('have.class', 'turn--O')
+
+        // verificar se o nome do player atual está correto no hint 
+        cy.get('[data-board-screen__hint]')
+            .should('contain.text', player2.name + ':')
+
+        cy.get('.board__cell--empty')
+            .first()
+            .click()
+            .should('not.have.class', 'board__cell--empty')
+            .should('have.class', 'board__cell--O')
+
+        cy.get('[data-board-screen__board]')
+            .should('have.class', 'board--human-turn')
+            .should('have.class', 'turn--X')
+
+        // verificar se o nome do player atual está correto no hint 
+        cy.get('[data-board-screen__hint]')
+            .should('contain.text', player1.name + ':')
+    
+    })
+
     it('Should show end round screen if round ends with victory', () => {
         const xMoves = [ 0, 1, 2 ]
         const oMoves = [ 3, 4 ]
