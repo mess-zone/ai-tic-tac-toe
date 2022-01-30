@@ -90,6 +90,36 @@ describe('Game rules', () => {
 
         cy.get('#end-round-screen')
             .should('be.visible')
+
+            
+        cy.wait(5000);
+        
+        // Should show start round alert
+        cy.get('#start-screen')
+            .should('not.have.class', 'screen--show')
+
+        cy.get('#round-screen')
+            .should('have.class', 'screen--show')
+            .and('have.class', 'animating')
+
+        cy.get('#end-round-screen')
+            .should('not.have.class', 'screen--show')
+            .should('not.have.class', 'animating')
+        
+        cy.get('#end-game-screen')
+            .should('not.have.class', 'screen--show')
+        
+        cy.get('#round-screen').contains('Round 2/')
+
+        // Should show reseted board screen
+
+        cy.get('#round-screen')
+            .should('not.have.class', 'screen--show')
+            .and('not.have.class', 'animating')
+
+        cy.get('#board-screen')
+            .should('have.class', 'screen--show')
+        
     })
     it('Should not start next round (show end game) if current round exceds maxRouds config, and show scores right')
 
