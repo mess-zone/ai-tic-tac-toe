@@ -18,6 +18,7 @@ describe('Start Game', () => {
 
         cy.get('#end-round-screen')
             .should('not.have.class', 'screen--show')
+            .should('not.have.class', 'animating')
 
         cy.get('#end-game-screen')
             .should('not.have.class', 'screen--show')
@@ -153,6 +154,7 @@ describe('Start Game', () => {
     
             cy.get('#end-round-screen')
                 .should('not.have.class', 'screen--show')
+                .should('not.have.class', 'animating')
     
             cy.get('#end-game-screen')
                 .should('not.have.class', 'screen--show')
@@ -174,6 +176,7 @@ describe('Start Game', () => {
     
             cy.get('#end-round-screen')
                 .should('not.have.class', 'screen--show')
+                .should('not.have.class', 'animating')
     
             cy.get('#end-game-screen')
                 .should('not.have.class', 'screen--show')
