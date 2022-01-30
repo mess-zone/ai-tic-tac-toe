@@ -39,6 +39,15 @@ describe('Round rules', () => {
             }
         }
 
+        cy.get('.board__cell--highlight')
+            .should('have.length', 3)
+            .first()
+            .should('have.attr', 'data-board-screen__cell', xMoves[0])
+            .next()
+            .should('have.attr', 'data-board-screen__cell', xMoves[1])
+            .next()
+            .should('have.attr', 'data-board-screen__cell', xMoves[2])
+
         cy.get('#start-screen')
             .should('not.have.class', 'screen--show')
 
@@ -73,6 +82,9 @@ describe('Round rules', () => {
             }
         }
 
+        cy.get('.board__cell--highlight')
+            .should('have.length', 0)
+
         cy.get('#start-screen')
             .should('not.have.class', 'screen--show')
 
@@ -94,27 +106,29 @@ describe('Round rules', () => {
             .should('contain', 'Draw')
     })
 
-    it('Should highlight winning combination', () => {
-        const xMoves = [ 0, 1, 2 ]
-        const oMoves = [ 3, 4 ]
+    // it('Should highlight winning combination', () => {
+    //     const xMoves = [ 0, 1, 2 ]
+    //     const oMoves = [ 3, 4 ]
 
-        for(let i = 0; i < Math.max(xMoves.length, oMoves.length); i++) {
-            if(xMoves[i] !== undefined) {
-                cy.get(`[data-board-screen__cell=${xMoves[i]}]`).click()
-            }
-            if(oMoves[i] !== undefined){
-                cy.get(`[data-board-screen__cell=${oMoves[i]}]`).click()
-            }
-        }
+    //     for(let i = 0; i < Math.max(xMoves.length, oMoves.length); i++) {
+    //         if(xMoves[i] !== undefined) {
+    //             cy.get(`[data-board-screen__cell=${xMoves[i]}]`).click()
+    //         }
+    //         if(oMoves[i] !== undefined){
+    //             cy.get(`[data-board-screen__cell=${oMoves[i]}]`).click()
+    //         }
+    //     }
 
-        cy.get(`[data-board-screen__cell=${xMoves[0]}]`)
-            .should('have.class', 'board__cell--highlight')
-        cy.get(`[data-board-screen__cell=${xMoves[1]}]`)
-            .should('have.class', 'board__cell--highlight')
-        cy.get(`[data-board-screen__cell=${xMoves[2]}]`)
-            .should('have.class', 'board__cell--highlight')
+    //     cy.get('.board__cell--highlight')
+    //         .should('have.length', 3)
+    //         .first()
+    //         .should('have.attr', 'data-board-screen__cell', xMoves[0])
+    //         .next()
+    //         .should('have.attr', 'data-board-screen__cell', xMoves[1])
+    //         .next()
+    //         .should('have.attr', 'data-board-screen__cell', xMoves[2])
 
-    })
+    // })
 
     it('Should start next round if current round ends')
     it('Should update scores every time the round ends')
