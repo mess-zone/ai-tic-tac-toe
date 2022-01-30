@@ -94,7 +94,28 @@ describe('Round rules', () => {
             .should('contain', 'Draw')
     })
 
-    it('Should highlight winning combination')
+    it('Should highlight winning combination', () => {
+        const xMoves = [ 0, 1, 2 ]
+        const oMoves = [ 3, 4 ]
+
+        for(let i = 0; i < Math.max(xMoves.length, oMoves.length); i++) {
+            if(xMoves[i] !== undefined) {
+                cy.get(`[data-board-screen__cell=${xMoves[i]}]`).click()
+            }
+            if(oMoves[i] !== undefined){
+                cy.get(`[data-board-screen__cell=${oMoves[i]}]`).click()
+            }
+        }
+
+        cy.get(`[data-board-screen__cell=${xMoves[0]}]`)
+            .should('have.class', 'board__cell--highlight')
+        cy.get(`[data-board-screen__cell=${xMoves[1]}]`)
+            .should('have.class', 'board__cell--highlight')
+        cy.get(`[data-board-screen__cell=${xMoves[2]}]`)
+            .should('have.class', 'board__cell--highlight')
+
+    })
+
     it('Should start next round if current round ends')
     it('Should update scores every time the round ends')
     it('Should not start next round (show end game) if current round exceds maxRouds config, and show scores')

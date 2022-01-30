@@ -207,8 +207,11 @@ describe('Start Game', () => {
                 .should('have.class', 'turn--X')
     
             cy.get('.board__cell')
-                .should('have.class', 'board__cell--empty')
                 .should('have.length', 9)
+                .should('have.class', 'board__cell--empty')
+                .should('not.have.class', 'board__cell--highlight')
+                .should('not.have.class', 'board__cell--X')
+                .should('not.have.class', 'board__cell--O')
                 .first()
                 .should('have.attr', 'data-board-screen__cell', 0)
                 .next()
