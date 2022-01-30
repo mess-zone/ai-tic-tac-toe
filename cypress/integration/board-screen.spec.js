@@ -11,7 +11,7 @@ const player2 = {
     symbol: 'O',
 }
 
-describe.only('Board Screen', () => {
+describe('Board Screen', () => {
     before(() => {
         cy.visit('/')
 
