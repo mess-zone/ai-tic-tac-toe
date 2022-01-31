@@ -1,3 +1,5 @@
+import { PlayerTypes } from "./helpers/constants.js";
+
 export default function createLogicCommands(logic, observable) {
 
     function SETUP({ player1, player2 }) { 
@@ -11,6 +13,14 @@ export default function createLogicCommands(logic, observable) {
                 id: 'START_ROUND',
                 state: logic.getState(),
             });
+
+            if(player1.type === PlayerTypes.COMPUTER) {
+                logic.move(0, 0);
+                observable.notifyAll({
+                    id: 'UPDATE_BOARD',
+                    state: logic.getState(),
+                });
+            }
         }
     }
 

@@ -124,7 +124,7 @@ describe('LogicCommands', function() {
 
     describe('SETUP', function() {
 
-        it('Should call setPlayers, resetGame, startNextRound and notifyAll when receive valid params', function() {
+        it('Should call setPlayers, resetGame, startNextRound and notifyAll START_ROUND when receive valid params', function() {
             logicSpy = createLogicSpy();
             observableSpy = createObservableSpy();
 
@@ -142,6 +142,30 @@ describe('LogicCommands', function() {
             expect(logicSpy.params.calls.startNextRound).to.equal(1);
             expect(observableSpy.params.history.notifyAll.length).to.equal(1);
             expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
+        });
+
+        it('If player 1 is a computer, also should call logic.move and notifyAll UPDATE_BOARD', function() {
+            logicSpy = createLogicSpy();
+            observableSpy = createObservableSpy();
+
+            const sut = createLogicCommands(logicSpy, observableSpy);
+            const command = { 
+                id: 'SETUP',
+                player1: { name: 'robot', type: PlayerTypes.COMPUTER }, 
+                player2: { name: 'animal', type: PlayerTypes.HUMAN } 
+            };
+            sut.SETUP(command);
+         
+            // expect(logicSpy.params.args.setPlayers.p1).to.deep.equal(command.player1);
+            // expect(logicSpy.params.args.setPlayers.p2).to.deep.equal(command.player2);
+            // expect(logicSpy.params.calls.resetGame).to.equal(1);
+            // expect(logicSpy.params.calls.startNextRound).to.equal(1);
+            expect(logicSpy.params.calls.move).to.equal(1);
+            expect(logicSpy.params.args.move.playerIndex).to.equal(0);
+            expect(logicSpy.params.args.move.cellIndex).to.equal(0);
+            expect(observableSpy.params.history.notifyAll.length).to.equal(2);
+            // expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
+            expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
         });
 
         it('Should throw an error if receive invalid params', function() {
