@@ -124,6 +124,45 @@ describe('Start Screen', () => {
         cy.get('[data-start-screen__form-setup] button').click()
     })
 
+    it('Should create 1 computer and 1 human player', () => {
+        const player1 = {
+            name: 'robot',
+            type: 'COMPUTER',
+            symbol: 'X',
+        }
+        const player2 = {
+            name: 'gilmar',
+            type: 'HUMAN',
+            symbol: 'O',
+        }
+
+        cy.get('[data-start-screen__player1-name]')
+            .type(player1.name)
+            .should('have.value', player1.name)
+        
+        cy.get('[data-start-screen__player2-name]')
+            .type(player2.name)
+            .should('have.value', player2.name)
+
+
+        cy.get('[data-start-screen__player1] input[type=radio][value=' + player1.type + ']').check()
+    
+        cy.get('[data-start-screen__player2] input[type=radio][value=' + player2.type + ']').check()
+
+        cy.get('[data-start-screen__player1] :checked').should('be.checked').and('have.value', player1.type)
+        cy.get('[data-start-screen__player2] :checked').should('be.checked').and('have.value', player2.type)
+        
+
+        cy.get('[data-start-screen__form-setup] button').click()
+
+        // cy.get('[data-board-screen__score]')
+        //     .children()
+        //     .first()
+        //     .next()
+        //     .should('contain.text', `${player1.name} (${player1.symbol})`)
+        //     .next()
+        //     .should('contain.text', `${player2.name} (${player2.symbol})`)
+    })
     it('Should create 1 human and 1 computer player')
     it('Should create 2 computer players')
 
