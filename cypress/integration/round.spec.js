@@ -312,7 +312,7 @@ describe('Round rules', () => {
 
 
 // computers
-context('computer x human', () => {
+context.skip('computer x human', () => {
     beforeEach(() => {
         cy.visit('/')
 
@@ -381,42 +381,79 @@ context('computer x human', () => {
         cy.get('#board-screen')
             .should('be.visible')
 
-        // cy.get('.board__cell--empty')
-        //     .should('have.length.greaterThan', 0)
+        let isRoundEnded = false;
 
-        // computer turn
-        cy.get('[data-board-screen__board]')
-            .should('not.have.class', 'board--human-turn')
-            .should('have.class', 'turn--X')
+        let count = 0;
+        let xCount = 0;
+        let oCount = 0;
 
-        // verificar se o nome do player atual está correto no hint 
-        cy.get('[data-board-screen__hint]')
-            .should('contain.text', computer1.name + ':')
+        while(!isRoundEnded && count <= 9) {
 
-        // computer move 
-        cy.get('[data-board-screen__board]')
-            .should('have.class', 'board--human-turn')
-            .should('have.class', 'turn--O')
-        cy.get('.board__cell--X')
-            .should('have.length', 1)
+            if(!isRoundEnded) {
+                // computer turn
+                cy.get('[data-board-screen__board]')
+                    .should('not.have.class', 'board--human-turn')
+                    .should('have.class', 'turn--X')
+    
+                // verificar se o nome do player atual está correto no hint 
+                cy.get('[data-board-screen__hint]')
+                    .should('contain.text', computer1.name + ':')
+    
+                // wait computer move, checks if a X cell pops up
+                cy.get('[data-board-screen__board]')
+                    .should('have.class', 'board--human-turn')
+                    // .should('have.class', 'turn--X')
+                cy.get('.board__cell--X')
+                    .should('have.length', ++xCount)
+
+    
+    
+                // verifica se o round acabou
+                cy.get('[data-board-screen__board]').then(($board) => {
+                    isRoundEnded = !$board.hasClass('turn--X') && !$board.hasClass('turn--O')
+                    cy.log('isRoundEnded? ', isRoundEnded)
+                })
+            }
+            count++;
+            cy.log('count', count)
 
 
-        
-        // human turn
-        cy.get('[data-board-screen__board]')
-            .should('have.class', 'board--human-turn')
-            .should('have.class', 'turn--O')
 
-        // verificar se o nome do player atual está correto no hint 
-        cy.get('[data-board-screen__hint]')
-            .should('contain.text', human1.name + ':')
+            if(!isRoundEnded) {
+                // human turn
+                cy.get('[data-board-screen__board]')
+                    // .should('have.class', 'board--human-turn')
+                    .should('have.class', 'turn--O')
+    
+                // verificar se o nome do player atual está correto no hint 
+                cy.get('[data-board-screen__hint]')
+                    .should('contain.text', human1.name + ':')
+    
+                // human move
+                cy.get('.board__cell--empty')
+                    .first()
+                    .click()
+    
+                cy.get('.board__cell--O')
+                    .should('have.length', ++oCount)
 
-        // human move
-        cy.get('.board__cell--empty')
-            .first()
-            .click()
-            .should('not.have.class', 'board__cell--empty')
-            .should('have.class', 'board__cell--O')
+    
+    
+    
+    
+                // verifica se o round acabou
+                cy.get('[data-board-screen__board]').then(($board) => {
+                    isRoundEnded = !$board.hasClass('turn--X') && !$board.hasClass('turn--O')
+                    cy.log('isRoundEnded? ', isRoundEnded)
+                })
+
+            }
+            count++;
+            cy.log('count', count)
+
+
+        }
+
 
         // cy.get('[data-board-screen__board]')
         //     .should('have.class', 'board--human-turn')
