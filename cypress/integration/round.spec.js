@@ -320,18 +320,25 @@ context('computer x human', () => {
 
     })
 
-    it.only('If the player 1 is type computer, it should move to cell 0', ()  => {
+    it('If the player 1 is type computer, should wait until it moves', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')
 
         cy.get('[data-board-screen__board]')
-            // .should('not.have.class', 'board--human-turn')
-        //     .should('have.class', 'turn--X')
+            .should('not.have.class', 'board--human-turn')
+            .should('have.class', 'turn--X')
 
-        // // verificar se o nome do player atual está correto no hint 
-        // cy.get('[data-board-screen__hint]')
-        //     .should('contain.text', player1.name + ':')
+        // verificar se o nome do player atual está correto no hint 
+        cy.get('[data-board-screen__hint]')
+            .should('contain.text', computer1.name + ':')
+
+        // wait computer move 
+        cy.get('[data-board-screen__board]')
+            .should('have.class', 'board--human-turn')
+            .should('have.class', 'turn--O')
+        cy.get('.board__cell--X')
+            .should('have.length', 1)
 
         // cy.get('.board__cell--empty')
         //     .first()

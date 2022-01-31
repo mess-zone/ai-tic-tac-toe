@@ -144,7 +144,8 @@ describe('LogicCommands', function() {
             expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
         });
 
-        it('If player 1 is a computer, also should call MOVE and notifyAll UPDATE_BOARD', function() {
+        it('[first move] If player 1 is a computer, after 5s pause, also should call MOVE and notifyAll UPDATE_BOARD', function(done) {
+            this.timeout(7000);
             logicSpy = createLogicSpy();
             observableSpy = createObservableSpy();
 
@@ -160,14 +161,25 @@ describe('LogicCommands', function() {
             // expect(logicSpy.params.args.setPlayers.p2).to.deep.equal(command.player2);
             // expect(logicSpy.params.calls.resetGame).to.equal(1);
             // expect(logicSpy.params.calls.startNextRound).to.equal(1);
-            expect(logicSpy.params.calls.move).to.equal(1);
-            expect(logicSpy.params.args.move.playerIndex).to.equal(0);
-            expect(logicSpy.params.args.move.cellIndex).to.equal(0);
-            expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
-            expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
-            expect(observableSpy.params.history.notifyAll.length).to.equal(2);
-            // expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
-            expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
+
+
+
+            expect(observableSpy.params.history.notifyAll.length).to.equal(1);
+            expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
+            
+
+            setTimeout(function() {
+                /* COMPUTER FIRST MOVE */
+                expect(logicSpy.params.calls.move).to.equal(1);
+                expect(logicSpy.params.args.move.playerIndex).to.equal(0);
+                expect(logicSpy.params.args.move.cellIndex).to.equal(0);
+                expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
+                expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
+                expect(observableSpy.params.history.notifyAll.length).to.equal(2);
+                expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
+       
+                done();
+            }, 6000)
         });
 
         it('Should throw an error if receive invalid params', function() {

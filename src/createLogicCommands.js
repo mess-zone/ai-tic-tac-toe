@@ -15,7 +15,9 @@ export default function createLogicCommands(logic, observable) {
             });
 
             if(player1.type === PlayerTypes.COMPUTER) {
-                MOVE({ playerIndex: 0, cellIndex: 0 });
+                setTimeout(() => {
+                    MOVE({ playerIndex: 0, cellIndex: 0 });
+                }, 5000)
             }
         }
     }
