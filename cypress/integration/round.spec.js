@@ -11,7 +11,21 @@ const player2 = {
     symbol: 'O',
 }
 
+
+const computer1 = {
+    name: 'robot',
+    type: 'COMPUTER',
+    symbol: 'X',
+}
+
+const human1 = {
+    name: 'gilmar',
+    type: 'HUMAN',
+    symbol: 'O',
+}
+
 describe('Round rules', () => {
+
 
     beforeEach(() => {
         cy.visit('/')
@@ -90,7 +104,7 @@ describe('Round rules', () => {
     
     })
 
-    it('Should Start Round Screen if current round ends', () => {
+    it('Should show Start Round Screen if current round ends', () => {
         const test = {
             xMoves: [ 0, 1, 2 ],
             oMoves: [ 3, 4 ],
@@ -288,4 +302,64 @@ describe('Round rules', () => {
         })
     });
 
+})
+
+
+// computers
+context('computer x human', () => {
+    beforeEach(() => {
+        cy.visit('/')
+
+
+        cy.get('[data-start-screen__player1-name]').type(computer1.name)
+        cy.get('[data-start-screen__player1] input[type=radio][value=' + computer1.type + ']').check()
+        
+        cy.get('[data-start-screen__player2-name]').type(human1.name)
+
+        cy.get('[data-start-screen__form-setup] button').click()
+
+    })
+
+    it.only('If the player 1 is type computer, it should move to cell 0', ()  => {
+
+        cy.get('#board-screen')
+            .should('be.visible')
+
+        cy.get('[data-board-screen__board]')
+            // .should('not.have.class', 'board--human-turn')
+        //     .should('have.class', 'turn--X')
+
+        // // verificar se o nome do player atual está correto no hint 
+        // cy.get('[data-board-screen__hint]')
+        //     .should('contain.text', player1.name + ':')
+
+        // cy.get('.board__cell--empty')
+        //     .first()
+        //     .click()
+        //     .should('not.have.class', 'board__cell--empty')
+        //     .should('have.class', 'board__cell--X')
+
+        // cy.get('[data-board-screen__board]')
+        //     .should('have.class', 'board--human-turn')
+        //     .should('have.class', 'turn--O')
+
+        // // verificar se o nome do player atual está correto no hint 
+        // cy.get('[data-board-screen__hint]')
+        //     .should('contain.text', player2.name + ':')
+
+        // cy.get('.board__cell--empty')
+        //     .first()
+        //     .click()
+        //     .should('not.have.class', 'board__cell--empty')
+        //     .should('have.class', 'board__cell--O')
+
+        // cy.get('[data-board-screen__board]')
+        //     .should('have.class', 'board--human-turn')
+        //     .should('have.class', 'turn--X')
+
+        // // verificar se o nome do player atual está correto no hint 
+        // cy.get('[data-board-screen__hint]')
+        //     .should('contain.text', player1.name + ':')
+    
+    })
 })

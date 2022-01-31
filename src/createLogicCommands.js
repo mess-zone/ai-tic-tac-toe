@@ -15,11 +15,7 @@ export default function createLogicCommands(logic, observable) {
             });
 
             if(player1.type === PlayerTypes.COMPUTER) {
-                logic.move(0, 0);
-                observable.notifyAll({
-                    id: 'UPDATE_BOARD',
-                    state: logic.getState(),
-                });
+                MOVE({ playerIndex: 0, cellIndex: 0 });
             }
         }
     }

@@ -144,7 +144,7 @@ describe('LogicCommands', function() {
             expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
         });
 
-        it('If player 1 is a computer, also should call logic.move and notifyAll UPDATE_BOARD', function() {
+        it('If player 1 is a computer, also should call MOVE and notifyAll UPDATE_BOARD', function() {
             logicSpy = createLogicSpy();
             observableSpy = createObservableSpy();
 
@@ -163,6 +163,8 @@ describe('LogicCommands', function() {
             expect(logicSpy.params.calls.move).to.equal(1);
             expect(logicSpy.params.args.move.playerIndex).to.equal(0);
             expect(logicSpy.params.args.move.cellIndex).to.equal(0);
+            expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
+            expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
             expect(observableSpy.params.history.notifyAll.length).to.equal(2);
             // expect(observableSpy.params.history.notifyAll[0].id).to.equal('START_ROUND');
             expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
