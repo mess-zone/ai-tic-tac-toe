@@ -42,6 +42,21 @@ describe('logic', function() {
             expect(logic.getState().players[1].symbol).to.equal(Symbols.O);
         });
 
+        it('Should create 2 users of type computer', function() {
+
+            logic.setPlayers({ name: 'comp1', type: PlayerTypes.COMPUTER }, { name: 'comp2', type: PlayerTypes.COMPUTER });
+
+            expect(logic.getState().players).to.have.lengthOf(2);
+
+            expect(logic.getState().players[0].name).to.equal('comp1');
+            expect(logic.getState().players[0].type).to.equal(PlayerTypes.COMPUTER);
+            expect(logic.getState().players[0].symbol).to.equal(Symbols.X);
+
+            expect(logic.getState().players[1].name).to.equal('comp2');
+            expect(logic.getState().players[1].type).to.equal(PlayerTypes.COMPUTER);
+            expect(logic.getState().players[1].symbol).to.equal(Symbols.O);
+        });
+
         it('Should create users with default names', function() {
 
             logic.setPlayers({ type: PlayerTypes.HUMAN }, { type: PlayerTypes.HUMAN });

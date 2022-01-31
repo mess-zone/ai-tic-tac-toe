@@ -114,7 +114,6 @@ export default function createLogic() {
         state.board.cells[cellIndex] = state.players[playerIndex].symbol;
     }
 
-    
     function checkEndOfRound() {
         const combination = searchWinningCombination(state.players[state.currentRound.currentPlayer].symbol, state.board.cells);
         const hasEmptyCell = hasEmptyCells(state.board.cells);
