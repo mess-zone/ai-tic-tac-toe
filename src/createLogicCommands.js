@@ -17,8 +17,9 @@ export default function createLogicCommands(logic, observable) {
 
             // se player 1 é o computador, executar o primeiro movimento
             if(player1.type === PlayerTypes.COMPUTER) {
+                console.log('PLAYER 1 É COMPUTER, se player 1 é o computador, executar o primeiro movimento ')
                 // setTimeout(() => {
-                    // MOVE({ playerIndex: 0, cellIndex: 0 });
+                    MOVE({ playerIndex: 0, cellIndex: 0 });
                 // }, 5000)
             }
         }

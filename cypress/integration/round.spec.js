@@ -326,7 +326,7 @@ context('computer x human', () => {
 
     })
 
-    it.skip('If the player 1 is type computer, should wait until its first move', ()  => {
+    it('If the player 1 is type computer, his move should have a delay', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')
@@ -340,11 +340,11 @@ context('computer x human', () => {
             .should('contain.text', computer1.name + ':')
 
         // wait computer move 
-        cy.get('[data-board-screen__board]')
-            .should('have.class', 'board--human-turn')
-            .should('have.class', 'turn--O')
-        cy.get('.board__cell--X')
-            .should('have.length', 1)
+        // cy.get('[data-board-screen__board]')
+        //     .should('have.class', 'board--human-turn')
+        //     .should('have.class', 'turn--O')
+        // cy.get('.board__cell--X')
+        //     .should('have.length', 1)
 
         // cy.get('.board__cell--empty')
         //     .first()

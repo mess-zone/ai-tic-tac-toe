@@ -1,4 +1,4 @@
-import { Symbols, RoundStatus } from "./helpers/constants.js";
+import { Symbols, RoundStatus, PlayerTypes } from "./helpers/constants.js";
 
 export default function createCommands(views) {
 
@@ -22,11 +22,19 @@ export default function createCommands(views) {
     }
 
     function UPDATE_BOARD(command) {
-        console.log('[iu] UPDATE BOARD');
         const state = {...command.state};
+        console.log('[UI] UPDATE BOARD', state);
 
-        console.log('UPDATEEEEEEE', state)
-        views.updateBoardInfo(state);
+        // Se o player que acabou de mover é um COMPUTER, dá um delay na exibição
+        const lastPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
+        if(state.players[lastPlayer].type == PlayerTypes.COMPUTER) {
+            setTimeout(() => {
+                console.log('UPDATEEEEEEE COMPUTER', state)
+                views.updateBoardInfo(state);
+            }, 3000)
+        } else {
+            views.updateBoardInfo(state);
+        }
       
     }
 

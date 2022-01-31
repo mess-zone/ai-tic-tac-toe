@@ -106,6 +106,7 @@ describe('ViewComands', function() {
         });
     });
 
+    // TODO if player 1 type computer should have a delay do update board
     describe('UPDATE_BOARD', function() {
         it('Should call updateBoardInfo', function() {
             viewsSpy = createViewsSpy();
@@ -116,8 +117,17 @@ describe('ViewComands', function() {
                 state: {
                     currentRound: {
                         round: 0,
+                        currentPlayer: 0
                     },
                     maxRounds: 3,
+                    players: [
+                        {
+                            type: 'HUMAN',
+                        },
+                        {
+                            type: 'HUMAN',
+                        }
+                    ]
                 },
             };
             sut.UPDATE_BOARD(command);
