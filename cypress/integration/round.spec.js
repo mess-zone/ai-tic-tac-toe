@@ -312,7 +312,7 @@ describe('Round rules', () => {
 
 
 // computers
-context.skip('computer x human', () => {
+context('computer x human', () => {
     beforeEach(() => {
         cy.visit('/')
 
@@ -326,7 +326,7 @@ context.skip('computer x human', () => {
 
     })
 
-    it('If the player 1 is type computer, should wait until its first move', ()  => {
+    it.skip('If the player 1 is type computer, should wait until its first move', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')
@@ -376,7 +376,7 @@ context.skip('computer x human', () => {
     
     })
 
-    it('If the round is not over, players must take turns', ()  => {
+    it.skip('If the round is not over, players must take turns', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')

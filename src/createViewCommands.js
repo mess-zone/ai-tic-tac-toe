@@ -11,6 +11,7 @@ export default function createCommands(views) {
         console.log('[ui] START_ROUND');
         const state = {...command.state};
 
+        console.log('STARRRRRT', state)
         views.updateBoardInfo(state);
 
         const modelRoundScreen = {
@@ -24,7 +25,9 @@ export default function createCommands(views) {
         console.log('[iu] UPDATE BOARD');
         const state = {...command.state};
 
+        console.log('UPDATEEEEEEE', state)
         views.updateBoardInfo(state);
+      
     }
 
     function END_ROUND(command) {

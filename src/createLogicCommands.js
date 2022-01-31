@@ -11,14 +11,15 @@ export default function createLogicCommands(logic, observable) {
         if(shouldStartNextRound) {
             observable.notifyAll({
                 id: 'START_ROUND',
-                state: logic.getState(),
+                state:  JSON.parse(JSON.stringify(logic.getState())),
             });
+
 
             // se player 1 é o computador, executar o primeiro movimento
             if(player1.type === PlayerTypes.COMPUTER) {
-                setTimeout(() => {
-                    MOVE({ playerIndex: 0, cellIndex: 0 });
-                }, 5000)
+                // setTimeout(() => {
+                    // MOVE({ playerIndex: 0, cellIndex: 0 });
+                // }, 5000)
             }
         }
     }
@@ -32,7 +33,7 @@ export default function createLogicCommands(logic, observable) {
             //update screen board
             observable.notifyAll({ 
                 id: 'END_ROUND', 
-                state: logic.getState()
+                state: JSON.parse(JSON.stringify(logic.getState()))
             });
 
             return;
@@ -43,15 +44,15 @@ export default function createLogicCommands(logic, observable) {
             //update screen board
             observable.notifyAll({ 
                 id: 'UPDATE_BOARD', 
-                state:logic.getState()
+                state:JSON.parse(JSON.stringify(logic.getState()))
             });
 
             // se o player atual é um computador, executa um movimento
-            if( logic.getState().players[logic.getState().currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
-                setTimeout(() => {
-                    MOVE({ playerIndex: logic.getState().currentRound.currentPlayer, cellIndex: 8 });
-                }, 5000)
-            }
+            // if( logic.getState().players[logic.getState().currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
+            //     // setTimeout(() => {
+            //         MOVE({ playerIndex: logic.getState().currentRound.currentPlayer, cellIndex: 8 });
+            //     // }, 5000)
+            // }
         }
 
     }
@@ -61,7 +62,7 @@ export default function createLogicCommands(logic, observable) {
         if(isEndOfGame) {
             observable.notifyAll({
                 id: 'END_GAME',
-                state: logic.getState(),
+                state: JSON.parse(JSON.stringify(logic.getState())),
             });
             return;
         }
@@ -71,7 +72,7 @@ export default function createLogicCommands(logic, observable) {
         if(shouldStartNextRound) {
             observable.notifyAll({
                 id: 'START_ROUND',
-                state: logic.getState(),
+                state: JSON.parse(JSON.stringify(logic.getState())),
             });
         }
     }
