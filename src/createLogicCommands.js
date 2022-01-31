@@ -1,4 +1,4 @@
-import { PlayerTypes } from "./helpers/constants.js";
+import { PlayerTypes, Symbols } from "./helpers/constants.js";
 
 export default function createLogicCommands(logic, observable) {
 
@@ -17,9 +17,12 @@ export default function createLogicCommands(logic, observable) {
 
             // se player 1 é o computador, executar o primeiro movimento
             if(player1.type === PlayerTypes.COMPUTER) {
-                console.log('PLAYER 1 É COMPUTER, se player 1 é o computador, executar o primeiro movimento ')
+                const emptyCells = logic.getState().board.cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
+                console.log('PLAYER 1 É COMPUTER, se player 1 é o computador, executar o primeiro movimento ', emptyCells)
+                const cellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)]
+                console.log(cellIndex);
                 // setTimeout(() => {
-                    MOVE({ playerIndex: 0, cellIndex: 0 });
+                MOVE({ playerIndex: 0, cellIndex: cellIndex });
                 // }, 5000)
             }
         }

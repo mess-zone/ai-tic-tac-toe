@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import { PlayerTypes } from '../src/helpers/constants.js';
+import { PlayerTypes, Symbols } from '../src/helpers/constants.js';
 import createLogicCommands from '../src/createLogicCommands.js';
 
 function createLogicSpy() {
@@ -17,7 +17,14 @@ function createLogicSpy() {
                 type: 'HUMAN',
                 symbol: 'O'
             }
-        ]
+        ],
+        board: {
+            cells: [
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+            ],
+        }
     };
 
     const params = {
@@ -162,6 +169,7 @@ describe('LogicCommands', function() {
         it('[first move] If player 1 is a computer, also should call MOVE and notifyAll UPDATE_BOARD', function() {
 
             logicSpy = createLogicSpy();
+            logicSpy.getState().players[0].type = PlayerTypes.COMPUTER;
             observableSpy = createObservableSpy();
 
             const sut = createLogicCommands(logicSpy, observableSpy);
@@ -187,7 +195,7 @@ describe('LogicCommands', function() {
             /* COMPUTER FIRST MOVE */
             expect(logicSpy.params.calls.move).to.equal(1);
             expect(logicSpy.params.args.move.playerIndex).to.equal(0);
-            expect(logicSpy.params.args.move.cellIndex).to.equal(0);
+            expect(logicSpy.params.args.move.cellIndex).to.not.equal(undefined);
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
             expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
             expect(observableSpy.params.history.notifyAll.length).to.equal(2);
