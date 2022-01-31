@@ -3,7 +3,22 @@ import { PlayerTypes } from '../src/helpers/constants.js';
 import createLogicCommands from '../src/createLogicCommands.js';
 
 function createLogicSpy() {
-    const state = { test: 'valid_state_object' };
+    // const state = { test: 'valid_state_object' };
+    const state = {
+        currentRound: {
+            currentPlayer: 1,
+        },
+        players: [
+            {
+                type: 'HUMAN',
+                symbol: 'X'
+            },
+            {
+                type: 'HUMAN',
+                symbol: 'O'
+            }
+        ]
+    };
 
     const params = {
         config: {
@@ -146,6 +161,7 @@ describe('LogicCommands', function() {
 
         it('[first move] If player 1 is a computer, after 5s pause, also should call MOVE and notifyAll UPDATE_BOARD', function(done) {
             this.timeout(7000);
+
             logicSpy = createLogicSpy();
             observableSpy = createObservableSpy();
 
@@ -252,6 +268,41 @@ describe('LogicCommands', function() {
             expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
             expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
             expect(observableSpy.params.history.notifyAll.length).to.equal(0);
+        });
+
+        it('[current player is human] Should call MOVE again for the computer turn', function(done) {
+            this.timeout(7000);
+
+            logicSpy = createLogicSpy();
+            logicSpy.getState().players[1].type = 'COMPUTER';
+            // logicSpy.params.config.switchPlayerTurn.isSwitch = false;
+            observableSpy = createObservableSpy();
+
+            const sut = createLogicCommands(logicSpy, observableSpy);
+            const command = { 
+                id: 'MOVE',
+                playerIndex: 0,
+                cellIndex: 0
+            };
+            sut.MOVE(command);
+            expect(logicSpy.params.args.move.playerIndex).to.equal(command.playerIndex);
+            expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
+            expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
+            expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
+            expect(observableSpy.params.history.notifyAll.length).to.equal(1);
+
+            setTimeout(function() {
+                /* COMPUTER MOVE */
+                expect(logicSpy.params.calls.move).to.equal(2);
+                expect(logicSpy.params.args.move.playerIndex).to.equal(1);
+                expect(logicSpy.params.args.move.cellIndex).to.equal(8);
+                expect(logicSpy.params.calls.checkEndOfRound).to.equal(2);
+                expect(logicSpy.params.calls.switchPlayerTurn).to.equal(2);
+                expect(observableSpy.params.history.notifyAll.length).to.equal(2);
+                expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
+       
+                done();
+            }, 6000)
         });
     });
 
