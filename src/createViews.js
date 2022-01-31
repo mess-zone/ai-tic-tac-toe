@@ -172,9 +172,9 @@ export default function createViews(window, observable) {
         updateBoard(updateBoardModel);
 
         const updatePlayerTurnModel = {
-            isXTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.X,
-            isOTurn: model.players[model.currentRound.currentPlayer].symbol === Symbols.O,
-            isHumanTurn: model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
+            isXTurn: model.currentRound.statusRound == RoundStatus.PLAYING && model.players[model.currentRound.currentPlayer].symbol === Symbols.X,
+            isOTurn: model.currentRound.statusRound == RoundStatus.PLAYING && model.players[model.currentRound.currentPlayer].symbol === Symbols.O,
+            isHumanTurn: model.currentRound.statusRound == RoundStatus.PLAYING && model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
             hintText: model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '',
         };
         updatePlayerTurn(updatePlayerTurnModel);

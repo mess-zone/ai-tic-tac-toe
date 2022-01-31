@@ -61,6 +61,7 @@ describe('Round rules', () => {
         cy.get('#round-screen').contains('Round 1/')
     })
 
+    // TODO esse teste ainda é necessário? (acho que sim)
     it('If the round is not over, players must take turns', ()  => {
 
         cy.get('#board-screen')
@@ -103,68 +104,6 @@ describe('Round rules', () => {
             .should('contain.text', player1.name + ':')
     
     })
-
-    it('Should show Start Round Screen if current round ends', () => {
-        const test = {
-            xMoves: [ 0, 1, 2 ],
-            oMoves: [ 3, 4 ],
-        }
-
-        // Should show start round 1 alert
-        cy.get('#round-screen')
-            .should('have.class', 'screen--show')
-            .and('have.class', 'animating')
-
-        cy.get('#round-screen').contains('Round 1/')
-
-        cy.get('#board-screen')
-            .should('be.visible')
-
-
-
-        for(let i = 0; i < Math.max(test.xMoves.length, test.oMoves.length); i++) {
-            if(test.xMoves[i] !== undefined) {
-                cy.get(`[data-board-screen__cell=${test.xMoves[i]}]`).click()
-            }
-            if(test.oMoves[i] !== undefined){
-                cy.get(`[data-board-screen__cell=${test.oMoves[i]}]`).click()
-            }
-        }
-
-        cy.get('#end-round-screen')
-            .should('be.visible')
-
-            
-        cy.wait(5000);
-        
-        // Should show start round 2 alert
-        cy.get('#start-screen')
-            .should('not.have.class', 'screen--show')
-
-        cy.get('#round-screen')
-            .should('have.class', 'screen--show')
-            .and('have.class', 'animating')
-
-        cy.get('#end-round-screen')
-            .should('not.have.class', 'screen--show')
-            .should('not.have.class', 'animating')
-        
-        cy.get('#end-game-screen')
-            .should('not.have.class', 'screen--show')
-        
-        cy.get('#round-screen').contains('Round 2/')
-
-        // Should show reseted board screen
-
-        cy.get('#round-screen')
-            .should('not.have.class', 'screen--show')
-            .and('not.have.class', 'animating')
-
-        cy.get('#board-screen')
-            .should('have.class', 'screen--show')
-        
-    })
-
     
     const tests = [
         {
@@ -267,6 +206,12 @@ describe('Round rules', () => {
                 cy.get('.board__cell--highlight')
                     .should('have.length', 0)
             }
+
+            // verifica se a board resetou as classes
+            cy.get('[data-board-screen__board]')
+                .should('not.have.class', 'board--human-turn')
+                .should('not.have.class', 'turn--X')
+                .should('not.have.class', 'turn--O')
     
             // verificar se scores estão corretos
             cy.get('[data-board-screen__score]')
@@ -302,6 +247,67 @@ describe('Round rules', () => {
         })
     });
 
+    it('Should start next round if current round ends', () => {
+        const test = {
+            xMoves: [ 0, 1, 2 ],
+            oMoves: [ 3, 4 ],
+        }
+
+        // Should show start round 1 alert
+        cy.get('#round-screen')
+            .should('have.class', 'screen--show')
+            .and('have.class', 'animating')
+
+        cy.get('#round-screen').contains('Round 1/')
+
+        cy.get('#board-screen')
+            .should('be.visible')
+
+
+
+        for(let i = 0; i < Math.max(test.xMoves.length, test.oMoves.length); i++) {
+            if(test.xMoves[i] !== undefined) {
+                cy.get(`[data-board-screen__cell=${test.xMoves[i]}]`).click()
+            }
+            if(test.oMoves[i] !== undefined){
+                cy.get(`[data-board-screen__cell=${test.oMoves[i]}]`).click()
+            }
+        }
+
+        cy.get('#end-round-screen')
+            .should('be.visible')
+
+            
+        cy.wait(5000);
+        
+        // Should show start round 2 alert
+        cy.get('#start-screen')
+            .should('not.have.class', 'screen--show')
+
+        cy.get('#round-screen')
+            .should('have.class', 'screen--show')
+            .and('have.class', 'animating')
+
+        cy.get('#end-round-screen')
+            .should('not.have.class', 'screen--show')
+            .should('not.have.class', 'animating')
+        
+        cy.get('#end-game-screen')
+            .should('not.have.class', 'screen--show')
+        
+        cy.get('#round-screen').contains('Round 2/')
+
+        // Should show reseted board screen
+
+        cy.get('#round-screen')
+            .should('not.have.class', 'screen--show')
+            .and('not.have.class', 'animating')
+
+        cy.get('#board-screen')
+            .should('have.class', 'screen--show')
+        
+    })
+
 })
 
 
@@ -320,7 +326,7 @@ context('computer x human', () => {
 
     })
 
-    it('If the player 1 is type computer, should wait until it moves', ()  => {
+    it('If the player 1 is type computer, should wait until its first move', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')
@@ -345,6 +351,72 @@ context('computer x human', () => {
         //     .click()
         //     .should('not.have.class', 'board__cell--empty')
         //     .should('have.class', 'board__cell--X')
+
+        // cy.get('[data-board-screen__board]')
+        //     .should('have.class', 'board--human-turn')
+        //     .should('have.class', 'turn--O')
+
+        // // verificar se o nome do player atual está correto no hint 
+        // cy.get('[data-board-screen__hint]')
+        //     .should('contain.text', player2.name + ':')
+
+        // cy.get('.board__cell--empty')
+        //     .first()
+        //     .click()
+        //     .should('not.have.class', 'board__cell--empty')
+        //     .should('have.class', 'board__cell--O')
+
+        // cy.get('[data-board-screen__board]')
+        //     .should('have.class', 'board--human-turn')
+        //     .should('have.class', 'turn--X')
+
+        // // verificar se o nome do player atual está correto no hint 
+        // cy.get('[data-board-screen__hint]')
+        //     .should('contain.text', player1.name + ':')
+    
+    })
+
+    it('If the round is not over, players must take turns', ()  => {
+
+        cy.get('#board-screen')
+            .should('be.visible')
+
+        // cy.get('.board__cell--empty')
+        //     .should('have.length.greaterThan', 0)
+
+        // computer turn
+        cy.get('[data-board-screen__board]')
+            .should('not.have.class', 'board--human-turn')
+            .should('have.class', 'turn--X')
+
+        // verificar se o nome do player atual está correto no hint 
+        cy.get('[data-board-screen__hint]')
+            .should('contain.text', computer1.name + ':')
+
+        // computer move 
+        cy.get('[data-board-screen__board]')
+            .should('have.class', 'board--human-turn')
+            .should('have.class', 'turn--O')
+        cy.get('.board__cell--X')
+            .should('have.length', 1)
+
+
+        
+        // human turn
+        cy.get('[data-board-screen__board]')
+            .should('have.class', 'board--human-turn')
+            .should('have.class', 'turn--O')
+
+        // verificar se o nome do player atual está correto no hint 
+        cy.get('[data-board-screen__hint]')
+            .should('contain.text', human1.name + ':')
+
+        // human move
+        cy.get('.board__cell--empty')
+            .first()
+            .click()
+            .should('not.have.class', 'board__cell--empty')
+            .should('have.class', 'board__cell--O')
 
         // cy.get('[data-board-screen__board]')
         //     .should('have.class', 'board--human-turn')
