@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import { PlayerTypes, RoundStatus, Symbols } from '../src/helpers/constants.js';
 import createLogicCommands from '../src/createLogicCommands.js';
 
+
 function createLogicSpy() {
     // const state = { test: 'valid_state_object' };
     const state = {
@@ -142,6 +143,78 @@ function createObservableSpy() {
 
 describe('LogicCommands', function() {
 
+    
+    function createLogicStub() {
+        const params = {
+            returns: {
+                setPlayers: [],
+                resetGame: [],
+                startNextRound: [],
+                getState: [],
+                move: [],
+                checkEndOfRound: [],
+                switchPlayerTurn: [],
+            },
+            calls: {
+                setPlayers: 0,
+                resetGame: 0,
+                startNextRound: 0,
+                getState: 0,
+                move: 0,
+                checkEndOfRound: 0,
+                switchPlayerTurn: 0,
+            },
+        }
+
+        const setPlayers = (player1, player2) => {
+            params.calls.setPlayers++;
+            return params.returns.setPlayers.shift();
+        }
+        
+        const resetGame = () => {
+            params.calls.resetGame++;
+            return params.returns.resetGame.shift();
+        }
+
+        const startNextRound = () => {
+            params.calls.startNextRound++;
+            return params.returns.startNextRound.shift();
+        }
+
+        const getState = () => {
+            params.calls.getState++;
+            return params.returns.getState.shift();
+        }
+        
+        const move = (playerIndex, cellIndex) => {
+            params.calls.move++; 
+            return params.returns.move.shift();
+        }
+
+        const checkEndOfRound = () => {
+            params.calls.checkEndOfRound++;
+            return params.returns.checkEndOfRound.shift();
+        }
+
+        const switchPlayerTurn = () => {
+            params.calls.switchPlayerTurn++;
+            return params.returns.switchPlayerTurn.shift();
+        }
+
+        return {
+            params,
+            setPlayers,
+            resetGame,
+            startNextRound,
+            getState,
+            move,
+            checkEndOfRound,
+            switchPlayerTurn,
+        }
+
+    }
+
+    let logicStub;
     let logicSpy;
     let observableSpy;
 
@@ -171,11 +244,35 @@ describe('LogicCommands', function() {
         it('[first move] If player 1 is a computer, also should call MOVE and notifyAll UPDATE_BOARD', function() {
 
             // TODO refactor to use a Logic Stub
-            logicSpy = createLogicSpy();
-            logicSpy.getState().players[0].type = PlayerTypes.COMPUTER;
+            logicStub = createLogicStub();
+            // logicStub.params.returns.setPlayers = []
+            // logicSpy.getState().players[0].type = PlayerTypes.COMPUTER;
+            logicStub.params.returns.startNextRound = [ true ];
+            logicStub.params.returns.getState = [ 
+                { 
+                    board: {
+                        cells: [
+                            Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY,
+                            Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY,
+                            Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY
+                        ]
+                    }
+                }, 
+                {
+                    currentRound: {
+                        currentPlayer: 1
+                    },
+                    players: [
+                        { type: PlayerTypes.COMPUTER },
+                        { type: PlayerTypes.HUMAN }
+                    ],
+                }
+            ];
+            logicStub.params.returns.checkEndOfRound = [ false, false]; 
+            logicStub.params.returns.switchPlayerTurn = [ true ]; 
             observableSpy = createObservableSpy();
 
-            const sut = createLogicCommands(logicSpy, observableSpy);
+            const sut = createLogicCommands(logicStub, observableSpy);
             const command = { 
                 id: 'SETUP',
                 player1: { name: 'robot', type: PlayerTypes.COMPUTER }, 
@@ -183,10 +280,10 @@ describe('LogicCommands', function() {
             };
             sut.SETUP(command);
          
-            // expect(logicSpy.params.args.setPlayers.p1).to.deep.equal(command.player1);
-            // expect(logicSpy.params.args.setPlayers.p2).to.deep.equal(command.player2);
-            // expect(logicSpy.params.calls.resetGame).to.equal(1);
-            // expect(logicSpy.params.calls.startNextRound).to.equal(1);
+            // expect(logicStub.params.args.setPlayers.p1).to.deep.equal(command.player1);
+            // expect(logicStub.params.args.setPlayers.p2).to.deep.equal(command.player2);
+            // expect(logicStub.params.calls.resetGame).to.equal(1);
+            // expect(logicStub.params.calls.startNextRound).to.equal(1);
 
 
 
@@ -196,11 +293,11 @@ describe('LogicCommands', function() {
 
             // setTimeout(function() {
             /* COMPUTER FIRST MOVE */
-            expect(logicSpy.params.calls.move).to.equal(1);
-            expect(logicSpy.params.args.move.playerIndex).to.equal(0);
-            expect(logicSpy.params.args.move.cellIndex).to.not.equal(undefined);
-            expect(logicSpy.params.calls.checkEndOfRound).to.equal(2);
-            expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
+            expect(logicStub.params.calls.move).to.equal(1);
+            // expect(logicSpy.params.args.move.playerIndex).to.equal(0);
+            // expect(logicSpy.params.args.move.cellIndex).to.not.equal(undefined);
+            expect(logicStub.params.calls.checkEndOfRound).to.equal(2);
+            expect(logicStub.params.calls.switchPlayerTurn).to.equal(1);
             expect(observableSpy.params.history.notifyAll.length).to.equal(2);
             expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
        
