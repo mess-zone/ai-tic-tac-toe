@@ -175,6 +175,7 @@ export default function createViews(window, observable) {
             isXTurn: model.currentRound.statusRound == RoundStatus.PLAYING && model.players[model.currentRound.currentPlayer].symbol === Symbols.X,
             isOTurn: model.currentRound.statusRound == RoundStatus.PLAYING && model.players[model.currentRound.currentPlayer].symbol === Symbols.O,
             isHumanTurn: model.currentRound.statusRound == RoundStatus.PLAYING && model.players[model.currentRound.currentPlayer].type === PlayerTypes.HUMAN,
+            isComputerTurn: model.currentRound.statusRound == RoundStatus.PLAYING && model.players[model.currentRound.currentPlayer].type === PlayerTypes.COMPUTER,
             hintText: model.currentRound.statusRound == RoundStatus.PLAYING ? `${model.players[model.currentRound.currentPlayer].name}: your turn!` : '',
         };
         updatePlayerTurn(updatePlayerTurnModel);
@@ -245,6 +246,7 @@ export default function createViews(window, observable) {
         nodes.hintEl.innerHTML = model.hintText;
 
         nodes.boardEl.classList.toggle('board--human-turn', model.isHumanTurn);
+        nodes.boardEl.classList.toggle('board--computer-turn', model.isComputerTurn);
         
         // if(model.isRoundEnded) {
         //     nodes.boardEl.classList.remove('board--human-turn');

@@ -68,7 +68,8 @@ describe('Round rules', () => {
     })
 
     // TODO esse teste ainda é necessário? (acho que sim)
-    it('If the round is not over, players must take turns', ()  => {
+    // TODO refacotor: use movePlayer recursive function
+    it('[2 humans] If the round is not over, players must take turns', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')
@@ -216,6 +217,7 @@ describe('Round rules', () => {
             // verifica se a board resetou as classes
             cy.get('[data-board-screen__board]')
                 .should('not.have.class', 'board--human-turn')
+                .should('not.have.class', 'board--computer-turn')
                 .should('not.have.class', 'turn--X')
                 .should('not.have.class', 'turn--O')
     
@@ -339,7 +341,8 @@ context('computer x human', () => {
             .should('be.visible')
 
         cy.get('[data-board-screen__board]')
-            .should('not.have.class', 'board--human-turn')
+            // .should('not.have.class', 'board--human-turn')
+            .should('have.class', 'board--computer-turn')
             .should('have.class', 'turn--X')
 
         // verificar se o nome do player atual está correto no hint 
@@ -347,11 +350,11 @@ context('computer x human', () => {
             .should('contain.text', computer1.name + ':')
 
         // wait computer move 
-        // cy.get('[data-board-screen__board]')
-        //     .should('have.class', 'board--human-turn')
-        //     .should('have.class', 'turn--O')
-        // cy.get('.board__cell--X')
-        //     .should('have.length', 1)
+        cy.get('[data-board-screen__board]')
+            .should('have.class', 'board--human-turn')
+            .should('have.class', 'turn--O')
+        cy.get('.board__cell--X')
+            .should('have.length', 1)
 
         // cy.get('.board__cell--empty')
         //     .first()
@@ -363,9 +366,9 @@ context('computer x human', () => {
         //     .should('have.class', 'board--human-turn')
         //     .should('have.class', 'turn--O')
 
-        // // verificar se o nome do player atual está correto no hint 
-        // cy.get('[data-board-screen__hint]')
-        //     .should('contain.text', player2.name + ':')
+        // verificar se o nome do player atual está correto no hint 
+        cy.get('[data-board-screen__hint]')
+            .should('contain.text', human1.name + ':')
 
         // cy.get('.board__cell--empty')
         //     .first()
@@ -387,6 +390,7 @@ context('computer x human', () => {
     function movePlayer(xCount, oCount) {
         cy.log(xCount, oCount)
 
+        // TODO criar classe board--computer-turn
         cy.get('[data-board-screen__board]').invoke('attr', 'class').then($boarClasses => {
             const currentPlayerType = $boarClasses.includes('board--human-turn') ? 'HUMAN' : 'COMPUTER';
             const currentPlayerSymbol = $boarClasses.includes('turn--X') ? 'X' : 'O'
