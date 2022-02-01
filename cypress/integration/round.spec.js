@@ -376,6 +376,7 @@ context('computer x human', () => {
     
     })
 
+    // TODO o teste tem um coportamento inconsistente
     it.skip('If the round is not over, players must take turns', ()  => {
 
         cy.get('#board-screen')
@@ -417,7 +418,7 @@ context('computer x human', () => {
             count++;
             cy.log('count', count)
 
-
+            cy.pause()
 
             if(!isRoundEnded) {
                 // human turn
@@ -450,7 +451,7 @@ context('computer x human', () => {
             }
             count++;
             cy.log('count', count)
-
+            cy.pause()
 
         }
 
@@ -478,4 +479,8 @@ context('computer x human', () => {
         //     .should('contain.text', player1.name + ':')
     
     })
+
+    it('In the next round the game does not work!!')
+    it('What if a human x computer')
+    it('What if a computer x computer')
 })

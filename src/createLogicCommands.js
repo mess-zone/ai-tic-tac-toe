@@ -1,4 +1,4 @@
-import { PlayerTypes, Symbols } from "./helpers/constants.js";
+import { PlayerTypes, RoundStatus, Symbols } from "./helpers/constants.js";
 
 export default function createLogicCommands(logic, observable) {
 
@@ -18,7 +18,7 @@ export default function createLogicCommands(logic, observable) {
             // se player 1 é o computador, executar o primeiro movimento
             if(player1.type === PlayerTypes.COMPUTER) {
                 const emptyCells = logic.getState().board.cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
-                console.log('PLAYER 1 É COMPUTER, se player 1 é o computador, executar o primeiro movimento ', emptyCells)
+                console.log('START PLAYER 1 É COMPUTER, se player 1 é o computador, executar o primeiro movimento ', emptyCells)
                 const cellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)]
                 console.log(cellIndex);
                 // setTimeout(() => {
@@ -29,6 +29,7 @@ export default function createLogicCommands(logic, observable) {
     }
 
     function MOVE({ playerIndex, cellIndex }) {
+        console.log('MOVE:', playerIndex, cellIndex)
         logic.move(playerIndex, cellIndex);
         
         const isEndOfRound = logic.checkEndOfRound();
@@ -51,12 +52,20 @@ export default function createLogicCommands(logic, observable) {
                 state:JSON.parse(JSON.stringify(logic.getState()))
             });
 
-            // se o player atual é um computador, executa um movimento
-            // if( logic.getState().players[logic.getState().currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
-            //     // setTimeout(() => {
-            //         MOVE({ playerIndex: logic.getState().currentRound.currentPlayer, cellIndex: 8 });
-            //     // }, 5000)
-            // }
+            // se o round ainda não acabou...
+            if(!logic.checkEndOfRound()) {
+                // se o player atual é um computador, executa um movimento aleatorio
+                if( logic.getState().players[logic.getState().currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
+                    const emptyCells = logic.getState().board.cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
+                    console.log('NEXT PLAYER É COMPUTER, movimentos disponiveis: ', emptyCells)
+    
+                    if(emptyCells.length > 0) {
+                        const cellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)]
+                        MOVE({ playerIndex: logic.getState().currentRound.currentPlayer, cellIndex: cellIndex });
+                    }
+                }
+            }
+
         }
 
     }
