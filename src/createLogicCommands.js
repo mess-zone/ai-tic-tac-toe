@@ -88,10 +88,23 @@ export default function createLogicCommands(logic, observable) {
         const shouldStartNextRound = logic.startNextRound();
 
         if(shouldStartNextRound) {
+            const currentState = logic.getState();
+
             observable.notifyAll({
                 id: 'START_ROUND',
-                state: JSON.parse(JSON.stringify(logic.getState())),
+                state: JSON.parse(JSON.stringify(currentState)),
             });
+
+            // se o player atual é um computador, executa um movimento aleatorio
+            if(currentState.players[currentState.currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
+                const emptyCells = currentState.board.cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
+                console.log('NEXT PLAYER É COMPUTER, movimentos disponiveis: ', emptyCells)
+
+                if(emptyCells.length > 0) {
+                    const cellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)]
+                    MOVE({ playerIndex: currentState.currentRound.currentPlayer, cellIndex: cellIndex });
+                }
+            }
         }
     }
 
