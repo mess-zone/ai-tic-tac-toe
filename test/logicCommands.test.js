@@ -360,57 +360,63 @@ describe('LogicCommands', function() {
         });
 
         it('[current player is human] Should call MOVE again for the computer turn', function() {
-
-            // TODO refactor to use a Logic Stub
-            logicSpy = createLogicSpy();
-            logicSpy.getState().players = [
-                {
-                    type: 'HUMAN',
-                    symbol: 'X'
+            logicStub = createLogicStub();
+            logicStub.params.returns.checkEndOfRound.push(false); 
+            logicStub.params.returns.switchPlayerTurn.push(true);
+            logicStub.params.returns.getState.push({
+                currentRound: {
+                    currentPlayer: 1
                 },
-                {
-                    type: 'COMPUTER',
-                    symbol: 'O'
-                }
-            ];
-
-            logicSpy.getState().board = {
-                cells: [
-                    Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                    Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
-                    Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
+                players: [
+                    { type: PlayerTypes.HUMAN },
+                    { type: PlayerTypes.COMPUTER }
                 ],
-            }
-            // logicSpy.params.config.switchPlayerTurn.isSwitch = false;
+                board: {
+                    cells: [
+                        Symbols.X, Symbols.EMPTY, Symbols.EMPTY,
+                        Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY,
+                        Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY
+                    ]
+                }
+            });
+            logicStub.params.returns.checkEndOfRound.push(false);
+            logicStub.params.returns.checkEndOfRound.push(false); 
+            logicStub.params.returns.switchPlayerTurn.push(true);
+            logicStub.params.returns.getState.push({
+                currentRound: {
+                    currentPlayer: 0
+                },
+                players: [
+                    { type: PlayerTypes.HUMAN },
+                    { type: PlayerTypes.COMPUTER }
+                ],
+                board: {
+                    cells: [
+                        Symbols.X, Symbols.O, Symbols.EMPTY,
+                        Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY,
+                        Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY
+                    ]
+                }
+            });
+            logicStub.params.returns.checkEndOfRound.push(false);
+
             observableSpy = createObservableSpy();
 
-            const sut = createLogicCommands(logicSpy, observableSpy);
+            const sut = createLogicCommands(logicStub, observableSpy);
             const command = { 
                 id: 'MOVE',
                 playerIndex: 0,
                 cellIndex: 0
             };
             sut.MOVE(command);
-            // expect(logicSpy.params.calls.move).to.equal(1);
-            // expect(logicSpy.params.args.move.playerIndex).to.equal(command.playerIndex);
-            // expect(logicSpy.params.args.move.cellIndex).to.equal(command.cellIndex);
-            // expect(logicSpy.params.calls.checkEndOfRound).to.equal(1);
-            // expect(logicSpy.params.calls.switchPlayerTurn).to.equal(1);
-            // expect(observableSpy.params.history.notifyAll.length).to.equal(1);
 
-      
-                /* COMPUTER MOVE */
-                expect(logicSpy.params.calls.move).to.equal(2);
-                // expect(logicSpy.params.args.move.playerIndex).to.equal(1);
-                // expect(logicSpy.params.args.move.cellIndex).to.equal(8);
-                expect(logicSpy.params.calls.checkEndOfRound).to.equal(4);
-                expect(logicSpy.params.calls.switchPlayerTurn).to.equal(2);
-                expect(observableSpy.params.history.notifyAll.length).to.equal(2);
-                expect(observableSpy.params.history.notifyAll[0].id).to.equal('UPDATE_BOARD');
-                expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
-       
-         
-        
+            /* COMPUTER MOVE */
+            expect(logicStub.params.calls.move).to.equal(2);
+            expect(logicStub.params.calls.checkEndOfRound).to.equal(4);
+            expect(logicStub.params.calls.switchPlayerTurn).to.equal(2);
+            expect(observableSpy.params.history.notifyAll.length).to.equal(2);
+            expect(observableSpy.params.history.notifyAll[0].id).to.equal('UPDATE_BOARD');
+            expect(observableSpy.params.history.notifyAll[1].id).to.equal('UPDATE_BOARD');
         });
     });
 
