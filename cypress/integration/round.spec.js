@@ -18,6 +18,12 @@ const computer1 = {
     symbol: 'X',
 }
 
+const computer2 = {
+    name: 'R2D2',
+    type: 'COMPUTER',
+    symbol: 'O',
+}
+
 const human1 = {
     name: 'gilmar',
     type: 'HUMAN',
@@ -31,7 +37,6 @@ const human2 = {
 }
 
 describe('Round rules', () => {
-
 
     beforeEach(() => {
         cy.visit('/')
@@ -65,51 +70,6 @@ describe('Round rules', () => {
 
         
         cy.get('#round-screen').contains('Round 1/')
-    })
-
-    // TODO esse teste ainda é necessário? (acho que sim)
-    // TODO refacotor: use movePlayer recursive function
-    it('[2 humans] If the round is not over, players must take turns', ()  => {
-
-        cy.get('#board-screen')
-            .should('be.visible')
-
-        cy.get('[data-board-screen__board]')
-            .should('have.class', 'board--human-turn')
-            .should('have.class', 'turn--X')
-
-        // verificar se o nome do player atual está correto no hint 
-        cy.get('[data-board-screen__hint]')
-            .should('contain.text', player1.name + ':')
-
-        cy.get('.board__cell--empty')
-            .first()
-            .click()
-            .should('not.have.class', 'board__cell--empty')
-            .should('have.class', 'board__cell--X')
-
-        cy.get('[data-board-screen__board]')
-            .should('have.class', 'board--human-turn')
-            .should('have.class', 'turn--O')
-
-        // verificar se o nome do player atual está correto no hint 
-        cy.get('[data-board-screen__hint]')
-            .should('contain.text', player2.name + ':')
-
-        cy.get('.board__cell--empty')
-            .first()
-            .click()
-            .should('not.have.class', 'board__cell--empty')
-            .should('have.class', 'board__cell--O')
-
-        cy.get('[data-board-screen__board]')
-            .should('have.class', 'board--human-turn')
-            .should('have.class', 'turn--X')
-
-        // verificar se o nome do player atual está correto no hint 
-        cy.get('[data-board-screen__hint]')
-            .should('contain.text', player1.name + ':')
-    
     })
     
     const tests = [
@@ -381,7 +341,27 @@ function movePlayer(xCount, oCount) {
 }
 
 
-// computers
+context('human x human', () => {
+    beforeEach(() => {
+        cy.visit('/')
+
+        cy.get('[data-start-screen__player1-name]').type(human1.name)
+        
+        cy.get('[data-start-screen__player2-name]').type(human2.name)
+
+        cy.get('[data-start-screen__form-setup] button').click()
+
+    })
+
+    it('If the round is not over, players must take turns', () => {
+        cy.get('#board-screen')
+            .should('be.visible')
+
+        movePlayer(0,0);
+    })
+
+})
+
 context('computer x human', () => {
     beforeEach(() => {
         cy.visit('/')
@@ -395,6 +375,7 @@ context('computer x human', () => {
 
     })
 
+    // TODO user would configure do disable delay
     it('If the player is type computer, his move should have a delay', ()  => {
 
         cy.get('#board-screen')
@@ -416,33 +397,9 @@ context('computer x human', () => {
         cy.get('.board__cell--X')
             .should('have.length', 1)
 
-        // cy.get('.board__cell--empty')
-        //     .first()
-        //     .click()
-        //     .should('not.have.class', 'board__cell--empty')
-        //     .should('have.class', 'board__cell--X')
-
-        // cy.get('[data-board-screen__board]')
-        //     .should('have.class', 'board--human-turn')
-        //     .should('have.class', 'turn--O')
-
         // verificar se o nome do player atual está correto no hint 
         cy.get('[data-board-screen__hint]')
             .should('contain.text', human1.name + ':')
-
-        // cy.get('.board__cell--empty')
-        //     .first()
-        //     .click()
-        //     .should('not.have.class', 'board__cell--empty')
-        //     .should('have.class', 'board__cell--O')
-
-        // cy.get('[data-board-screen__board]')
-        //     .should('have.class', 'board--human-turn')
-        //     .should('have.class', 'turn--X')
-
-        // // verificar se o nome do player atual está correto no hint 
-        // cy.get('[data-board-screen__hint]')
-        //     .should('contain.text', player1.name + ':')
     
     })
 
@@ -453,9 +410,50 @@ context('computer x human', () => {
         movePlayer(0,0);
     })
 
+})
 
+context('human x computer', () => {
+    beforeEach(() => {
+        cy.visit('/')
 
-    // it('In the next round the game does not work!!')
-    it('What if a human x computer')
-    it('What if a computer x computer')
+        cy.get('[data-start-screen__player1-name]').type(human1.name)
+        
+        cy.get('[data-start-screen__player2-name]').type(computer1.name)
+        cy.get('[data-start-screen__player2] input[type=radio][value=' + computer1.type + ']').check()
+
+        cy.get('[data-start-screen__form-setup] button').click()
+
+    })
+
+    it('If the round is not over, players must take turns', () => {
+        cy.get('#board-screen')
+            .should('be.visible')
+
+        movePlayer(0,0);
+    })
+
+})
+
+// TODO pass in the spec test, but in reality does not work!!!
+context.skip('computer x computer', () => {
+    beforeEach(() => {
+        cy.visit('/')
+
+        cy.get('[data-start-screen__player1-name]').type(computer1.name)
+        cy.get('[data-start-screen__player1] input[type=radio][value=' + computer1.type + ']').check()
+        
+        cy.get('[data-start-screen__player2-name]').type(computer2.name)
+        cy.get('[data-start-screen__player1] input[type=radio][value=' + computer2.type + ']').check()
+
+        cy.get('[data-start-screen__form-setup] button').click()
+
+    })
+
+    it('If the round is not over, players must take turns', () => {
+        cy.get('#board-screen')
+            .should('be.visible')
+
+        movePlayer(0,0);
+    })
+
 })
