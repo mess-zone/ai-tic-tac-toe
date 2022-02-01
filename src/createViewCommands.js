@@ -9,7 +9,7 @@ export default function createCommands(views) {
     
     function START_ROUND(command) {
         console.log('[ui] START_ROUND');
-        const state = {...command.state};
+        const state = JSON.parse(JSON.stringify({...command.state}))
 
         console.log('STARRRRRT', state)
         views.updateBoardInfo(state);
@@ -22,7 +22,7 @@ export default function createCommands(views) {
     }
 
     function UPDATE_BOARD(command) {
-        const state = {...command.state};
+        const state = JSON.parse(JSON.stringify({...command.state}))
         console.log('[UI] UPDATE BOARD', state);
 
         // Se o player que acabou de mover é um COMPUTER, dá um delay na exibição
@@ -40,7 +40,7 @@ export default function createCommands(views) {
 
     function END_ROUND(command) {
         console.log('[ui] END ROUND');
-        const state = {...command.state};
+        const state = JSON.parse(JSON.stringify({...command.state}))
 
         views.updateBoardInfo(state);
 
@@ -52,7 +52,7 @@ export default function createCommands(views) {
 
     function END_GAME(command) {
         console.log('[ui] END GAME');
-        const state = {...command.state};
+        const state = JSON.parse(JSON.stringify({...command.state}))
 
         const endGameModel = {
             round: {
