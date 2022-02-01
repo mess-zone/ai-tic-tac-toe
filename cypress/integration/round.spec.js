@@ -24,6 +24,12 @@ const human1 = {
     symbol: 'O',
 }
 
+const human2 = {
+    name: 'beto',
+    type: 'HUMAN',
+    symbol: 'X',
+}
+
 describe('Round rules', () => {
 
 
@@ -319,6 +325,7 @@ context('computer x human', () => {
 
         cy.get('[data-start-screen__player1-name]').type(computer1.name)
         cy.get('[data-start-screen__player1] input[type=radio][value=' + computer1.type + ']').check()
+        // cy.get('[data-start-screen__player1-name]').type(human2.name)
         
         cy.get('[data-start-screen__player2-name]').type(human1.name)
 
@@ -376,19 +383,88 @@ context('computer x human', () => {
     
     })
 
+
+    function movePlayer(xCount, oCount) {
+        cy.log(xCount, oCount)
+
+        cy.get('[data-board-screen__board]').invoke('attr', 'class').then($boarClasses => {
+            const currentPlayerType = $boarClasses.includes('board--human-turn') ? 'HUMAN' : 'COMPUTER';
+            const currentPlayerSymbol = $boarClasses.includes('turn--X') ? 'X' : 'O'
+            const isRoundEnded = !$boarClasses.includes('turn--X') && !$boarClasses.includes('turn--O')
+            cy.log('isRoundEnded?', isRoundEnded )
+            cy.log('currentPlayerSymbol?', currentPlayerSymbol )
+            cy.log('currentPlayerType?', currentPlayerType )
+            if(!isRoundEnded) {
+                if(currentPlayerType === 'HUMAN') {
+                    // human move
+                    cy.get('.board__cell--empty')
+                        .first()
+                        .click()
+                        .should('not.have.class', 'board__cell--empty')
+                        .should('have.class', 'board__cell--' + currentPlayerSymbol).then(function() {
+                            if(currentPlayerSymbol === 'X') {
+                                ++xCount;
+                            } else {
+                                ++oCount;
+                            }
+                            movePlayer(xCount, oCount)
+                        })
+                        
+                } else {
+                    // computer  move
+
+                    // const nextPlayerSymbol = currentPlayerSymbol === 'X' ? 'O' : 'X';
+                    // wait computer move, checks if a X cell pops up
+                    cy.get('[data-board-screen__board]')
+                        // .should('have.class', 'board--human-turn')
+                        .should('not.have.class', 'turn--'+ currentPlayerSymbol).then(function() {
+                            if(currentPlayerSymbol === 'X') {
+                                ++xCount;
+                            } else {
+                                ++oCount;
+                            } 
+                        })
+
+                    cy.get('.board__cell--' + currentPlayerSymbol)
+                        .should('have.length', currentPlayerSymbol === 'X' ? xCount : oCount).then(function() {
+                            movePlayer(xCount, oCount)
+                        })
+                }
+            }
+        })
+
+    }
+
+    it.skip('If the round is not over, players must take turns', () => {
+        cy.get('#board-screen')
+            .should('be.visible')
+
+        movePlayer(0,0);
+    })
+
     // TODO o teste tem um coportamento inconsistente
     it.skip('If the round is not over, players must take turns', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')
 
+        // verifica se o round acabou
+        cy.get('[data-board-screen__board]').invoke('attr', 'class').as('boardClasses')
+        // cy.get('[data-board-screen__board]').then(function ($board) {
+        //     isRoundEnded = !$board.hasClass('turn--X') && !$board.hasClass('turn--O')
+        //     cy.log('isRoundEnded? ', isRoundEnded)
+        //     if(isRoundEnded) count = 10;
+        //     cy.log('count?', count)
+        // })
+
+        cy.log(this.boardClasses)
         let isRoundEnded = false;
 
         let count = 0;
         let xCount = 0;
         let oCount = 0;
 
-        while(!isRoundEnded && count <= 9) {
+        while(count < 9) {
 
             if(!isRoundEnded) {
                 // computer turn
@@ -410,15 +486,17 @@ context('computer x human', () => {
     
     
                 // verifica se o round acabou
-                cy.get('[data-board-screen__board]').then(($board) => {
+                cy.get('[data-board-screen__board]').then(function ($board) {
                     isRoundEnded = !$board.hasClass('turn--X') && !$board.hasClass('turn--O')
                     cy.log('isRoundEnded? ', isRoundEnded)
+                    if(isRoundEnded) count = 10;
+                    cy.log('count?', count)
                 })
             }
             count++;
             cy.log('count', count)
 
-            cy.pause()
+            // cy.pause()
 
             if(!isRoundEnded) {
                 // human turn
@@ -443,15 +521,16 @@ context('computer x human', () => {
     
     
                 // verifica se o round acabou
-                cy.get('[data-board-screen__board]').then(($board) => {
+                cy.get('[data-board-screen__board]').then(function($board) {
                     isRoundEnded = !$board.hasClass('turn--X') && !$board.hasClass('turn--O')
-                    cy.log('isRoundEnded? ', isRoundEnded)
+                    if(isRoundEnded) count = 10;
+                    cy.log('count?', count)
                 })
 
             }
             count++;
             cy.log('count', count)
-            cy.pause()
+            // cy.pause()
 
         }
 
