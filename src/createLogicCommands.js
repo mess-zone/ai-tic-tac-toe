@@ -8,9 +8,10 @@ export default function createLogicCommands(logic, observable) {
         
         const shouldStartNextRound = logic.startNextRound();
 
-        const currentState = logic.getState();
-
+        
         if(shouldStartNextRound) {
+            const currentState = logic.getState();
+            
             observable.notifyAll({
                 id: 'START_ROUND',
                 state:  JSON.parse(JSON.stringify(currentState)),
