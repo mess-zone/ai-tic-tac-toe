@@ -100,7 +100,9 @@ describe('Player modes', () => {
     it('[computer x human] If the round is not over, players must take turns', () => {
         cy.visit('/')
 
-        cy.get('[data-start-screen__preferences-computer-delay]').clear().type('0')
+        cy.get('[data-start-screen__preferences-computer-delay]').then(input => {
+            input.val(0);
+        });
 
         cy.get('[data-start-screen__game-mode]').select('COMPUTER,HUMAN')
 
@@ -119,7 +121,11 @@ describe('Player modes', () => {
     it('[human x computer] If the round is not over, players must take turns', () => {
         cy.visit('/')
 
-        cy.get('[data-start-screen__preferences-computer-delay]').clear().type('0')
+        cy.get('[data-start-screen__preferences-computer-delay]').then(input => {
+            input.val(0);
+        });
+
+        // cy.get('[data-start-screen__preferences-computer-delay]').clear().type('0')
 
         cy.get('[data-start-screen__game-mode]').select('HUMAN,COMPUTER')
 
