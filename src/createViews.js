@@ -9,11 +9,11 @@ export default function createViews(window, observable) {
         nodes.startScreenEl = template.content.cloneNode(true).children[0];
         nodes.startScreenEl.querySelector('[data-start-screen__form-setup]').addEventListener('submit', handleFormSetupSubmit);
         // TODO refactor SELECT CHANGE
-        nodes.startScreenEl.querySelector('[data-start-screen__game-mode]').addEventListener('change', (e) => {
-            const values = e.target.value.split(',');
-            nodes.startScreenEl.querySelector('[data-start-screen__player1] input[type=radio][value='+ values[0] +']').checked = true;
-            nodes.startScreenEl.querySelector('[data-start-screen__player2] input[type=radio][value='+ values[1] +']').checked = true;
-        });
+        // nodes.startScreenEl.querySelector('[data-start-screen__game-mode]').addEventListener('change', (e) => {
+        //     const values = e.target.value.split(',');
+        //     nodes.startScreenEl.querySelector('[data-start-screen__player1] input[name=start-screen__player1-type][type=hidden]').value = values[0];
+        //     nodes.startScreenEl.querySelector('[data-start-screen__player2] input[name=start-screen__player2-type][type=hidden]').value = values[1];
+        // });
         window.document.body.appendChild(nodes.startScreenEl);
     }
 
@@ -289,14 +289,17 @@ export default function createViews(window, observable) {
 
     function handleFormSetupSubmit(e) {
         e.preventDefault();
+
+        const values = nodes.startScreenEl.querySelector('[data-start-screen__game-mode]').value.split(',');
+
         const player1 = {
             name: nodes.startScreenEl.querySelector('[data-start-screen__player1-name]').value || 'player 1',
-            type: nodes.startScreenEl.querySelector('input[name="start-screen__player1-type"]:checked')?.value || PlayerTypes.HUMAN,
+            type: values[0],
         };
 
         const player2 = {
             name: nodes.startScreenEl.querySelector('[data-start-screen__player2-name]').value || 'player 2',
-            type: nodes.startScreenEl.querySelector('input[name="start-screen__player2-type"]:checked')?.value || PlayerTypes.HUMAN,
+            type: values[1],
         };
 
         setPlayers(player1, player2);

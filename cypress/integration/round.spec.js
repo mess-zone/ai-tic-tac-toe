@@ -376,8 +376,8 @@ context('computer x human', () => {
 
     })
 
-    // TODO user would configure do disable delay
-    it('If the player is type computer, his move should have a delay', ()  => {
+    it('user would configure do disable delay')
+    it('[SETUP] If the player is type computer, his move should have a delay', ()  => {
 
         cy.get('#board-screen')
             .should('be.visible')
@@ -403,6 +403,7 @@ context('computer x human', () => {
             .should('contain.text', human1.name + ':')
     
     })
+    it('[Start Next Round] If the player is type computer, his move should have a delay')
 
     it('If the round is not over, players must take turns', () => {
         cy.get('#board-screen')

@@ -48,13 +48,6 @@ describe('Start Screen', () => {
 
         cy.get('[data-start-screen__form-setup] button').click()
 
-        // cy.get('[data-board-screen__score]')
-        //     .children()
-        //     .first()
-        //     .next()
-        //     .should('contain.text', `${player1.name} (${player1.symbol})`)
-        //     .next()
-        //     .should('contain.text', `${player2.name} (${player2.symbol})`)
     })
 
     it('Should create 2 players with default type', () => {
@@ -69,8 +62,7 @@ describe('Start Screen', () => {
             symbol: 'O',
         }
 
-        cy.get('[data-start-screen__player1] :checked').should('be.checked').and('have.value', player1.type)
-        cy.get('[data-start-screen__player2] :checked').should('be.checked').and('have.value', player2.type)
+        cy.get('[data-start-screen__game-mode]').should('have.value', 'HUMAN,HUMAN')
 
         cy.get('[data-start-screen__form-setup] button').click()
     })
@@ -87,10 +79,7 @@ describe('Start Screen', () => {
             symbol: 'O',
         }
 
-        cy.get('[data-start-screen__game-mode]').select('HUMAN,HUMAN')
-
-        cy.get('[data-start-screen__player1] :checked').should('be.checked').and('have.value', player1.type)
-        cy.get('[data-start-screen__player2] :checked').should('be.checked').and('have.value', player2.type)
+        cy.get('[data-start-screen__game-mode]').select('HUMAN,HUMAN').should('have.value', 'HUMAN,HUMAN')
 
         cy.get('[data-start-screen__form-setup] button').click()
     })
@@ -118,11 +107,7 @@ describe('Start Screen', () => {
             .should('have.value', player2.name)
 
 
-        cy.get('[data-start-screen__game-mode]').select('COMPUTER,HUMAN')
-
-        cy.get('[data-start-screen__player1] :checked').should('be.checked').and('have.value', player1.type)
-        cy.get('[data-start-screen__player2] :checked').should('be.checked').and('have.value', player2.type)
-        
+        cy.get('[data-start-screen__game-mode]').select('COMPUTER,HUMAN').should('have.value', 'COMPUTER,HUMAN')
 
         cy.get('[data-start-screen__form-setup] button').click()
 
@@ -152,11 +137,7 @@ describe('Start Screen', () => {
             .should('have.value', player2.name)
 
 
-        cy.get('[data-start-screen__game-mode]').select('HUMAN,COMPUTER')
-
-        cy.get('[data-start-screen__player1] :checked').should('be.checked').and('have.value', player1.type)
-        cy.get('[data-start-screen__player2] :checked').should('be.checked').and('have.value', player2.type)
-        
+        cy.get('[data-start-screen__game-mode]').select('HUMAN,COMPUTER').should('have.value', 'HUMAN,COMPUTER')
 
         cy.get('[data-start-screen__form-setup] button').click()
 

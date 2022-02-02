@@ -3,6 +3,7 @@ import { PlayerTypes, RoundStatus, Symbols } from "./helpers/constants.js";
 export default function createLogicCommands(logic, observable) {
 
     function SETUP({ player1, player2 }) { 
+        console.log('[LOGIC] SETUP', player1, player2)
         logic.setPlayers(player1, player2);
         logic.resetGame();
         
