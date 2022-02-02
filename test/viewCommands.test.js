@@ -24,6 +24,12 @@ function createViewsSpy() {
             showRoundScreen: 0,
             showEndRoundScreen: 0,
             showEndGameScreen: 0,
+            getUserPreferences: 0,
+        },
+        returns: {
+            getUserPreferences: {
+                computerDelay: 3000,
+            }
         }
     };
 
@@ -51,6 +57,11 @@ function createViewsSpy() {
         params.calls.showEndGameScreen++;
     }
 
+    function getUserPreferences() {
+        params.calls.getUserPreferences++;
+        return params.returns.getUserPreferences;
+    }
+
 
     return {
         params,
@@ -59,6 +70,7 @@ function createViewsSpy() {
         showRoundScreen,
         showEndRoundScreen,
         showEndGameScreen,
+        getUserPreferences,
     };
 }
 
@@ -68,10 +80,7 @@ describe('ViewComands', function() {
     describe('SETUP', function() {
         it('Should call showStartScreen', function() {
             viewsSpy = createViewsSpy();
-            const userPreferences = {
-                computerPlayerDelay: 3000,
-            } 
-            const sut = createViewCommands(viewsSpy, userPreferences);
+            const sut = createViewCommands(viewsSpy);
 
             const command = {
                 id: 'SETUP',
@@ -85,10 +94,7 @@ describe('ViewComands', function() {
     describe('START_ROUND', function() {
         it('Should call updateBoardInfo and showRoundScreen', function() {
             viewsSpy = createViewsSpy();
-            const userPreferences = {
-                computerPlayerDelay: 3000,
-            } 
-            const sut = createViewCommands(viewsSpy, userPreferences);
+            const sut = createViewCommands(viewsSpy);
 
             const command = {
                 id: 'START_ROUND',
@@ -115,10 +121,7 @@ describe('ViewComands', function() {
     describe('UPDATE_BOARD', function() {
         it('Should call updateBoardInfo', function() {
             viewsSpy = createViewsSpy();
-            const userPreferences = {
-                computerPlayerDelay: 3000,
-            } 
-            const sut = createViewCommands(viewsSpy, userPreferences);
+            const sut = createViewCommands(viewsSpy);
 
             const command = {
                 id: 'UPDATE_BOARD',
@@ -145,13 +148,11 @@ describe('ViewComands', function() {
             expect(viewsSpy.params.args.updateBoardInfo.model).to.deep.equal(state);
         });
 
+        // TODO DELAY NÃO PODE SER MAIOR QUE 5 SEGUNDOS 
         it('[computer player] Should call updateBoardInfo after a delay', function(done) {
-            this.timeout(5000);
+            this.timeout(6000);
             viewsSpy = createViewsSpy();
-            const userPreferences = {
-                computerPlayerDelay: 3000,
-            } 
-            const sut = createViewCommands(viewsSpy, userPreferences);
+            const sut = createViewCommands(viewsSpy);
 
             const command = {
                 id: 'UPDATE_BOARD',
@@ -174,21 +175,20 @@ describe('ViewComands', function() {
             sut.UPDATE_BOARD(command);
 
             const {state} = command;
+            expect(viewsSpy.params.calls.getUserPreferences).to.equal(1);
             expect(viewsSpy.params.calls.updateBoardInfo).to.equal(0);
             
             setTimeout(()=> {
                 expect(viewsSpy.params.calls.updateBoardInfo).to.equal(1);
                 expect(viewsSpy.params.args.updateBoardInfo.model).to.deep.equal(state);
                 done();
-            }, 4000)
+            }, viewsSpy.getUserPreferences().computerDelay + 500)
         });
 
-        it('[computer player] Should call updateBoardInfo immediately if animations are disabled in userPreferences', function(done) {
+        it('[computer player] Should call updateBoardInfo immediately if animations (computerDelay) are disabled in userPreferences', function(done) {
             viewsSpy = createViewsSpy();
-            const userPreferences = {
-                computerPlayerDelay: 0,
-            } 
-            const sut = createViewCommands(viewsSpy, userPreferences);
+            viewsSpy.params.returns.getUserPreferences.computerDelay = 0;
+            const sut = createViewCommands(viewsSpy);
 
             const command = {
                 id: 'UPDATE_BOARD',
@@ -212,6 +212,7 @@ describe('ViewComands', function() {
 
             const {state} = command;
             setTimeout(()=> {
+                expect(viewsSpy.params.calls.getUserPreferences).to.equal(1);
                 expect(viewsSpy.params.calls.updateBoardInfo).to.equal(1);
                 expect(viewsSpy.params.args.updateBoardInfo.model).to.deep.equal(state);
                 done()
@@ -222,10 +223,7 @@ describe('ViewComands', function() {
     describe('END_ROUND', function() {
         it('Should call updateBoardInfo and showEndRoundScreen', function() {
             viewsSpy = createViewsSpy();
-            const userPreferences = {
-                computerPlayerDelay: 3000,
-            } 
-            const sut = createViewCommands(viewsSpy, userPreferences);
+            const sut = createViewCommands(viewsSpy);
 
             const command = {
                 id: 'END_ROUND',
@@ -258,10 +256,7 @@ describe('ViewComands', function() {
     describe('END_GAME', function() {
         it('Should call updateBoardInfo and showEndRoundScreen', function() {
             viewsSpy = createViewsSpy();
-            const userPreferences = {
-                computerPlayerDelay: 3000,
-            } 
-            const sut = createViewCommands(viewsSpy, userPreferences);
+            const sut = createViewCommands(viewsSpy);
 
             const command = {
                 id: 'END_GAME',

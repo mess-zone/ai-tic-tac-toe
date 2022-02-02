@@ -1,11 +1,6 @@
 import { Symbols, RoundStatus, PlayerTypes } from "./helpers/constants.js";
 
-export default function createViewCommands(views, userPreferences) {
-
-    // const userPreferences = {
-    //     computerPlayerDelay: 3000,
-    // } 
-        
+export default function createViewCommands(views) {
 
     function SETUP(command) {
         console.log('[ui] SETUP');
@@ -33,10 +28,11 @@ export default function createViewCommands(views, userPreferences) {
         // Se o player que acabou de mover é um COMPUTER, dá um delay na exibição
         const lastPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
         if(state.players[lastPlayer].type == PlayerTypes.COMPUTER) {
+            const delay = views.getUserPreferences().computerDelay;
             setTimeout(() => {
-                console.log('UPDATEEEEEEE COMPUTER', state)
+                console.log('UPDATEEEEEEE COMPUTER AFTER ', delay)
                 views.updateBoardInfo(state);
-            }, userPreferences.computerPlayerDelay);
+            }, delay);
         } else {
             views.updateBoardInfo(state);
         }

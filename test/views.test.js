@@ -20,7 +20,7 @@ function createObservableSpy() {
 }
 
 
-describe('Views', function() {
+describe('Views observers', function() {
 
     let observableSpy;
 

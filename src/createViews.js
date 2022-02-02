@@ -2,6 +2,10 @@ import { Symbols, PlayerTypes, RoundStatus } from "./helpers/constants.js";
 
 export default function createViews(window, observable) {
 
+    const userPreferences = {
+        computerDelay: 3000,
+    };
+
     const nodes = {};
 
     function buildStartScreen() {
@@ -269,12 +273,16 @@ export default function createViews(window, observable) {
         });
     }
 
-    function setup(player1, player2) {
+    function setup(player1, player2, preferencesComputerDelay) {
+        userPreferences.computerDelay = preferencesComputerDelay;
         console.log('[screen] set players');
         observable.notifyAll({ 
             id: 'SETUP', 
             player1, 
             player2,
+            // preferences: {
+            //     computerDelay: preferencesComputerDelay,
+            // },
         });
     }
 
@@ -304,7 +312,7 @@ export default function createViews(window, observable) {
             type: values[1],
         };
 
-        setup(player1, player2);
+        setup(player1, player2, preferencesComputerDelay);
     }
 
     function handleCellClick(e) {
@@ -322,6 +330,9 @@ export default function createViews(window, observable) {
         nodes.boardEl.style.height = side + 'px';
     }
 
+    function getUserPreferences() {
+        return userPreferences;
+    }
 
     return {
         buildStartScreen,
@@ -349,5 +360,6 @@ export default function createViews(window, observable) {
         handleFormSetupSubmit,
         handleCellClick,
         handleResize,
+        getUserPreferences,
     }
 }

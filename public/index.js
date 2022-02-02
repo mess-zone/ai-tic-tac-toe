@@ -17,12 +17,9 @@ const gameController = createCommandExecutor(logicCommands);
 
 
 const screenObservable = createObservable();
-const userPreferences = {
-    computerPlayerDelay: 3000,
-} 
 // view
 const views = createViews(window, screenObservable);
-const viewCommands = createViewCommands(views, userPreferences);
+const viewCommands = createViewCommands(views);
 // presenter
 const gamePresenter = createCommandExecutor(viewCommands);
 
