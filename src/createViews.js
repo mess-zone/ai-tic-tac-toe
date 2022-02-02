@@ -8,6 +8,12 @@ export default function createViews(window, observable) {
         const template = document.querySelector('[data-template-start-screen]')
         nodes.startScreenEl = template.content.cloneNode(true).children[0];
         nodes.startScreenEl.querySelector('[data-start-screen__form-setup]').addEventListener('submit', handleFormSetupSubmit);
+        // TODO refactor SELECT CHANGE
+        nodes.startScreenEl.querySelector('[data-start-screen__game-mode]').addEventListener('change', (e) => {
+            const values = e.target.value.split(',');
+            nodes.startScreenEl.querySelector('[data-start-screen__player1] input[type=radio][value='+ values[0] +']').checked = true;
+            nodes.startScreenEl.querySelector('[data-start-screen__player2] input[type=radio][value='+ values[1] +']').checked = true;
+        });
         window.document.body.appendChild(nodes.startScreenEl);
     }
 

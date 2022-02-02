@@ -366,8 +366,9 @@ context('computer x human', () => {
     beforeEach(() => {
         cy.visit('/')
 
+        cy.get('[data-start-screen__game-mode]').select('COMPUTER,HUMAN')
+
         cy.get('[data-start-screen__player1-name]').type(computer1.name)
-        cy.get('[data-start-screen__player1] input[type=radio][value=' + computer1.type + ']').check()
         
         cy.get('[data-start-screen__player2-name]').type(human1.name)
 
@@ -416,10 +417,11 @@ context('human x computer', () => {
     beforeEach(() => {
         cy.visit('/')
 
+        cy.get('[data-start-screen__game-mode]').select('HUMAN,COMPUTER')
+
         cy.get('[data-start-screen__player1-name]').type(human1.name)
         
         cy.get('[data-start-screen__player2-name]').type(computer1.name)
-        cy.get('[data-start-screen__player2] input[type=radio][value=' + computer1.type + ']').check()
 
         cy.get('[data-start-screen__form-setup] button').click()
 
@@ -434,16 +436,16 @@ context('human x computer', () => {
 
 })
 
-// TODO pass in the spec test, but in reality does not work!!!
+// TODO remove
 context.skip('computer x computer', () => {
     beforeEach(() => {
         cy.visit('/')
 
+        cy.get('[data-start-screen__game-mode]').select('COMPUTER,COMPUTER')
+
         cy.get('[data-start-screen__player1-name]').type(computer1.name)
-        cy.get('[data-start-screen__player1] input[type=radio][value=' + computer1.type + ']').check()
         
         cy.get('[data-start-screen__player2-name]').type(computer2.name)
-        cy.get('[data-start-screen__player1] input[type=radio][value=' + computer2.type + ']').check()
 
         cy.get('[data-start-screen__form-setup] button').click()
 
@@ -453,7 +455,7 @@ context.skip('computer x computer', () => {
         cy.get('#board-screen')
             .should('be.visible')
 
-        movePlayer(0,0);
+        // movePlayer(0,0);
     })
 
 })

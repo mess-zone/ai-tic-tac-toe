@@ -16,6 +16,12 @@
         <section id="start-screen" class="screen screen--start">
             <form data-start-screen__form-setup class="container">
                 <h1>tic tac toe</h1>
+
+                <select name="data-start-screen__game-mode" data-start-screen__game-mode>
+                    <option value="HUMAN,HUMAN">HUMAN vs HUMAN</option>
+                    <option value="HUMAN,COMPUTER">HUMAN vs COMPUTER</option>
+                    <option value="COMPUTER,HUMAN">COMPUTER vs HUMAN</option>
+                </select>
         
                 <div data-start-screen__player1>
                     <h2>player 1 (X)</h2>
@@ -23,10 +29,10 @@
                         <input data-start-screen__player1-name type="text" placeholder="player 1" />
                     </label>
                     <label>
-                        <input type="radio" name="start-screen__player1-type"  value="HUMAN" checked> HUMAN
+                        <input type="radio" name="start-screen__player1-type"  value="HUMAN" checked disabled> HUMAN
                     </label>
                     <label>
-                        <input type="radio" name="start-screen__player1-type"  value="COMPUTER"> COMPUTER
+                        <input type="radio" name="start-screen__player1-type"  value="COMPUTER" disabled> COMPUTER
                     </label>
                 </div>
                 <div data-start-screen__player2>
@@ -35,10 +41,10 @@
                         <input data-start-screen__player2-name type="text" placeholder="player 2" />
                     </label>
                     <label>
-                        <input type="radio" name="start-screen__player2-type"  value="HUMAN" checked> HUMAN
+                        <input type="radio" name="start-screen__player2-type"  value="HUMAN" checked disabled> HUMAN
                     </label>
                     <label>
-                        <input type="radio" name="start-screen__player2-type"  value="COMPUTER"> COMPUTER
+                        <input type="radio" name="start-screen__player2-type"  value="COMPUTER" disabled> COMPUTER
                     </label>
                 </div>
         
