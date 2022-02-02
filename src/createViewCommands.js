@@ -1,8 +1,11 @@
 import { Symbols, RoundStatus, PlayerTypes } from "./helpers/constants.js";
 
-export default function createCommands(views) {
+export default function createViewCommands(views, userPreferences) {
 
-    const computerPlayerDelay = 3000;
+    // const userPreferences = {
+    //     computerPlayerDelay: 3000,
+    // } 
+        
 
     function SETUP(command) {
         console.log('[ui] SETUP');
@@ -33,7 +36,7 @@ export default function createCommands(views) {
             setTimeout(() => {
                 console.log('UPDATEEEEEEE COMPUTER', state)
                 views.updateBoardInfo(state);
-            }, computerPlayerDelay);
+            }, userPreferences.computerPlayerDelay);
         } else {
             views.updateBoardInfo(state);
         }
