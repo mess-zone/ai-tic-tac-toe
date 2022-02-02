@@ -67,6 +67,7 @@ describe('Winning combinations', () => {
     beforeEach(() => {
         cy.visit('/')
 
+        cy.get('body').invoke('addClass', 'animation--disabled')
 
         cy.get('[data-start-screen__player1-name]').type(player1.name)
         

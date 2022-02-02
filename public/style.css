@@ -14,6 +14,10 @@ body {
     font-size: 1.3rem;
 }
 
+body.animation--disabled {
+
+}
+
 .screen {
     position: fixed;
     display: none;
@@ -103,6 +107,10 @@ body {
 .screen--round.animating .container {
     opacity: 1;
     animation: new-round 2s ease-out forwards;
+}
+
+.animation--disabled .screen--round.animating .container {
+    animation-duration: .5s;
 }
 
 @keyframes new-round {
@@ -262,6 +270,10 @@ body {
     stroke-dasharray: 308;
     stroke-dashoffset: 308;
     animation: dash 5s linear forwards;
+}
+
+.animation--disabled .screen--end-round.animating .loading-icon .path {
+    animation-duration: .5s;
 }
   
 @keyframes dash {

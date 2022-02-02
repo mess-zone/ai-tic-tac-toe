@@ -85,6 +85,8 @@ describe('Player modes', () => {
     it('[human x human] If the round is not over, players must take turns', () => {
         cy.visit('/')
 
+        cy.get('body').invoke('addClass', 'animation--disabled')
+
         cy.get('[data-start-screen__player1-name]').type(human1.name)
         
         cy.get('[data-start-screen__player2-name]').type(human2.name)
@@ -99,6 +101,8 @@ describe('Player modes', () => {
 
     it('[computer x human] If the round is not over, players must take turns', () => {
         cy.visit('/')
+
+        cy.get('body').invoke('addClass', 'animation--disabled')
 
         cy.get('[data-start-screen__preferences-computer-delay]').then(input => {
             input.val(0);
@@ -120,6 +124,8 @@ describe('Player modes', () => {
 
     it('[human x computer] If the round is not over, players must take turns', () => {
         cy.visit('/')
+
+        cy.get('body').invoke('addClass', 'animation--disabled')
 
         cy.get('[data-start-screen__preferences-computer-delay]').then(input => {
             input.val(0);
@@ -147,6 +153,8 @@ describe('Player modes', () => {
 context('Computer player delay', () => {
     beforeEach(() => {
         cy.visit('/')
+
+        cy.get('body').invoke('addClass', 'animation--disabled')
 
         cy.get('[data-start-screen__game-mode]').select('COMPUTER,HUMAN')
 

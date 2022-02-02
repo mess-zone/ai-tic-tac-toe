@@ -31,6 +31,7 @@ describe('End game screen', () => {
     before(() => {
         cy.visit('/')
 
+        cy.get('body').invoke('addClass', 'animation--disabled')
 
         cy.get('[data-start-screen__player1-name]').type(player1.name)
         
@@ -59,7 +60,8 @@ describe('End game screen', () => {
                 }
             }
     
-            cy.wait(5000);
+            // TODO if animations are not disabled, the wait is necessary to test success
+            // cy.wait(5000);
             
         });
 

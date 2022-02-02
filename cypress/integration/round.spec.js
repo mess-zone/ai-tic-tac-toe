@@ -41,6 +41,7 @@ describe('Round rules', () => {
     beforeEach(() => {
         cy.visit('/')
 
+        cy.get('body').invoke('addClass', 'animation--disabled')
 
         cy.get('[data-start-screen__player1-name]').type(player1.name)
         
@@ -225,8 +226,8 @@ describe('Round rules', () => {
         cy.get('#round-screen')
             .should('have.class', 'screen--show')
             .and('have.class', 'animating')
-
-        cy.get('#round-screen').contains('Round 1/')
+            .contains('Round 1/')
+        // cy.get('#round-screen').contains('Round 1/')
 
         cy.get('#board-screen')
             .should('be.visible')
@@ -245,10 +246,10 @@ describe('Round rules', () => {
         cy.get('#end-round-screen')
             .should('be.visible')
 
-            
-        cy.wait(5000);
+        // TODO if animations are not disabled, the wait is necessary to test success
+        // cy.wait(5000);
         
-        // Should show start round 2 alert
+        // // Should show start round 2 alert
         cy.get('#start-screen')
             .should('not.have.class', 'screen--show')
 

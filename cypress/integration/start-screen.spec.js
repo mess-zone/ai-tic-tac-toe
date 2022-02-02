@@ -3,6 +3,8 @@
 describe('Start Screen', () => {
     beforeEach(() => {
         cy.visit('/')
+
+        cy.get('body').invoke('addClass', 'animation--disabled')
     })
 
     it('Should show Start Screen', () => {
