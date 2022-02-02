@@ -14,10 +14,6 @@ body {
     font-size: 1.3rem;
 }
 
-body.animation--disabled {
-
-}
-
 .screen {
     position: fixed;
     display: none;
@@ -49,7 +45,8 @@ body.animation--disabled {
     text-shadow: 5px 1px 0px #ffffff;
 }
 
-.screen--start input[type="text"] {
+.screen--start input[type="text"],
+.screen--start select {
     padding: 10px 15px;
     color: white;
     background-color: black;
