@@ -39,14 +39,14 @@ describe('Views', function() {
         });
     });
 
-    describe('#setPlayers()', function() {
+    describe('#setup()', function() {
         it('Should call notifyAll SETUP', function() {
             observableSpy = createObservableSpy();
             const sut = createViews(null, observableSpy);
 
             const player1 = 'valid_player1';
             const player2 = 'valid_player2';
-            sut.setPlayers(player1, player2);
+            sut.setup(player1, player2);
 
             expect(observableSpy.params.history.notifyAll[0].id).to.equal('SETUP');
             expect(observableSpy.params.history.notifyAll[0].player1).to.equal(player1);

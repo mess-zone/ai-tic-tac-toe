@@ -62,7 +62,7 @@ function createViewsSpy() {
     };
 }
 
-describe.only('ViewComands', function() {
+describe('ViewComands', function() {
     let viewsSpy;
 
     describe('SETUP', function() {

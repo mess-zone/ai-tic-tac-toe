@@ -269,7 +269,7 @@ export default function createViews(window, observable) {
         });
     }
 
-    function setPlayers(player1, player2) {
+    function setup(player1, player2) {
         console.log('[screen] set players');
         observable.notifyAll({ 
             id: 'SETUP', 
@@ -290,6 +290,8 @@ export default function createViews(window, observable) {
     function handleFormSetupSubmit(e) {
         e.preventDefault();
 
+        const preferencesComputerDelay = +nodes.startScreenEl.querySelector('[data-start-screen__preferences-computer-delay]').value;
+
         const values = nodes.startScreenEl.querySelector('[data-start-screen__game-mode]').value.split(',');
 
         const player1 = {
@@ -302,7 +304,7 @@ export default function createViews(window, observable) {
             type: values[1],
         };
 
-        setPlayers(player1, player2);
+        setup(player1, player2);
     }
 
     function handleCellClick(e) {
@@ -335,7 +337,7 @@ export default function createViews(window, observable) {
         showEndRoundScreen,
         showEndGameScreen,
 
-        setPlayers,
+        setup,
         resetBoard,
         updateBoardInfo,
         updateBoard,
