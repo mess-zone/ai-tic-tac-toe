@@ -4,14 +4,17 @@ import { WinningCombinations } from './helpers/constants.js';
 export default function createMinimaxStrategy () {
     const name = 'MinimaxStrategy';
 
-    function findBestMove(board, maximizingPlayerSymbol) {
+    let maximizingPlayerSymbol;
+
+    function findBestMove(board, maximizingSymbol) {
+        maximizingPlayerSymbol = maximizingSymbol;
         // console.log('MinimaxStrategy finding best value', maximizingPlayerSymbol);
         let bestVal = -1000;
         let bestMove = undefined;
         const avaliablePositions = getAvaliablePositions(board);
         avaliablePositions.forEach(cellIndex => {
             board[cellIndex] = maximizingPlayerSymbol;
-            const value = minimax(board, 0, false, maximizingPlayerSymbol);
+            const value = minimax(board, 0, false);
             bestVal = Math.max(bestVal, value);
             // console.log('VALUE', value, 'BEST VALUE', bestVal, 'cellINDEX', avaliablePositions[i])
             board[cellIndex] = Symbols.EMPTY;
@@ -27,9 +30,9 @@ export default function createMinimaxStrategy () {
         return bestMove;
     }
 
-    function minimax(board, depth, isMaximizingPlayer, maximizingPlayerSymbol) {
+    function minimax(board, depth, isMaximizingPlayer) {
         
-        let score = evaluate(board, maximizingPlayerSymbol);
+        let score = evaluate(board);
         
         // If Maximizer has won the game
         // return his/her evaluated score
@@ -53,7 +56,7 @@ export default function createMinimaxStrategy () {
             const avaliablePositions = getAvaliablePositions(board);
             avaliablePositions.forEach(cellIndex => {
                 board[cellIndex] = maximizingPlayerSymbol;
-                const value = minimax(board, depth+1, false, maximizingPlayerSymbol);
+                const value = minimax(board, depth+1, false);
                 bestVal = Math.max(bestVal, value);
                 board[cellIndex] = Symbols.EMPTY;
             });
@@ -64,7 +67,7 @@ export default function createMinimaxStrategy () {
             const avaliablePositions = getAvaliablePositions(board);
             avaliablePositions.forEach(cellIndex => {
                 board[cellIndex] = getOpponentPlayerSymbol(maximizingPlayerSymbol);
-                const value = minimax(board, depth+1, true, maximizingPlayerSymbol);
+                const value = minimax(board, depth+1, true);
                 bestVal = Math.min(bestVal, value);
                 board[cellIndex] = Symbols.EMPTY;
             });
@@ -72,7 +75,7 @@ export default function createMinimaxStrategy () {
         }
     }
 
-    function evaluate(board, maximizingPlayerSymbol) {
+    function evaluate(board) {
             const maximizingWinningCombination = searchWinningCombination(maximizingPlayerSymbol, board);
             const minimizingWinningCombination = searchWinningCombination(getOpponentPlayerSymbol(maximizingPlayerSymbol), board);
 
