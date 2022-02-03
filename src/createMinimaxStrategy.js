@@ -5,11 +5,10 @@ export default function createMinimaxStrategy () {
     const name = 'MinimaxStrategy';
 
     function findBestMove(board, maximizingPlayerSymbol) {
-        // TODO only works if maximizer player is X, should work for O too
         console.log('MinimaxStrategy finding best value', maximizingPlayerSymbol);
         let bestVal = -1000;
         const avaliablePositions = board.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null);
-        let bestMove = avaliablePositions[0];
+        let bestMove = undefined;
         for(let i = 0; i < avaliablePositions.length; i++) {
             board[avaliablePositions[i]] = maximizingPlayerSymbol;
             const value = minimax(board, 0, false, maximizingPlayerSymbol);
@@ -20,7 +19,7 @@ export default function createMinimaxStrategy () {
             // If the value of the current move
             // is more than the best value, then
             // update best
-            if (value > bestVal) {
+            if (value >= bestVal) {
                 bestMove = avaliablePositions[i];
                 bestVal = value;
             }
