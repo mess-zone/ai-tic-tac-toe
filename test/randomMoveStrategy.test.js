@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import createRandomMoveStrategy from '../src/createRandomMoveStrategy.js';
 import { Symbols } from '../src/helpers/constants.js';
 
-describe('RandomMoveStrategy', () => {
+describe.skip('RandomMoveStrategy', () => {
     it('Should have a name', ()=> {
         const sut = createRandomMoveStrategy();
         expect(sut.name).to.equal('RandomMoveStrategy');

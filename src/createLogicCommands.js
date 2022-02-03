@@ -1,13 +1,13 @@
 import createGameStrategyManager from "./createGameStrategyManager.js";
-import createRandomMoveStrategy from "./createRandomMoveStrategy.js";
+import createMinimaxStrategy from "./createMinimaxStrategy.js";
 import { PlayerTypes, RoundStatus, Symbols } from "./helpers/constants.js";
 
 
 export default function createLogicCommands(logic, observable) {
 
     const gameStrategyManager = createGameStrategyManager();
-    const randomMoveStrategy = createRandomMoveStrategy();
-    gameStrategyManager.addStrategy(randomMoveStrategy);
+    const minimaxStrategy = createMinimaxStrategy();
+    gameStrategyManager.addStrategy(minimaxStrategy);
 
     function SETUP({ player1, player2 }) { 
         console.log('[LOGIC] SETUP', player1, player2)
@@ -28,7 +28,7 @@ export default function createLogicCommands(logic, observable) {
 
             // se player 1 é o computador, executar o primeiro movimento
             if(player1.type === PlayerTypes.COMPUTER) {
-                const cellIndex = gameStrategyManager.getStrategy('RandomMoveStrategy').findBestMove(currentState.board.cells);
+                const cellIndex = gameStrategyManager.getStrategy('MinimaxStrategy').findBestMove(currentState.board.cells, player1.symbol);
                 console.log(cellIndex);
                 MOVE({ playerIndex: 0, cellIndex: cellIndex });
             }
@@ -65,7 +65,7 @@ export default function createLogicCommands(logic, observable) {
             if(!logic.checkEndOfRound()) {
                 // se o player atual é um computador, executa um movimento aleatorio
                 if( currentState.players[currentState.currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
-                    const cellIndex = gameStrategyManager.getStrategy('RandomMoveStrategy').findBestMove(currentState.board.cells);
+                    const cellIndex = gameStrategyManager.getStrategy('MinimaxStrategy').findBestMove(currentState.board.cells, currentState.players[currentState.currentRound.currentPlayer].symbol);
                     console.log(cellIndex);
                     MOVE({ playerIndex: currentState.currentRound.currentPlayer, cellIndex: cellIndex });
                 }
@@ -97,7 +97,7 @@ export default function createLogicCommands(logic, observable) {
 
             // se o player atual é um computador, executa um movimento aleatorio
             if(currentState.players[currentState.currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
-                const cellIndex = gameStrategyManager.getStrategy('RandomMoveStrategy').findBestMove(currentState.board.cells);
+                const cellIndex = gameStrategyManager.getStrategy('MinimaxStrategy').findBestMove(currentState.board.cells, currentState.players[currentState.currentRound.currentPlayer].symbol);
                 console.log(cellIndex);
                 MOVE({ playerIndex: currentState.currentRound.currentPlayer, cellIndex: cellIndex });
             }
