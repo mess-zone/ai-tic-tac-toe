@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import createGameStrategyManager from '../src/createGameStrategyManager.js';
+import createGameStrategyManager from '../src/gameStrategies/createGameStrategyManager.js';
 
 describe('GameStrategyManager', () => {
     it('Should get an added strategy by the name', ()=> {

@@ -1,4 +1,4 @@
-import { Symbols } from './helpers/constants.js';
+import { Symbols } from '../helpers/constants.js';
 
 export default function createRandomMoveStrategy () {
     const name = 'RandomMoveStrategy';

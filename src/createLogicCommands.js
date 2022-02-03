@@ -1,6 +1,6 @@
-import createGameStrategyManager from "./createGameStrategyManager.js";
-import createMinimaxStrategy from "./createMinimaxStrategy.js";
-import createRandomMoveStrategy from './createRandomMoveStrategy.js';
+import createGameStrategyManager from "./gameStrategies/createGameStrategyManager.js";
+import createMinimaxStrategy from "./gameStrategies/createMinimaxStrategy.js";
+import createRandomMoveStrategy from './gameStrategies/createRandomMoveStrategy.js';
 import { PlayerTypes, RoundStatus, Symbols } from "./helpers/constants.js";
 
 

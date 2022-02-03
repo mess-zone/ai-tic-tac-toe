@@ -1,5 +1,5 @@
-import { Symbols } from './helpers/constants.js';
-import { WinningCombinations } from './helpers/constants.js';
+import { Symbols } from '../helpers/constants.js';
+import { WinningCombinations } from '../helpers/constants.js';
 
 export default function createMinimaxStrategy () {
     const name = 'MinimaxStrategy';

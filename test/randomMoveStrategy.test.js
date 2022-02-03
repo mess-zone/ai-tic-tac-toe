@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import createRandomMoveStrategy from '../src/createRandomMoveStrategy.js';
+import createRandomMoveStrategy from '../src/gameStrategies/createRandomMoveStrategy.js';
 import { Symbols } from '../src/helpers/constants.js';
 
 describe('RandomMoveStrategy', () => {

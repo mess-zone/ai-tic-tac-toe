@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import createMinimaxStrategy from '../src/createMinimaxStrategy.js';
+import createMinimaxStrategy from '../src/gameStrategies/createMinimaxStrategy.js';
 import { Symbols } from '../src/helpers/constants.js';
 
 describe('MinimaxStrategy', () => {
