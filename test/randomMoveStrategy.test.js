@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import createRandomMoveStrategy from '../src/createRandomMoveStrategy.js';
 import { Symbols } from '../src/helpers/constants.js';
 
-describe.skip('RandomMoveStrategy', () => {
+describe('RandomMoveStrategy', () => {
     it('Should have a name', ()=> {
         const sut = createRandomMoveStrategy();
         expect(sut.name).to.equal('RandomMoveStrategy');
@@ -15,7 +15,7 @@ describe.skip('RandomMoveStrategy', () => {
             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
             Symbols.EMPTY, Symbols.EMPTY, Symbols.EMPTY, 
         ];
-        const bestMove = sut.findBestMove(currentBoard);
+        const bestMove = sut.findBestMove(currentBoard, Symbols.X);
         expect(bestMove).to.not.equal(undefined);
         expect(bestMove).to.be.at.least(0);
         expect(bestMove).to.be.at.most(8);
@@ -28,7 +28,7 @@ describe.skip('RandomMoveStrategy', () => {
             Symbols.X, Symbols.X, Symbols.EMPTY, 
             Symbols.X, Symbols.X, Symbols.X, 
         ];
-        const bestMove = sut.findBestMove(currentBoard);
+        const bestMove = sut.findBestMove(currentBoard, Symbols.O);
         expect(bestMove).to.equal(5);
     })
 
@@ -39,7 +39,7 @@ describe.skip('RandomMoveStrategy', () => {
             Symbols.X, Symbols.X, Symbols.X, 
             Symbols.X, Symbols.X, Symbols.X, 
         ];
-        const bestMove = sut.findBestMove(currentBoard);
+        const bestMove = sut.findBestMove(currentBoard, Symbols.O);
         expect(bestMove).to.equal(undefined);
     })
 
@@ -50,7 +50,7 @@ describe.skip('RandomMoveStrategy', () => {
             Symbols.EMPTY, Symbols.X, Symbols.EMPTY, 
             Symbols.O, Symbols.EMPTY, Symbols.X, 
         ];
-        const bestMove = sut.findBestMove(currentBoard);
+        const bestMove = sut.findBestMove(currentBoard, Symbols.X);
         expect(bestMove).to.not.equal(0);
         expect(bestMove).to.not.equal(2);
         expect(bestMove).to.not.equal(4);

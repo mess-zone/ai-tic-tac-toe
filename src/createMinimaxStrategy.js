@@ -7,9 +7,9 @@ export default function createMinimaxStrategy () {
     let maximizingPlayerSymbol;
     let minimizingPlayerSymbol;
 
-    function findBestMove(board, maximizingSymbol) {
-        maximizingPlayerSymbol = maximizingSymbol;
-        minimizingPlayerSymbol = getOpponentPlayerSymbol(maximizingSymbol);
+    function findBestMove(board, currentPlayerSymbol) {
+        maximizingPlayerSymbol = currentPlayerSymbol;
+        minimizingPlayerSymbol = getOpponentPlayerSymbol(currentPlayerSymbol);
         let bestVal = -1000;
         let bestMove = undefined;
 
