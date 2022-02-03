@@ -5,18 +5,19 @@ export default function createMinimaxStrategy () {
     const name = 'MinimaxStrategy';
 
     let maximizingPlayerSymbol;
+    let minimizingPlayerSymbol;
 
     function findBestMove(board, maximizingSymbol) {
         maximizingPlayerSymbol = maximizingSymbol;
-        // console.log('MinimaxStrategy finding best value', maximizingPlayerSymbol);
+        minimizingPlayerSymbol = getOpponentPlayerSymbol(maximizingSymbol);
         let bestVal = -1000;
         let bestMove = undefined;
+
         const avaliablePositions = getAvaliablePositions(board);
         avaliablePositions.forEach(cellIndex => {
             board[cellIndex] = maximizingPlayerSymbol;
             const value = minimax(board, 0, false);
             bestVal = Math.max(bestVal, value);
-            // console.log('VALUE', value, 'BEST VALUE', bestVal, 'cellINDEX', avaliablePositions[i])
             board[cellIndex] = Symbols.EMPTY;
 
             // If the value of the current move
@@ -36,12 +37,12 @@ export default function createMinimaxStrategy () {
         
         // If Maximizer has won the game
         // return his/her evaluated score
-        if (score == 10)
+        if (score === 10)
             return score - depth;
         
         // If Minimizer has won the game
         // return his/her evaluated score
-        if (score == -10)
+        if (score === -10)
             return depth - score;
         
         // If there are no more moves and
@@ -49,7 +50,6 @@ export default function createMinimaxStrategy () {
         if (isMovesLeft(board) === false)
             return 0;
 
-        // console.log('m', score, depth, isMaximizingPlayer, maximizingPlayerSymbol )
         
         if(isMaximizingPlayer) {
             let bestVal = -1000;
@@ -66,7 +66,7 @@ export default function createMinimaxStrategy () {
             let bestVal = +1000;
             const avaliablePositions = getAvaliablePositions(board);
             avaliablePositions.forEach(cellIndex => {
-                board[cellIndex] = getOpponentPlayerSymbol(maximizingPlayerSymbol);
+                board[cellIndex] = minimizingPlayerSymbol;
                 const value = minimax(board, depth+1, true);
                 bestVal = Math.min(bestVal, value);
                 board[cellIndex] = Symbols.EMPTY;
@@ -76,22 +76,19 @@ export default function createMinimaxStrategy () {
     }
 
     function evaluate(board) {
-            const maximizingWinningCombination = searchWinningCombination(maximizingPlayerSymbol, board);
-            const minimizingWinningCombination = searchWinningCombination(getOpponentPlayerSymbol(maximizingPlayerSymbol), board);
-
-            // console.log(maximizingWinningCombination)
-            // console.log(minimizingWinningCombination)
-            if(maximizingWinningCombination?.length === 3) {
-                // se maximizing player venceu, retorna +10
-                return +10;
-            } 
-            if(minimizingWinningCombination?.length === 3){
-                // se minimizing player venceu, retorna -10
-                return -10;
+        for(let i = 0; i < WinningCombinations.length; i++) {
+            const [ first, second, third ] = WinningCombinations[i];
+            if (board[first] === board[second] && board[second] === board[third]) {
+                if (board[first] === maximizingPlayerSymbol) {
+                    return +10;
+                } else if (board[first] === minimizingPlayerSymbol) {
+                    return -10;
+                }
             }
-                
-            // se o jogo está em andamento ou provavelmente empatou, retorna 0
-            return 0;
+        }
+
+        // Else if none of them have won then return 0
+        return 0;
             
     }
 
@@ -105,12 +102,6 @@ export default function createMinimaxStrategy () {
 
     function isMovesLeft(board) {
         return board.some(cell => cell === Symbols.EMPTY);
-    }
-
-    function searchWinningCombination(symbol, boardCells) {
-        return WinningCombinations.find((combination) => 
-            combination.every(index => boardCells[index] === symbol)
-        );
     }
 
     return {
