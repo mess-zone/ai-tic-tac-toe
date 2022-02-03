@@ -1,6 +1,13 @@
+import createGameStrategyManager from "./createGameStrategyManager.js";
+import createRandomStrategy from "./createRandomStrategy.js";
 import { PlayerTypes, RoundStatus, Symbols } from "./helpers/constants.js";
 
+
 export default function createLogicCommands(logic, observable) {
+
+    const gameStrategyManager = createGameStrategyManager();
+    const randomStrategy = createRandomStrategy();
+    gameStrategyManager.addStrategy(randomStrategy);
 
     function SETUP({ player1, player2 }) { 
         console.log('[LOGIC] SETUP', player1, player2)
@@ -21,13 +28,9 @@ export default function createLogicCommands(logic, observable) {
 
             // se player 1 é o computador, executar o primeiro movimento
             if(player1.type === PlayerTypes.COMPUTER) {
-                const emptyCells = currentState.board.cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
-                console.log('START PLAYER 1 É COMPUTER, se player 1 é o computador, executar o primeiro movimento ', emptyCells)
-                const cellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)]
+                const cellIndex = gameStrategyManager.getStrategy('RandomStrategy').calculateNextMove(currentState.board.cells);
                 console.log(cellIndex);
-                // setTimeout(() => {
                 MOVE({ playerIndex: 0, cellIndex: cellIndex });
-                // }, 5000)
             }
         }
     }
@@ -62,13 +65,9 @@ export default function createLogicCommands(logic, observable) {
             if(!logic.checkEndOfRound()) {
                 // se o player atual é um computador, executa um movimento aleatorio
                 if( currentState.players[currentState.currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
-                    const emptyCells = currentState.board.cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
-                    console.log('NEXT PLAYER É COMPUTER, movimentos disponiveis: ', emptyCells)
-    
-                    if(emptyCells.length > 0) {
-                        const cellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)]
-                        MOVE({ playerIndex: currentState.currentRound.currentPlayer, cellIndex: cellIndex });
-                    }
+                    const cellIndex = gameStrategyManager.getStrategy('RandomStrategy').calculateNextMove(currentState.board.cells);
+                    console.log(cellIndex);
+                    MOVE({ playerIndex: currentState.currentRound.currentPlayer, cellIndex: cellIndex });
                 }
             }
 
@@ -98,13 +97,9 @@ export default function createLogicCommands(logic, observable) {
 
             // se o player atual é um computador, executa um movimento aleatorio
             if(currentState.players[currentState.currentRound.currentPlayer].type === PlayerTypes.COMPUTER) {
-                const emptyCells = currentState.board.cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
-                console.log('NEXT PLAYER É COMPUTER, movimentos disponiveis: ', emptyCells)
-
-                if(emptyCells.length > 0) {
-                    const cellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)]
-                    MOVE({ playerIndex: currentState.currentRound.currentPlayer, cellIndex: cellIndex });
-                }
+                const cellIndex = gameStrategyManager.getStrategy('RandomStrategy').calculateNextMove(currentState.board.cells);
+                console.log(cellIndex);
+                MOVE({ playerIndex: currentState.currentRound.currentPlayer, cellIndex: cellIndex });
             }
         }
     }
