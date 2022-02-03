@@ -1,5 +1,6 @@
 import createGameStrategyManager from "./createGameStrategyManager.js";
 import createMinimaxStrategy from "./createMinimaxStrategy.js";
+import createRandomMoveStrategy from './createRandomMoveStrategy.js';
 import { PlayerTypes, RoundStatus, Symbols } from "./helpers/constants.js";
 
 
@@ -7,7 +8,9 @@ export default function createLogicCommands(logic, observable) {
 
     const gameStrategyManager = createGameStrategyManager();
     const minimaxStrategy = createMinimaxStrategy();
+    const randomMoveStrategy = createRandomMoveStrategy()
     gameStrategyManager.addStrategy(minimaxStrategy);
+    gameStrategyManager.addStrategy(randomMoveStrategy);
 
     function SETUP({ player1, player2 }) { 
         console.log('[LOGIC] SETUP', player1, player2)
