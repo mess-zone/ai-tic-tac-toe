@@ -44,7 +44,7 @@ describe('MinimaxStrategy', () => {
         expect(bestMove).to.be.equal(undefined);
     })
 
-    it('Dumb decision', ()=> {
+    it('Smart decision', ()=> {
         const sut = createMinimaxStrategy();
         const currentBoard = [
             Symbols.EMPTY, Symbols.X, Symbols.EMPTY, 
@@ -54,8 +54,8 @@ describe('MinimaxStrategy', () => {
         // expected smart: 2
         //expect dumb: 4
         const bestMove = sut.findBestMove(currentBoard, Symbols.O);
-        expect(bestMove).to.be.equal(4);
-        expect(bestMove).to.not.be.equal(2);
+        expect(bestMove).to.be.equal(2);
+        expect(bestMove).to.not.be.equal(4);
     })
 
 

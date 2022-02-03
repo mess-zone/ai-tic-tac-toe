@@ -36,12 +36,12 @@ export default function createMinimaxStrategy () {
         // If Maximizer has won the game
         // return his/her evaluated score
         if (score == 10)
-            return score;
+            return score - depth;
         
         // If Minimizer has won the game
         // return his/her evaluated score
         if (score == -10)
-            return score;
+            return depth - score;
         
         // If there are no more moves and
         // no winner then it is a tie
