@@ -2,12 +2,15 @@ import {expect} from 'chai';
 import { Symbols } from '../src/helpers/constants.js';
 
 function createRandomStrategy () {
+    const name = 'RandomStrategy';
+
     function calculateNextMove(cells) {
         const avaliabePositions = cells.map((cell, index) => {return cell === Symbols.EMPTY ? index : null}).filter(cell => cell !== null)
         const bestMoveIndex = avaliabePositions[Math.floor(Math.random() * avaliabePositions.length)]
         return bestMoveIndex;
     }
     return {
+        name,
         calculateNextMove,
     }
 }
@@ -19,12 +22,22 @@ function createGameStrategyManager() {
         strategies.push(strategy)
     }
 
+    function getStrategy(strategyName) {
+        return strategies.find(strategy => strategy.name === strategyName);
+    }
+
     return {
         addStrategy,
+        getStrategy
     }
 }
 
 describe('RandomStrategy', () => {
+    it('Should have a name', ()=> {
+        const sut = createRandomStrategy();
+        expect(sut.name).to.equal('RandomStrategy');
+    })
+
     it('If the board is fully empty, should return any random position between 0 and 8', ()=> {
         const sut = createRandomStrategy();
         const currentBoard = [
@@ -77,9 +90,14 @@ describe('RandomStrategy', () => {
 })
 
 describe('GameStrategyManager', () => {
-    it('test', ()=> {
+    it('Should get a strategy by the name', ()=> {
         const sut = createGameStrategyManager();
-        const randomStrategy = createRandomStrategy();
-        sut.addStrategy(randomStrategy);
+        const validStrategy = { name: 'validStrategy' };
+        
+        sut.addStrategy(validStrategy);
+        const strategy = sut.getStrategy(validStrategy.name);
+        expect(strategy).to.deep.equal(validStrategy);
     })
+
+
 })
