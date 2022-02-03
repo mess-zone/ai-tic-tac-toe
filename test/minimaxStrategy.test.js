@@ -44,22 +44,41 @@ describe('MinimaxStrategy', () => {
         expect(bestMove).to.be.equal(undefined);
     })
 
-    it('Smart decision', ()=> {
+    it('Avoid opponent to win', ()=> {
         const sut = createMinimaxStrategy();
         const currentBoard = [
+            Symbols.EMPTY, Symbols.O, Symbols.EMPTY, 
             Symbols.EMPTY, Symbols.X, Symbols.EMPTY, 
-            Symbols.EMPTY, Symbols.EMPTY, Symbols.X, 
-            Symbols.O, Symbols.O, Symbols.X, 
+            Symbols.X, Symbols.X, Symbols.O, 
         ];
-        // expected smart: 2
-        //expect dumb: 4
         const bestMove = sut.findBestMove(currentBoard, Symbols.O);
         expect(bestMove).to.be.equal(2);
-        expect(bestMove).to.not.be.equal(4);
+    })
+
+    it('Win as soon as possible', ()=> {
+        const sut = createMinimaxStrategy();
+        const currentBoard = [
+            Symbols.O, Symbols.EMPTY, Symbols.EMPTY, 
+            Symbols.EMPTY, Symbols.X, Symbols.O, 
+            Symbols.O, Symbols.X, Symbols.X, 
+        ];
+        const bestMove = sut.findBestMove(currentBoard, Symbols.X);
+        expect(bestMove).to.be.equal(1);
+    })
+
+    it('Draw if can not win', ()=> {
+        const sut = createMinimaxStrategy();
+        const currentBoard = [
+            Symbols.X, Symbols.O, Symbols.EMPTY, 
+            Symbols.EMPTY, Symbols.X, Symbols.X, 
+            Symbols.O, Symbols.X, Symbols.O, 
+        ];
+        const bestMove = sut.findBestMove(currentBoard, Symbols.O);
+        expect(bestMove).to.be.equal(3);
     })
 
 
-/////////////////// generic tests
+    /* generic tests */
 
 
     it('If the board is almost filled, should return the only avaliable position', ()=> {
