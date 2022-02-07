@@ -3,15 +3,15 @@ import { Symbols, RoundStatus, PlayerTypes } from "./helpers/constants.js";
 export default function createViewCommands(views) {
 
     function SETUP(command) {
-        console.log('[ui] SETUP');
+        // console.log('[ui] SETUP');
         views.showStartScreen();
     }
     
     function START_ROUND(command) {
-        console.log('[ui] START_ROUND');
+        // console.log('[ui] START_ROUND');
         const state = JSON.parse(JSON.stringify({...command.state}))
 
-        console.log('STARRRRRT', state)
+        // console.log('STARRRRRT', state)
         views.updateBoardInfo(state);
 
         const modelRoundScreen = {
@@ -23,14 +23,14 @@ export default function createViewCommands(views) {
 
     function UPDATE_BOARD(command) {
         const state = JSON.parse(JSON.stringify({...command.state}))
-        console.log('[UI] UPDATE BOARD', state);
+        // console.log('[UI] UPDATE BOARD', state);
 
         // Se o player que acabou de mover é um COMPUTER, dá um delay na exibição
         const lastPlayer = (state.currentRound.currentPlayer + 1) % state.players.length;
         if(state.players[lastPlayer].type == PlayerTypes.COMPUTER) {
             const delay = views.getUserPreferences().computerDelay;
             setTimeout(() => {
-                console.log('UPDATEEEEEEE COMPUTER AFTER ', delay)
+                // console.log('UPDATEEEEEEE COMPUTER AFTER ', delay)
                 views.updateBoardInfo(state);
             }, delay);
         } else {
@@ -40,7 +40,7 @@ export default function createViewCommands(views) {
     }
 
     function END_ROUND(command) {
-        console.log('[ui] END ROUND');
+        // console.log('[ui] END ROUND');
         const state = JSON.parse(JSON.stringify({...command.state}))
 
         views.updateBoardInfo(state);
@@ -52,7 +52,7 @@ export default function createViewCommands(views) {
     }
 
     function END_GAME(command) {
-        console.log('[ui] END GAME');
+        // console.log('[ui] END GAME');
         const state = JSON.parse(JSON.stringify({...command.state}))
 
         const endGameModel = {

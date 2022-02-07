@@ -272,7 +272,7 @@ describe('logic', function() {
         });
         it('Should move player 2 to empty destination cell', function() {
             logic.getState().currentRound.currentPlayer = 1
-            console.log('CURRENT PLAYER: ', logic.getState().currentRound.currentPlayer)
+            // console.log('CURRENT PLAYER: ', logic.getState().currentRound.currentPlayer)
             logic.move(1, 2);
 
             expect(logic.getState().board.cells[2]).to.equal(Symbols.O);

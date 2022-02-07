@@ -63,7 +63,7 @@ export default function createViews(window, observable) {
     }
 
     function buildAll() {
-        console.log('[screen] create all views')
+        // console.log('[screen] create all views')
         buildStartScreen();
         buildRoundScreen();
         buildBoardScreen();
@@ -73,7 +73,7 @@ export default function createViews(window, observable) {
 
 
     function showStartScreen(model) {
-        console.log('[screen] SHOW START SCREEN')
+        // console.log('[screen] SHOW START SCREEN')
         nodes.endGameScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('screen--show');
         nodes.roundScreenEl.classList.remove('animating');
@@ -99,7 +99,7 @@ export default function createViews(window, observable) {
     }
 
     function showBoardScreen(model) {
-        console.log('[screen] show board screen')
+        // console.log('[screen] show board screen')
         nodes.startScreenEl.classList.remove('screen--show');
         nodes.boardScreenEl.classList.add('screen--show');
         handleResize();
@@ -111,7 +111,7 @@ export default function createViews(window, observable) {
     }
 
     function showEndRoundScreen(model) {
-        console.log('[screen] showEndRound');
+        // console.log('[screen] showEndRound');
       
         nodes.endRoundScreenEl.querySelector('[data-end-round-screen__text]').innerText = model.text;
       
@@ -149,7 +149,7 @@ export default function createViews(window, observable) {
 
 
     function updateBoardInfo(model) {
-        console.log('[screen] set board info');
+        // console.log('[screen] set board info');
 
         const updateScoreModel = {
             round: {
@@ -213,7 +213,7 @@ export default function createViews(window, observable) {
     }
 
     function resetBoard() {
-        console.log('[screen] resetBoard');
+        // console.log('[screen] resetBoard');
 
         for(let i = 0; i < nodes.cellsEl.length; i++) {
             nodes.cellsEl[i].classList.add('board__cell--empty');
@@ -226,7 +226,7 @@ export default function createViews(window, observable) {
     function updateBoard(model) {
         resetBoard();
 
-        console.log('[screen] updateBoard');
+        // console.log('[screen] updateBoard');
 
         for(let i = 0; i < model.boardCells.length; i++) {
             if(model.boardCells[i] == Symbols.EMPTY) {
@@ -248,7 +248,7 @@ export default function createViews(window, observable) {
     }
     
     function updatePlayerTurn(model) {
-        console.log('[screen] updatePlayerTurn ');
+        // console.log('[screen] updatePlayerTurn ');
 
         nodes.boardEl.classList.toggle('turn--X', model.isXTurn);
         nodes.boardEl.classList.toggle('turn--O', model.isOTurn);
@@ -264,7 +264,7 @@ export default function createViews(window, observable) {
     }
 
     function move(playerIndex, cellIndex) {
-        console.log('[screen] move');
+        // console.log('[screen] move');
 
         observable.notifyAll({ 
             id: 'MOVE', 
@@ -275,7 +275,7 @@ export default function createViews(window, observable) {
 
     function setup(player1, player2, preferencesComputerDelay) {
         userPreferences.computerDelay = preferencesComputerDelay;
-        console.log('[screen] set players');
+        // console.log('[screen] set players');
         observable.notifyAll({ 
             id: 'SETUP', 
             player1, 
@@ -287,7 +287,7 @@ export default function createViews(window, observable) {
     }
 
     function startNextRound() {
-        console.log('[screen] start next round')
+        // console.log('[screen] start next round')
         observable.notifyAll({
             id: 'START_NEXT_ROUND'
         });

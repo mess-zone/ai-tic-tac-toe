@@ -14,22 +14,36 @@ export default function createMinimaxStrategy () {
         let bestMove = undefined;
 
         const avaliablePositions = getAvaliablePositions(board);
-        avaliablePositions.forEach(cellIndex => {
+        console.log(avaliablePositions)
+        const positionsScores = avaliablePositions.map(cellIndex => {
             board[cellIndex] = maximizingPlayerSymbol;
             const value = minimax(board, 0, false);
             bestVal = Math.max(bestVal, value);
             board[cellIndex] = Symbols.EMPTY;
+            console.log('cellIndex', cellIndex, 'VALUE', value, 'best value', bestVal)
 
             // If the value of the current move
             // is more than the best value, then
             // update best
-            if (value >= bestVal) {
-                bestMove = cellIndex;
-                bestVal = value;
-            }
+            // if (value >= bestVal) {
+            //     bestMove = cellIndex;
+            //     bestVal = value;
+            // }
+
+            return { index: cellIndex, score: value };
         });
-        console.log('BEST MOVE:', bestMove)
-        return bestMove;
+
+        const filteredBestScores = positionsScores.filter((position) => position.score === bestVal);
+        let shuffled = filteredBestScores
+            .map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value)
+        console.log('best value', bestVal, 'BEST MOVE:', bestMove)
+        // console.log('psitionsScores', positionsScores)
+        console.log('filteredScores', filteredBestScores)
+        console.log('shuffled', shuffled)
+
+        return shuffled[0]?.index;
     }
 
     function minimax(board, depth, isMaximizingPlayer) {
