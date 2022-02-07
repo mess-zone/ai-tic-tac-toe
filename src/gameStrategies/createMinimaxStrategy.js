@@ -11,39 +11,21 @@ export default function createMinimaxStrategy () {
         maximizingPlayerSymbol = currentPlayerSymbol;
         minimizingPlayerSymbol = getOpponentPlayerSymbol(currentPlayerSymbol);
         let bestVal = -1000;
-        let bestMove = undefined;
 
-        const avaliablePositions = getAvaliablePositions(board);
-        console.log(avaliablePositions)
-        const positionsScores = avaliablePositions.map(cellIndex => {
-            board[cellIndex] = maximizingPlayerSymbol;
-            const value = minimax(board, 0, false);
-            bestVal = Math.max(bestVal, value);
-            board[cellIndex] = Symbols.EMPTY;
-            console.log('cellIndex', cellIndex, 'VALUE', value, 'best value', bestVal)
-
-            // If the value of the current move
-            // is more than the best value, then
-            // update best
-            // if (value >= bestVal) {
-            //     bestMove = cellIndex;
-            //     bestVal = value;
-            // }
-
-            return { index: cellIndex, score: value };
-        });
-
-        const filteredBestScores = positionsScores.filter((position) => position.score === bestVal);
-        let shuffled = filteredBestScores
-            .map(value => ({ value, sort: Math.random() }))
+        const positionsScores = getAvaliablePositions(board)
+            .map(cellIndex => {
+                board[cellIndex] = maximizingPlayerSymbol;
+                const value = minimax(board, 0, false);
+                bestVal = Math.max(bestVal, value);
+                board[cellIndex] = Symbols.EMPTY;
+                return { index: cellIndex, score: value };
+            })
+            .filter((position) => position.score === bestVal)
+            .map(obj => ({ obj, sort: Math.random() }))
             .sort((a, b) => a.sort - b.sort)
-            .map(({ value }) => value)
-        console.log('best value', bestVal, 'BEST MOVE:', bestMove)
-        // console.log('psitionsScores', positionsScores)
-        console.log('filteredScores', filteredBestScores)
-        console.log('shuffled', shuffled)
+            .map(({ obj }) => obj)
 
-        return shuffled[0]?.index;
+        return positionsScores[0]?.index;
     }
 
     function minimax(board, depth, isMaximizingPlayer) {
