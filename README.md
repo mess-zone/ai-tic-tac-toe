@@ -1,7 +1,22 @@
 # ai-tic-tac-toe
-Jogo da velha jogado por inteligência artificial usando o algoritmo Minimax.
+Tic Tac Toe AI with Minimax Algorithm using vanilla Javascript
 
-Jogar: [Jogar](https://mess-zone.github.io/ai-tic-tac-toe/index.html)
+## Demo 
+[Play](https://mess-zone.github.io/ai-tic-tac-toe/index.html)
+
+## Install
+`npm install`
+
+## Execution
+Just open index.html on a browser (ES6 browser support required)
+
+## Tests
+
+### Unit tests
+`npm run test`
+
+### End To End tests
+`npm run cypress:open`
 
 ## References
 
